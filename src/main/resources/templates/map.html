@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Capstone</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+    <style>
+        /* CSS를 사용하여 화면 전체 크기로 맵을 설정 */
+        html, body, #map { /* html과 body 요소의 크기를 100%로 설정 */
+            width: 100%;
+            height: 100%;
+            margin: 0; /* body의 기본 마진 제거 */
+            padding: 0; /* body의 기본 패딩 제거 */
+            position: relative; /* 상대적 위치 설정 */
+
+        }
+        #map-container {
+            position: relative; /* 상대적 위치 설정 */
+            width: 100%; /* 가로 전체 차지 */
+            height: 100%; /* 세로 전체 차지 */
+        }
+        /* 주소 입력 칸 스타일 추가 */
+        .start-input{
+            width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
+            height: 50px;
+            /* 입력 칸 아래 여백 추가 */
+            border-radius: 5px; /* 테두리 둥글게 처리 */
+            margin-top: 40px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc; /* 테두리 설정 */
+
+        }
+        .destination-input{
+            width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
+            height: 50px;
+            margin-bottom: 10px; /* 입력 칸 아래 여백 추가 */
+            border-radius: 5px; /* 테두리 둥글게 처리 */
+            border: 1px solid #ccc; /* 테두리 설정 */
+
+        }
+        /* 검색 버튼 스타일 추가 */
+        #search-form {
+            width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
+            height: 45px; /* 높이 설정 */
+            margin-left:  auto; /* 수평 가운데 정렬 */
+            margin-right:  auto; /* 수평 가운데 정렬 */
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
+        }
+
+        #search-container {
+            position: absolute; /* 절대 위치 설정 */
+            top: 43px; /* 상단 여백 설정 */
+            left: 10px; /* 좌측 여백 설정 */
+            z-index: 1000; /* 다른 요소 위에 표시하기 위한 z-index 설정 */
+            padding: 20px; /* 내부 여백 설정 */
+            border: 1px solid #ccc; /* 테두리 설정 */
+            border-radius: 5px; /* 테두리 둥글게 처리 */
+            background-color: #6CCA7B;
+            width : 450px;
+            height: 700px;
+            margin-left: auto;
+            margin-right: auto;
+
+
+        }
+        #logo-image {
+
+            position: absolute; /* 절대 위치 설정 */
+            left: 10px; /* 로고의 왼쪽 여백 조정 */
+            z-index: 1000; /* 다른 요소 위에 표시하기 위한 z-index 설정 */
+        }
+        #toggle-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        #close-button {
+            position: absolute;
+            top: 540px; /* 아래 여백 조정 */
+            left: 30px; /* 우측 여백 조정 */
+            z-index: 1001;
+            cursor: pointer;
+            display: none;
+        }
+
+        .toggle-open #toggle-button {
+            display: none; /* 토글된 상태에서 토글 버튼 숨김 */
+        }
+
+        .toggle-open #close-button {
+            display: block; /* 토글된 상태에서 닫기 버튼 표시 */
+        }
+
+        .toggle-closed #toggle-button {
+            display: block;
+
+        }
+
+        .toggle-closed #close-button {
+            display: none; /* 토글된 상태에서 닫기 버튼 숨김 */
+        }
+        .place-list-container {
+            top: 10px;
+            max-height: 400px; /* 최대 높이 지정 */
+            overflow-y: auto; /* 세로 스크롤 표시 */
+        }
+
+        .place-info-box {
+            border: 1px solid #ccc; /* 테두리 추가 */
+            background-color: #FAFFF9; /* 배경색 하얗게 */
+            padding: 10px; /* 안쪽 여백 추가 */
+            margin-bottom: 10px; /* 아래쪽 여백 추가 */
+            border-radius: 5px; /* 테두리를 살짝 둥글게 만듦 */
+
+        }
+
+        /* 시간 설정 입력란 가운데 정렬 */
+        #departure-time {
+            width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
+            height: auto; /* 높이 자동 조정 */
+            display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
+            border: none; /* 테두리 제거 */
+            background: none; /* 배경 제거 */
+            font-size: 1.2em; /* 글자 크기 설정 */
+            font-weight: bold; /* 글자 두껍게 설정 */
+            text-align: center; /* 가운데 정렬 */
+            color: #555; /* 힌트 색상 설정 */
+        }
+    </style>
+</head>
+<body th:attr = "data-api-key=${restapiKey}">
+<div id="map-container">
+    <div id="map"></div>
+    <div id="search-container">
+        <img src="/image/logo.png" alt="로고" id="logo-image">
+
+        <form id="search-form-small">
+            <input type="text" id="start-input-small" class="start-input" name="startAddress" placeholder="출발지를 입력하세요" autocomplete="off" required />
+            <br>
+            <div id="start-suggestions" class="suggestions"></div> <!-- 출발지 자동완성을 표시할 영역 -->
+            <input type="text" id="destination-input-small" class="destination-input" name="destinationAddress" placeholder="도착지를 입력하세요" autocomplete="off" required />
+            <br>
+            <div id="destination-suggestions" class="suggestions"></div> <!-- 도착지 자동완성을 표시할 영역 -->
+            <!-- 예상 출발 시간 입력란 -->
+
+            <input type="datetime-local" id="departure-time" class="departure-time" name="departureTime" autocomplete="off" />
+            <br>
+
+            <button type="submit" class="btn btn-primary" id="search-form">자동차 경로 검색</button>
+        </form>
+        <div id="place-list" class="place-list-container">
+
+        </div>
+    </div>
+
+    <div id="toggle-button"><img src="/image/toggleOpenButton.png" alt="열기"/></div> <!-- 토글 버튼 -->
+    <div id="close-button"><img src="/image/toggleCloseButton.png" alt="닫기" /></div> <!-- 닫기 버튼 -->
+</div>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/kakao-js-api/v2.0.3/kakao.js}"></script>
+<script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${jsKey} + '&libraries=services'}"></script>
+<script type="text/javascript" src="/js/map.js"></script>
+<script type="text/javascript" src="/js/toggle.js"></script>
+
+
+</body>
+</html>
