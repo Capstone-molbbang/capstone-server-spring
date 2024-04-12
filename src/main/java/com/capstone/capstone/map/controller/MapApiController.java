@@ -21,7 +21,6 @@ public class MapApiController {
     private final DistanceService distanceService;
 
     // FastAPI 서버의 엔드포인트 URL
-
     private final RestTemplate restTemplate;
 
 

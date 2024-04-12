@@ -29,6 +29,9 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class FastApiController {
     private static final String FASTAPI_ENDPOINT = "http://fastapi-server-address/api/coordinates";
 
+    /**
+     * 리스트 형식으로 예측 경로 받아옴!
+     */
     @GetMapping("/path-prediction")
     public ResponseEntity<List<List<Double>>> getPathPredictionCoordinates() {
         HttpClient httpClient = HttpClients.createDefault();
@@ -57,23 +60,20 @@ public class FastApiController {
         }
     }
 
+    /**
+     * 출발지, 도착지 좌표 및 출발 예정 시간 전송
+     */
     @PostMapping("/api/info")
     public ResponseEntity<Map<String, String>> sendInfoToFastApi(@RequestBody Map<String, Object> requestData){
         try {
-            log.info("success!!");
             // 출발 좌표, 도착 좌표, 출발 시간을 추출
             Map<String, Double> startCoords = (Map<String, Double>) requestData.get("startCoords");
             Map<String, Double> destinationCoords = (Map<String, Double>) requestData.get("destinationCoords");
-            Double distance = (Double) requestData.get("distance");
             String departureTime = (String) requestData.get("departureTime");
 
             log.info("startCoords : " + startCoords);
             log.info("destinationCoords : " + destinationCoords);
-            log.info("distance : " + distance); //거리가 그냥 일직선
             log.info("departureTime : " + departureTime);
-
-            // FastAPI로 출발 좌표, 도착 좌표, 출발 시간을 전송
-           // sendToFastAPI(startCoords, destinationCoords, departureTime);
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Info sent to FastAPI successfully");

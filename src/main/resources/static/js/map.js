@@ -15,7 +15,11 @@ var startAddress = null;
 var destinationAddress = null;
 var startMarker= null;
 var destinationMarker= null;
-async function drawRouteKakao(origin, destination, apiKey) {
+
+var distanceList = []; // 거리를 저장할 리스트
+var predictedTime = 0; // 전체 예측 시간을 저장할 변수
+var i=0;
+async function drawRouteKakao(origin, destination, apiKey, bool) {
 
 
    // const formattedDepartureTime = departureTime.toISOString(); // ISO 형식으로 출발 예정 시간 변환
@@ -29,10 +33,16 @@ async function drawRouteKakao(origin, destination, apiKey) {
         'Content-Type': 'application/json'
     };
     console.log("selectedDepartureTime ;:" + selectedDepartureTime);
+
     const queryParams = new URLSearchParams({
 
         origin: origin,
         destination: destination,
+        //output_coord: 'WGS84', // 반환되는 좌표계 설정 (예: WGS84)
+        option: 'traoptimal', // 교통정보를 고려한 최적 경로 탐색
+        priority: "TIME",
+        traffic: 'true', // 실시간 교통 정보 반영
+        vehicle: 'car', // 차량 경로 탐색
         avoid: "roadevent", // roadevent를 피하도록 설정
         departure_time: selectedDepartureTime // 출발 예정 시간 추가
     });
@@ -52,12 +62,23 @@ async function drawRouteKakao(origin, destination, apiKey) {
         }
 
         const data = await response.json();
-
         // 경로 데이터가 제대로 반환되었는지 확인
         if (!data || !data.routes || data.routes.length === 0 || !data.routes[0].sections || data.routes[0].sections.length === 0) {
             throw new Error("No valid route found.");
         }
 
+        if(bool==true){
+            predictedTime += data.routes[0].summary.duration;
+        }
+        else{
+            distanceList[i] = data.routes[0].summary.distance;
+            i++
+        }
+
+        console.log("predictedTime : "+predictedTime);
+        for(let j=0; j<i; j++){
+            console.log("distance [" + j + "]: " +distanceList[j]);
+        }
         const linePath = [];
         data.routes[0].sections[0].roads.forEach(router => {
             router.vertexes.forEach((vertex, index) => {
@@ -120,18 +141,20 @@ async function drawRouteBetweenPoints(highwayNodes) {
 async function drawRoutes(origin, destination, highwayNodes, apikey) {
     if (highwayNodes.length === 0) {
         // 고속도로 노드가 없는 경우 출발지에서 도착지까지의 경로만 그림
-        await drawRouteKakao(origin, destination, apikey);
+        await drawRouteKakao(origin, destination, apikey, true);
     } else if (highwayNodes.length === 1) {
         // 고속도로 노드가 1개인 경우 출발지에서 고속도로 노드까지의 경로와 고속도로 노드에서 도착지까지의 경로를 그림
-        await drawRouteKakao(origin, highwayNodes[0], apikey);
-        await drawRouteKakao(highwayNodes[0], destination, apikey);
+        await drawRouteKakao(origin, highwayNodes[0], apikey, true);
+        await drawRouteKakao(highwayNodes[0], destination, apikey, true);
     } else {
         // 고속도로 노드가 2개 이상인 경우
-        await drawRouteKakao(origin, highwayNodes[0], apikey); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
-        for (let i = 0; i < highwayNodes.length - 1; i++) {
-            await drawRouteKakao(highwayNodes[i], highwayNodes[i + 1], apikey); // 연속된 고속도로 노드들 간의 경로 그림
+       // await drawRouteKakao(origin, highwayNodes[0], apikey, true); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
+        for (let k = 0; k < highwayNodes.length - 1; k++) {
+            console.log("k === " + k);
+            await drawRouteKakao(highwayNodes[k], highwayNodes[k + 1], apikey, false); // 연속된 고속도로 노드들 간의 경로 그림
         }
-        await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
+        console.log("length-1 : " + highwayNodes.length - 1)
+      //  await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey, true); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
     }
 }
 
@@ -225,15 +248,60 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         // 출발지와 도착지 좌표로 마커를 추가하고 경로를 표시합니다.
         //    addMarkerAndDrawRoute(startCoords, destinationCoords, apiKey);
+
         // 고속도로 노드들을 설정 (예시)
         const highwayNodes = [
-            [127.01594195339248, 37.51631226093331],
-            [127.10590011218926, 37.237307608483775],
-            // [127.025065, 37.485538],
-            // [127.037612, 37.465776],
-            // [127.103686, 37.267513],
-            [127.449390, 36.361496]  // 대전 ic
+           // [127.0859941413543, 37.41432861089564],//test
+            [127.10052949702488, 37.39752888714116],//판교 ic
+            [127.10311362063392, 37.367135131831446],//test
+
+            // [127.1008565722434, 37.396502014449894],
+         //   [127.10332041039379, 37.358794072637785],
+            // [127.1033906630679, 37.345278879829046],
+            // [127.1034515341123, 37.33356568720989],
+            // [127.10348898526756, 37.32635755753728],
+            // [127.1035591912988, 37.312842290450895],
+            // [127.10367148061468, 37.291217797312754],
+            // [127.10371825319847, 37.282207568764164],
+            // [127.10375566507477, 37.27499937548597],
+            // [127.10378839595677, 37.268692199713435],
+            // [127.10381177258138, 37.26418706952283],
+            // [127.10590011218926, 37.237307608483775],
+            // [127.10573924075685, 37.22862568813276],
+            // [127.10000025955983, 37.220871613416406],
+            // [127.09583359115491, 37.21257018267256],
+            // [127.09429176772097, 37.19856215954695],
+            // [127.09606378065385, 37.18069128191127],
+            // [127.09610530105527, 37.17979204711072],
+            // [127.09095628389771, 37.16515618993971],
+            // [127.08860850799043, 37.160092823492406],
+            // [127.08434548530306, 37.15080010058382],
+            //
+            // [127.1303810262686, 37.076033172993704],
+            // [127.13638237752647, 37.050797951559026],
+            // [127.13853955507483, 37.03742480458621],
+            // [127.1525524852754, 36.998650388044474],
+            // [127.17639266951697, 36.96229970125497],
+            // [127.1869520831318, 36.869115008014944],
+            // [127.16620375354104, 36.8193716654845],
+            // [127.2975301370419, 36.73091179184357],
+            // [127.41870756182243, 36.39700720499854],
+            // [127.43160697475312, 36.54286773348848],
+            // [127.449390, 36.361496]  // 대전 ic
         ];
+
+        /**
+         * 고속도로 노드 받아오는 코드
+         */
+        // const coordinates = await fetchCoordinatesFromServer(); // 서버로부터 좌표 데이터 가져오기
+        //
+        // if (!coordinates) {
+        //     throw new Error("Failed to fetch coordinates from server");
+        // }
+        //
+        // // 고속도로 노드들을 설정 (서버에서 받은 좌표 데이터 사용)
+        // const highwayNodes = coordinates;
+        //
         const origin = `${startCoords.x},${startCoords.y}`;
         const destination = `${destinationCoords.x},${destinationCoords.y}`;
 
@@ -247,6 +315,21 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         alert('경로 표시 중 오류가 발생했습니다.');
     }
 });
+// 서버로부터 좌표 데이터를 가져와서 highwayNodes에 할당
+async function fetchCoordinatesFromServer() {
+    try {
+        const response = await fetch('/path-prediction');
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const coordinates = await response.json();
+        return coordinates;
+    } catch (error) {
+        console.error("Error fetching coordinates from server:", error);
+        return null;
+    }
+}
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
@@ -542,3 +625,14 @@ async function sendDepartureTimeToFastAPI(startCoords, destinationCoords, distan
         console.error('Error sending departure time to FastAPI:', error);
     }
 }
+// 클릭된 위치의 위도와 경도 값을 알려주는 함수
+function displayLatLng(mouseEvent) {
+    const latlng = mouseEvent.latLng;
+    const lat = latlng.getLat(); // 클릭된 위치의 위도
+    const lng = latlng.getLng(); // 클릭된 위치의 경도
+
+    console.log('Clicked location - Latitude: ' + lat + ', Longitude: ' + lng);
+}
+
+// 지도 클릭 이벤트 핸들러 추가
+kakao.maps.event.addListener(map, 'click', displayLatLng);
