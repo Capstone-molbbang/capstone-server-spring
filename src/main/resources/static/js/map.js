@@ -39,11 +39,10 @@ async function drawRouteKakao(origin, destination, apiKey, bool) {
         origin: origin,
         destination: destination,
         //output_coord: 'WGS84', // 반환되는 좌표계 설정 (예: WGS84)
-        option: 'traoptimal', // 교통정보를 고려한 최적 경로 탐색
+       // option: 'traoptimal', // 교통정보를 고려한 최적 경로 탐색
         priority: "TIME",
         traffic: 'true', // 실시간 교통 정보 반영
-        vehicle: 'car', // 차량 경로 탐색
-        avoid: "roadevent", // roadevent를 피하도록 설정
+       // avoid: "roadevent", // roadevent를 피하도록 설정
         departure_time: selectedDepartureTime // 출발 예정 시간 추가
     });
     console.log(queryParams);
@@ -111,32 +110,6 @@ async function drawRouteKakao(origin, destination, apiKey, bool) {
     }
 }
 
-// 출발지부터 도착지까지 지도에 경로를 그리는 함수
-async function drawRouteBetweenPoints(highwayNodes) {
-    // 각 좌표를 담을 경로 배열
-    const linePath = [];
-
-    // 주어진 위도 경도 값을 순회하며 경로 배열에 추가
-    for (const coords of highwayNodes) {
-        console.log("Coords :: " + coords);
-        const latLng = new kakao.maps.LatLng(coords[1], coords[0]);
-        linePath.push(latLng);
-    }
-
-    // 지도에 표시될 선 생성
-    const polyline = new kakao.maps.Polyline({
-        path: linePath,
-        strokeWeight: 5,
-        strokeColor: '#000000',
-        strokeOpacity: 0.7,
-        strokeStyle: 'solid'
-    });
-
-    // 지도에 선 표시
-    polyline.setMap(map);
-}
-
-
 // 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
 async function drawRoutes(origin, destination, highwayNodes, apikey) {
     if (highwayNodes.length === 0) {
@@ -148,13 +121,15 @@ async function drawRoutes(origin, destination, highwayNodes, apikey) {
         await drawRouteKakao(highwayNodes[0], destination, apikey, true);
     } else {
         // 고속도로 노드가 2개 이상인 경우
-       // await drawRouteKakao(origin, highwayNodes[0], apikey, true); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
+        //await drawRouteKakao(origin, highwayNodes[0], apikey, true); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
         for (let k = 0; k < highwayNodes.length - 1; k++) {
             console.log("k === " + k);
             await drawRouteKakao(highwayNodes[k], highwayNodes[k + 1], apikey, false); // 연속된 고속도로 노드들 간의 경로 그림
         }
         console.log("length-1 : " + highwayNodes.length - 1)
-      //  await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey, true); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
+        sendDistanceToServer(distanceList);
+        //await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey, true); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
+
     }
 }
 
@@ -253,19 +228,19 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const highwayNodes = [
            // [127.0859941413543, 37.41432861089564],//test
             [127.10052949702488, 37.39752888714116],//판교 ic
-            [127.10311362063392, 37.367135131831446],//test
+           // [127.10311362063392, 37.367135131831446],//test
 
-            // [127.1008565722434, 37.396502014449894],
-         //   [127.10332041039379, 37.358794072637785],
+             //[127.1008565722434, 37.396502014449894],//판교 ic
+          //  [127.10332041039379, 37.358794072637785], //좀 이상,,
             // [127.1033906630679, 37.345278879829046],
-            // [127.1034515341123, 37.33356568720989],
+             [127.1034515341123, 37.33356568720989],
             // [127.10348898526756, 37.32635755753728],
             // [127.1035591912988, 37.312842290450895],
             // [127.10367148061468, 37.291217797312754],
             // [127.10371825319847, 37.282207568764164],
             // [127.10375566507477, 37.27499937548597],
             // [127.10378839595677, 37.268692199713435],
-            // [127.10381177258138, 37.26418706952283],
+     //        [127.10381177258138, 37.26418706952283],
             // [127.10590011218926, 37.237307608483775],
             // [127.10573924075685, 37.22862568813276],
             // [127.10000025955983, 37.220871613416406],
@@ -625,6 +600,28 @@ async function sendDepartureTimeToFastAPI(startCoords, destinationCoords, distan
         console.error('Error sending departure time to FastAPI:', error);
     }
 }
+
+async function sendDistanceToServer(distanceList) {
+    try {
+        console.log("distanceList : "+distanceList.length);
+        const response = await fetch('/api/distance', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(distanceList)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const responseData = await response.json();
+        console.log('Response from server:', responseData);
+    } catch (error) {
+        console.error('Error sending distance to server:', error);
+    }
+}
 // 클릭된 위치의 위도와 경도 값을 알려주는 함수
 function displayLatLng(mouseEvent) {
     const latlng = mouseEvent.latLng;
@@ -633,6 +630,5 @@ function displayLatLng(mouseEvent) {
 
     console.log('Clicked location - Latitude: ' + lat + ', Longitude: ' + lng);
 }
-
 // 지도 클릭 이벤트 핸들러 추가
 kakao.maps.event.addListener(map, 'click', displayLatLng);

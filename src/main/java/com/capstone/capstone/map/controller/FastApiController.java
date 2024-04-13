@@ -1,5 +1,6 @@
 package com.capstone.capstone.map.controller;
 
+import com.capstone.capstone.map.dto.DistanceDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -17,9 +18,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -28,6 +31,34 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Slf4j
 public class FastApiController {
     private static final String FASTAPI_ENDPOINT = "http://fastapi-server-address/api/coordinates";
+
+
+    /**
+     * 출발지, 도착지 좌표 및 출발 예정 시간 전송
+     */
+    @PostMapping("/api/info")
+    public ResponseEntity<Map<String, String>> sendInfoToFastApi(@RequestBody Map<String, Object> requestData){
+        try {
+            // 출발 좌표, 도착 좌표, 출발 시간을 추출
+            Map<String, Double> startCoords = (Map<String, Double>) requestData.get("startCoords");
+            Map<String, Double> destinationCoords = (Map<String, Double>) requestData.get("destinationCoords");
+            String departureTime = (String) requestData.get("departureTime");
+
+            log.info("startCoords : " + startCoords);
+            log.info("destinationCoords : " + destinationCoords);
+            log.info("departureTime : " + departureTime);
+
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Info sent to FastAPI successfully");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 요청 처리 중 오류 발생 시 클라이언트에게 오류 메시지 응답
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Error sending info to FastAPI: " + e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
+        }
+
+    }
 
     /**
      * 리스트 형식으로 예측 경로 받아옴!
@@ -60,34 +91,46 @@ public class FastApiController {
         }
     }
 
-    /**
-     * 출발지, 도착지 좌표 및 출발 예정 시간 전송
-     */
-    @PostMapping("/api/info")
-    public ResponseEntity<Map<String, String>> sendInfoToFastApi(@RequestBody Map<String, Object> requestData){
-        try {
-            // 출발 좌표, 도착 좌표, 출발 시간을 추출
-            Map<String, Double> startCoords = (Map<String, Double>) requestData.get("startCoords");
-            Map<String, Double> destinationCoords = (Map<String, Double>) requestData.get("destinationCoords");
-            String departureTime = (String) requestData.get("departureTime");
-
-            log.info("startCoords : " + startCoords);
-            log.info("destinationCoords : " + destinationCoords);
-            log.info("departureTime : " + departureTime);
-
-            Map<String, String> response = new HashMap<>();
-            response.put("message", "Info sent to FastAPI successfully");
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            // 요청 처리 중 오류 발생 시 클라이언트에게 오류 메시지 응답
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Error sending info to FastAPI: " + e.getMessage());
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(errorResponse);
+    @PostMapping("/api/distance")
+    public ResponseEntity<List<DistanceDto>> toDistance(@RequestBody List<Double> distanceList) {
+        log.info("Received distance list: {}", distanceList);
+        List<DistanceDto> distanceDtoList = new ArrayList<>();
+        for (Double distance : distanceList) {
+            distanceDtoList.add(new DistanceDto(distance));
         }
+        return ResponseEntity.ok(distanceDtoList);
 
+//        HttpClient httpClient = HttpClients.createDefault();
+//        HttpPost request = new HttpPost(FASTAPI_ENDPOINT);
+//        try {
+//            String requestBody = new ObjectMapper().writeValueAsString(distanceList);
+//            StringEntity entity = new StringEntity(requestBody);
+//            request.setEntity(entity);
+//
+//            HttpResponse response = httpClient.execute(request);
+//
+//            int statusCode = response.getStatusLine().getStatusCode();
+//
+//            if(statusCode == HttpStatus.SC_OK){
+//                String responseBody = EntityUtils.toString(response.getEntity());
+//                DistanceDto distanceDto = parseDistanceDto(responseBody);
+//                return ResponseEntity.ok(distanceDto);
+//            }
+//            else{
+//                log.error("Failed to calculate distances. Status code: {}", statusCode);
+//                return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
+//            }
+//        }catch (IOException e) {
+//            log.error("Error while calculating distances: {}", e.getMessage());
+//            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(null);
+//        }
     }
 
 
+    private DistanceDto parseDistanceDto(String responseBody) throws IOException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(responseBody, DistanceDto.class);
+    }
     private void sendToFastAPI(List<Double> startCoords, List<Double> destinationCoords, String departureTime) {
         // FastAPI 엔드포인트 URL
         String fastAPIEndpoint = "http://fastapi-server-address/api/info";

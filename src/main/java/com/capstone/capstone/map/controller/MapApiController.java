@@ -1,7 +1,7 @@
 package com.capstone.capstone.map.controller;
 
 import com.capstone.capstone.map.dto.KakaoSearchDto;
-import com.capstone.capstone.map.service.DistanceService;
+import com.capstone.capstone.map.service.CoordinateService;
 import com.capstone.capstone.map.service.KakaoMapService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class MapApiController {
 
     private final KakaoMapService kakaoMapService;
-    private final DistanceService distanceService;
+    private final CoordinateService distanceService;
 
     // FastAPI 서버의 엔드포인트 URL
     private final RestTemplate restTemplate;
