@@ -92,11 +92,11 @@ public class FastApiController {
     }
 
     @PostMapping("/api/distance")
-    public ResponseEntity<List<DistanceDto>> toDistance(@RequestBody List<Double> distanceList) {
+    public ResponseEntity<DistanceDto> toDistance(@RequestBody List<Double> distanceList) {
         log.info("Received distance list: {}", distanceList);
-        List<DistanceDto> distanceDtoList = new ArrayList<>();
+        DistanceDto distanceDtoList = null;
         for (Double distance : distanceList) {
-            distanceDtoList.add(new DistanceDto(distance));
+            distanceDtoList.addDistance(distance);
         }
         return ResponseEntity.ok(distanceDtoList);
 

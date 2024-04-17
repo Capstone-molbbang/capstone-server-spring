@@ -1,5 +1,6 @@
 package com.capstone.capstone.map.controller;
 
+import com.capstone.capstone.map.dto.DistanceDto;
 import com.capstone.capstone.map.dto.KakaoSearchDto;
 import com.capstone.capstone.map.service.CoordinateService;
 import com.capstone.capstone.map.service.KakaoMapService;
@@ -9,6 +10,9 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -19,7 +23,7 @@ public class MapApiController {
 
     private final KakaoMapService kakaoMapService;
     private final CoordinateService distanceService;
-
+  //  private final DistanceCalculatorService distanceCalculatorService;
     // FastAPI 서버의 엔드포인트 URL
     private final RestTemplate restTemplate;
 
@@ -40,7 +44,7 @@ public class MapApiController {
             KakaoSearchDto destinationSearchDto = kakaoMapService.getKakaoSearch(destinationAddress);
 
             // 검색 결과를 필요한 형태로 가공하여 반환
-            Map<String, Object> searchResults = distanceService.getCoordsAndDistanceFromSearchDto(startSearchDto, destinationSearchDto);
+            Map<String, Object> searchResults = distanceService.getCoordsFromSearchDto(startSearchDto, destinationSearchDto);
 
             log.info("search Result : " + searchResults);
             return ResponseEntity.status(HttpStatus.OK).body(searchResults);
@@ -56,5 +60,16 @@ public class MapApiController {
         log.info("placeInfo : " + placeSuggestions);
         return ResponseEntity.ok().body(placeSuggestions);
     }
+
+//    @GetMapping("/distance")
+//    public ResponseEntity<DistanceDto> getDistance(){
+//        List<List<Double>> distanceList =  new ArrayList<>();
+//        distanceList.add(Arrays.asList(127.10080718060937, 37.39616135057547));
+//        distanceList.add(Arrays.asList(127.10332041039379, 37.358794072637785));
+//
+//    //    DistanceDto distanceCalculate = distanceCalculatorService.calculate(distanceList);
+//      //  log.info(distanceCalculate.getDistanceList().toString());
+//        return ResponseEntity.ok().body(distanceCalculate);
+//    }
 
 }

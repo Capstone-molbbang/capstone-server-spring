@@ -1,10 +1,12 @@
 package com.capstone.capstone.map.service;
 
+import com.capstone.capstone.map.dto.DistanceDto;
 import com.capstone.capstone.map.dto.KakaoSearchDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -24,7 +26,7 @@ public class CoordinateService {
     }
 
     // 출발지와 도착지의 좌표
-    public Map<String, Object> getCoordsAndDistanceFromSearchDto(KakaoSearchDto startSearchDto, KakaoSearchDto destinationSearchDto) {
+    public Map<String, Object> getCoordsFromSearchDto(KakaoSearchDto startSearchDto, KakaoSearchDto destinationSearchDto) {
         Map<String, Object> result = new HashMap<>();
         Map<String, String> startCoords = getCoordsFromSearchDto(startSearchDto);
         Map<String, String> destinationCoords = getCoordsFromSearchDto(destinationSearchDto);

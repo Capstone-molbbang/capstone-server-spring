@@ -5,11 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class DistanceDto {
 
-    private Double distance;
+    private List<Double> distanceList;
+
+
+    public void addDistance(Double distance){
+        this.distanceList.add(distance);
+    }
 }

@@ -18,8 +18,125 @@ var destinationMarker= null;
 
 var distanceList = []; // 거리를 저장할 리스트
 var predictedTime = 0; // 전체 예측 시간을 저장할 변수
-var i=0;
-async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
+var k = 0;
+
+async function drawRouteKakao(origin, destination, apiKey, bool) {
+
+
+    // const formattedDepartureTime = departureTime.toISOString(); // ISO 형식으로 출발 예정 시간 변환
+
+    const REST_API_KEY = apiKey;
+    console.log(apiKey);
+    const url = 'https://apis-navi.kakaomobility.com/v1/directions';
+
+    const headers = {
+        Authorization: `KakaoAK ${REST_API_KEY}`,
+        'Content-Type': 'application/json'
+    };
+    console.log("selectedDepartureTime ;:" + selectedDepartureTime);
+
+    console.log("origin : "+ origin);
+    console.log("destination : "+ destination);
+
+    const queryParams = new URLSearchParams({
+
+        origin: origin,
+        destination: destination,
+        //output_coord: 'WGS84', // 반환되는 좌표계 설정 (예: WGS84)
+        // option: 'traoptimal', // 교통정보를 고려한 최적 경로 탐색
+        priority: "TIME",
+      // traffic: 'true', // 실시간 교통 정보 반영
+       // avoid: "roadevent|motorway", // roadevent를 피하도록 설정
+        departure_time: selectedDepartureTime // 출발 예정 시간 추가
+    });
+    console.log(queryParams);
+
+    const requestUrl = `${url}?${queryParams}`;
+    console.log(requestUrl);
+
+    try{
+        const response = await fetch(requestUrl, {
+            method: 'GET',
+            headers: headers
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // 경로 데이터가 제대로 반환되었는지 확인
+        if (!data || !data.routes || data.routes.length === 0 || !data.routes[0].sections || data.routes[0].sections.length === 0) {
+            throw new Error("No valid route found.");
+        }
+
+        // if(bool==true){
+        //     predictedTime += data.routes[0].summary.duration;
+        // }
+        // else{
+        //     distanceList[i] = data.routes[0].summary.distance;
+        //     i++
+        // }
+
+        // console.log("predictedTime : "+predictedTime);
+        // for(let j=0; j<i; j++){
+        //     console.log("distance [" + j + "]: " +distanceList[j]);
+        // }
+        const linePath = [];
+        data.routes[0].sections[0].roads.forEach(router => {
+            router.vertexes.forEach((vertex, index) => {
+                if (index % 2 === 0) {
+                    linePath.push(new kakao.maps.LatLng(router.vertexes[index + 1], router.vertexes[index]));
+                }
+            });
+        });
+        polyline = new kakao.maps.Polyline({
+            path: linePath,
+            strokeWeight: 5,
+            strokeColor: '#000000',
+            strokeOpacity: 0.7,
+            strokeStyle: 'solid'
+        });
+        polyline.setMap(map);
+
+        console.log("data=" + data)
+        // 거리와 소요 시간 가져오기
+        distance = data.routes[0].summary.distance;
+        duration = data.routes[0].summary.duration;
+
+        console.log("distance1 == " + distance);
+        console.log("distance1 == " + duration);
+
+        displayRouteInfo(distance, duration);
+
+    }catch (error){
+        console.error("Error:", error);
+    }
+}
+
+// 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
+async function drawRoutes(origin, destination, highwayNodes, apikey) {
+    if (highwayNodes.length === 0) {
+        // 고속도로 노드가 없는 경우 출발지에서 도착지까지의 경로만 그림
+        await drawRouteKakao(origin, destination, apikey, true);
+    } else if (highwayNodes.length === 1) {
+        // 고속도로 노드가 1개인 경우 출발지에서 고속도로 노드까지의 경로와 고속도로 노드에서 도착지까지의 경로를 그림
+        await drawRouteKakao(origin, highwayNodes[0], apikey, true);
+        await drawRouteKakao(highwayNodes[0], destination, apikey, true);
+    } else {
+        // 고속도로 노드가 2개 이상인 경우
+        //await drawRouteKakao(origin, highwayNodes[0], apikey, true); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
+        for (let k = 0; k < highwayNodes.length - 1; k++) {
+            console.log("k === " + k);
+            await drawRouteKakao(highwayNodes[k], highwayNodes[k + 1], apikey, false); // 연속된 고속도로 노드들 간의 경로 그림
+        }
+        console.log("length-1 : " + highwayNodes.length - 1)
+        sendDistanceToServer(distanceList);
+        //await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey, true); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
+
+    }
+}
+async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool) {
 
 
     console.log("origin : " + origin);
@@ -32,9 +149,10 @@ async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
         Authorization: `KakaoAK ${REST_API_KEY}`,
         'Content-Type': 'application/json'
     };
-    const w =[];
+
+    let w = null;
     if(waypoint != null){
-        const w = waypoint.map((waypoint) => ({
+        w = waypoint.map((waypoint) => ({
             "x": String(waypoint[0]),
             "y": String(waypoint[1])
         }));
@@ -49,34 +167,52 @@ async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
 
     //
     // console.log("origin : " + origin);
-    // console.log("w! : ", JSON.stringify(w));
+    console.log("w! : ", JSON.stringify(w));
     // console.log("w.len" + w.length);
     // console.log("des : " + destination);
+
+    let  data ;
+    if(w != null){
+        data =  {
+            "origin": {
+                "x": originX,
+                "y": originY
+            },
+            "destination": {
+                "x": destinationX,
+                "y": destinationY
+            },
+            "waypoints" : w,
+            "priority" : "RECOMMEND",
+            "traffic" : true,
+            "avoid" : ["motorway"],
+            "roadevent": 2
+        };
+    }
+    else{
+        data =  {
+            "origin": {
+
+                "x": originX,
+                "y": originY
+            },
+            "destination": {
+                "x": destinationX,
+                "y": destinationY
+            },
+            "priority" : "RECOMMEND",
+            "traffic" : true,
+            "avoid" : ["motorway"],
+            "roadevent": 2
+        };
+    }
+
 
     try {
         const response = await $.ajax({
             type: 'post',
             url: "https://apis-navi.kakaomobility.com/v1/waypoints/directions",
-            data: JSON.stringify({
-                "origin": {
-                    "x": originX,
-                    "y": originY
-                },
-                "destination": {
-                    "x": destinationX,
-                    "y": destinationY
-                },
-                // "waypoints": [
-                //     {
-                //         "name": "name0",
-                //         "x": "127.11341936045922",
-                //         "y": "37.39639094915999"
-                //     }
-                // ],
-                "waypoints" : w,
-                "priority" : "TIME",
-                "traffic" : true
-            }),
+            data: JSON.stringify(data),
             headers: headers,
             dataType: 'json',
             contentType: 'application/json',
@@ -88,12 +224,17 @@ async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
                 if (bool) {
                     predictedTime += response.routes[0].summary.duration;
                 } else {
-                    distanceList[i] = response.routes[0].summary.distance;
-                    i++;
+                    for(let i=0; i<w.length; i++){
+                   //     const tmp = response.routes[0].selects[i].distance;
+                        distanceList[k] = tmp;
+                        k++;
+                        console.log("k==" + k);
+                        console.log("tmp == " + tmp);
+                    }
                 }
 
                 console.log("predictedTime : " + predictedTime);
-                for (let j = 0; j < i; j++) {
+                for (let j = 0; j < k; j++) {
                     console.log("distance [" + j + "]: " + distanceList[j]);
                 }
 
@@ -116,11 +257,11 @@ async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
                 polyline.setMap(map);
 
                 // 거리와 소요 시간 가져오기
-                const distance = response.routes[0].summary.distance;
-                const duration = response.routes[0].summary.duration;
-                console.log("distance == " + distance);
-                console.log("duration == " + duration);
-                displayRouteInfo(distance, duration);
+                // const distance = response.routes[0].summary.distance;
+                // const duration = response.routes[0].summary.duration;
+                // console.log("distance == " + distance);
+                // console.log("duration == " + duration);
+                //displayRouteInfo(distance, duration);
             },
             error: function (xhr, status, error) {
                 console.log('통신 실패');
@@ -133,7 +274,7 @@ async function drawRouteKakao(origin, waypoint, destination, apiKey, bool) {
 }
 
 // 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
-async function drawRoutes(waypoints, apikey) {
+async function drawRoutesWayPoint(waypoints, apikey) {
 
     if (waypoints[1] === 0 && waypoints.length === 2) {
         // 고속도로 노드가 없는 경우 출발지에서 도착지까지의 경로만 그림
@@ -141,23 +282,24 @@ async function drawRoutes(waypoints, apikey) {
     }
     else {
         if(waypoints.length===3){
-            await drawRouteKakao(waypoints[0][0], null, waypoints[1][0], apikey, true);
+           // await drawRouteKakao(waypoints[0][0], null, waypoints[1][0], apikey, true);
 
-            await drawRouteKakao(waypoints[1][0], waypoints[1].slice(1, -1), waypoints[1][waypoints[1].length-1], apiKey, false);
-            await drawRouteKakao(waypoints[1][waypoints[1].length-1], null, waypoints[2][0], apikey, true);
+            await drawRouteKakao(waypoints[1][0], waypoints[1].slice(1, -1), waypoints[1][waypoints[1].length-1], apikey, false);
+        //    await drawRouteKakao(waypoints[1][waypoints[1].length-1], null, waypoints[2][0], apikey, true);
 
         }
         else {
             //출발점
             await drawRouteKakao(waypoints[0][0], null, waypoints[1][0], apikey, true);
 
-            await drawRouteKakao(waypoints[1][0], waypoints[1].slice(1), waypoints[2][0], apiKey, false);
+            await drawRouteKakao(waypoints[1][0], waypoints[1].slice(1), waypoints[2][0], apikey, false);
             for(let i = 2; i<waypoints.length-2; i++){
-                await drawRouteKakao(waypoints[i][0], waypoints[i].slice(1), waypoints[i+1][0], apiKey, false);
+                await drawRouteKakao(waypoints[i][0], waypoints[i].slice(1), waypoints[i+1][0], apikey, false);
             }
             await drawRouteKakao(waypoints[waypoints.length-2][0], waypoints[waypoints.length-2].slice(1, -1), waypoints[waypoints.length-2][waypoints[waypoints.length-2].length-1], apikey, false);
             await drawRouteKakao(waypoints[waypoints.length-2][waypoints[waypoints.length-2].length-1], null, waypoints[waypoints.length-1][0], apikey, true);
         }
+
     }
 
     // if (highwayNodes.length === 0) {
@@ -274,42 +416,50 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         // 고속도로 노드들을 설정 (예시)
         const highwayNodes1 = [
-           [127.10052949702488, 37.39752888714116],//판교 ic
-
-            [127.10332041039379, 37.358794072637785], //좀 이상,,
-            [127.1033906630679, 37.345278879829046],
-            [127.1034515341123, 37.33356568720989],
-            [127.10348898526756, 37.32635755753728],
-            [127.1035591912988, 37.312842290450895],
-            [127.10367148061468, 37.291217797312754],
-            [127.10371825319847, 37.282207568764164],
-            [127.10375566507477, 37.27499937548597],
-            [127.10378839595677, 37.268692199713435],
-
-            [127.10381177258138, 37.26418706952283],
-            [127.10590011218926, 37.237307608483775],
-            [127.10573924075685, 37.22862568813276],
-            [127.10000025955983, 37.220871613416406],
-            [127.09583359115491, 37.21257018267256],
-            [127.09429176772097, 37.19856215954695],
-            [127.09606378065385, 37.18069128191127],
-            [127.09610530105527, 37.17979204711072],
-            [127.09095628389771, 37.16515618993971],
-            [127.08860850799043, 37.160092823492406],
-
-            [127.08434548530306, 37.15080010058382],
-            [127.1303810262686, 37.076033172993704],
-            [127.13638237752647, 37.050797951559026],
-            [127.13853955507483, 37.03742480458621],
-            [127.1525524852754, 36.998650388044474],
-            [127.17639266951697, 36.96229970125497],
-            [127.1869520831318, 36.869115008014944],
-            [127.16620375354104, 36.8193716654845],
-            [127.2975301370419, 36.73091179184357],
-            [127.41870756182243, 36.39700720499854],
-
-            [127.43160697475312, 36.54286773348848],
-            [127.449390, 36.361496]  // 대전 ic
+            [127.10080718060937, 37.39616135057547],
+      //     [127.10069743533502, 37.39643400311985],//판교 ic
+            /**
+             * 02200부터 하면 옆도로로 인식, 01160으로 하면 위에 도로 인식
+             */
+               [127.10332041039379, 37.358794072637785], //02200
+         //    [127.1033906630679, 37.345278879829046],
+         //    [127.1034515341123, 37.33356568720989],
+         //    [127.10348898526756, 37.32635755753728],
+         //    [127.1035591912988, 37.312842290450895],
+         //    [127.10367148061468, 37.291217797312754],
+         //    [127.10371825319847, 37.282207568764164],
+         //    [127.10375566507477, 37.27499937548597],
+         //    [127.10378839595677, 37.268692199713435],
+         //    [127.10381177258138, 37.26418706952283],
+         //
+         //    [127.10590011218926, 37.237307608483775],
+         //    [127.10573924075685, 37.22862568813276],
+         //    [127.10000025955983, 37.220871613416406],
+         //    [127.09583359115491, 37.21257018267256],
+         //  //  [127.09429176772097, 37.19856215954695], //경부고속도로 아님 !..
+         //    [127.09606378065385, 37.18069128191127],
+         //    [127.09610530105527, 37.17979204711072],
+         //    [127.09095628389771, 37.16515618993971],
+         //    [127.08860850799043, 37.160092823492406],
+         //    [127.08434548530306, 37.15080010058382],
+         //    [127.1303810262686, 37.076033172993704],
+         //
+         //    [127.13638237752647, 37.050797951559026],
+         //    [127.13853955507483, 37.03742480458621], //04215
+         //    [127.1525524852754, 36.998650388044474], // 04250
+         //    [127.17639266951697, 36.96229970125497],//04290
+         //    [127.1869520831318, 36.869115008014944], //04320
+         //    [127.16620375354104, 36.8193716654845], //04350
+         //    [127.16519118693068, 36.80679540096083], //04355
+         //    [127.2975301370419, 36.73091179184357], //06100
+         //    [127.36479778834358, 36.68507636379607], //06700
+         //    [127.43160697475312, 36.54286773348848], //08400
+         //    [127.43020967328724, 36.532986405455695], //08500
+         //
+         //    [127.41731976383807, 36.429692944186755], //10100
+         //    [127.41870756182243, 36.39700720499854]
+         //
+         // //   [127.449390, 36.361496]  // 대전 ic
         ];
 
 
@@ -329,24 +479,27 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const destination = `${destinationCoords.x},${destinationCoords.y}`;
 
 
-        // 경유지 배열을 저장할 배열
-        const waypoints = [];
-        waypoints.push([[startCoords.x ,startCoords.y]]);
+        // // 경유지 배열을 저장할 배열
+        // const waypoints = [];
+        // waypoints.push([[startCoords.x ,startCoords.y]]);
+        //
+        // // 고속도로 노드를 30개씩 나누어 waypoints 배열에 추가
+        // for (let i = 0; i < highwayNodes1.length; i += 30) {
+        //     waypoints.push(highwayNodes1.slice(i, i + 30));
+        // }
 
-        // 고속도로 노드를 30개씩 나누어 waypoints 배열에 추가
-        for (let i = 0; i < highwayNodes1.length; i += 30) {
-            waypoints.push(highwayNodes1.slice(i, i + 30));
-        }
 
-
-        // 도착지를 waypoints 배열에 추가
-        waypoints.push([[destinationCoords.x,destinationCoords.y]]);
+        // // 도착지를 waypoints 배열에 추가
+        // waypoints.push([[destinationCoords.x,destinationCoords.y]]);
 
         addMarkersAndSetCenter(startCoords, destinationCoords);
 
+        addMarkers(highwayNodes1);
 
-        drawRoutes(waypoints, apiKey);
+        drawRoutes(origin, destination, highwayNodes1, apiKey);
+     //  drawRoutesWayPoint(waypoints, apiKey);
         resetSearch(); // 검색 필드 초기화
+
 
     } catch (error) {
         console.error("Error:", error);
