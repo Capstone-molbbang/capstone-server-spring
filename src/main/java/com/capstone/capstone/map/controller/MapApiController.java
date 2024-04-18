@@ -61,15 +61,4 @@ public class MapApiController {
         return ResponseEntity.ok().body(placeSuggestions);
     }
 
-//    @GetMapping("/distance")
-//    public ResponseEntity<DistanceDto> getDistance(){
-//        List<List<Double>> distanceList =  new ArrayList<>();
-//        distanceList.add(Arrays.asList(127.10080718060937, 37.39616135057547));
-//        distanceList.add(Arrays.asList(127.10332041039379, 37.358794072637785));
-//
-//    //    DistanceDto distanceCalculate = distanceCalculatorService.calculate(distanceList);
-//      //  log.info(distanceCalculate.getDistanceList().toString());
-//        return ResponseEntity.ok().body(distanceCalculate);
-//    }
-
 }

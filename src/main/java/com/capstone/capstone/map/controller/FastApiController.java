@@ -1,6 +1,7 @@
 package com.capstone.capstone.map.controller;
 
 import com.capstone.capstone.map.dto.DistanceDto;
+import com.capstone.capstone.map.dto.DistanceRequestDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -92,9 +93,9 @@ public class FastApiController {
     }
 
     @PostMapping("/api/distance")
-    public ResponseEntity<DistanceDto> toDistance(@RequestBody List<Double> distanceList) {
+    public ResponseEntity<DistanceRequestDto> toDistance(@RequestBody List<Double> distanceList) {
         log.info("Received distance list: {}", distanceList);
-        DistanceDto distanceDtoList = null;
+        DistanceRequestDto distanceDtoList = null;
         for (Double distance : distanceList) {
             distanceDtoList.addDistance(distance);
         }

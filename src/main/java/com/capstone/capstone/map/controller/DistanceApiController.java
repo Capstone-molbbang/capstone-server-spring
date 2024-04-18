@@ -1,6 +1,8 @@
 package com.capstone.capstone.map.controller;
 
 import com.capstone.capstone.map.dto.DistanceDto;
+import com.capstone.capstone.map.dto.DistanceRequestDto;
+import com.capstone.capstone.map.dto.PredictedTimeDto;
 import com.capstone.capstone.map.service.DistanceCalculatorService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +29,19 @@ public class DistanceApiController {
     @Value("${kakao.map.restapi-key}")
     private  String REST_API_KEY;
     private final RestTemplate restTemplate;
+
+
+
+    @PostMapping("/api/distanceList")
+    public ResponseEntity<DistanceDto> getDistanceList(@RequestBody List<Integer> distanceList) {
+        log.info("distanceList : " + distanceList);
+        DistanceDto distanceDto = new DistanceDto();
+        for (Integer distance : distanceList) {
+            distanceDto.addDistance(distance);
+        }
+        //log.info(distanceDto.getDistanceList().toString());
+        return  ResponseEntity.ok().body(distanceDto);
+    }
 
 
     @GetMapping("/convert/wgs84-to-wtm")
@@ -176,7 +191,7 @@ public class DistanceApiController {
 
 
     @GetMapping("/api/distance")
-    public ResponseEntity<DistanceDto> getDistance() {
+    public ResponseEntity<DistanceRequestDto> getDistance() {
 
         List<List<Double>> wtm = Arrays.asList(
                 Arrays.asList(208930.58309994685, 433022.0632990198),
@@ -279,7 +294,7 @@ public class DistanceApiController {
         );
 
 
-        DistanceDto distanceDto = distanceCalculatorService.calculateDistances(wtm);
+        DistanceRequestDto distanceDto = distanceCalculatorService.calculateDistances(wtm);
 
         if (distanceDto != null) {
             return ResponseEntity.ok(distanceDto); // 계산된 거리 리스트를 반환합니다.

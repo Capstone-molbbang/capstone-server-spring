@@ -7,14 +7,14 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 @Getter
 @Setter
-public class DistanceDto {
+@AllArgsConstructor
+@NoArgsConstructor
+public class DistanceRequestDto {
+    private List<Double> distanceList = new ArrayList<>();
 
-    private List<Integer> distanceList = new ArrayList<>();
-
-    public void addDistance(Integer distance){
+    public void addDistance(Double distance){
         distanceList.add(distance);
     }
 }

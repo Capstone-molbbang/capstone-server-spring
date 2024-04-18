@@ -1,6 +1,7 @@
 package com.capstone.capstone.map.service;
 
 import com.capstone.capstone.map.dto.DistanceDto;
+import com.capstone.capstone.map.dto.DistanceRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,8 @@ public class DistanceCalculatorService {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
-    // WTM 좌표 리스트를 받아서 각 점 간 거리를 계산하여 반환하는 메서드
-    public DistanceDto calculateDistances(List<List<Double>> wtmCoords) {
+//     WTM 좌표 리스트를 받아서 각 점 간 거리를 계산하여 반환하는 메서드
+    public DistanceRequestDto calculateDistances(List<List<Double>> wtmCoords) {
         List<Double> distanceList = new ArrayList<>();
 
         // WTM 좌표 리스트를 순회하면서 각 점 간의 거리를 계산하여 distanceList에 추가
@@ -37,7 +38,6 @@ public class DistanceCalculatorService {
             distanceList.add(distance/1000);
         }
 
-        // 계산된 거리 리스트를 DistanceDto로 감싸서 반환
-        return new DistanceDto(distanceList);
+        return new DistanceRequestDto(distanceList);
     }
 }
