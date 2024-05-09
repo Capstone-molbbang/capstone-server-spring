@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class BreadRecommendController {
 
-    @GetMapping("/breadPage")
+    @GetMapping("/bread")
     public String breadRecommend(){
         return "breadPage";
     }

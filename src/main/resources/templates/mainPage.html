@@ -82,6 +82,9 @@
             border-color: transparent;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
         }
+        .car-image {
+            margin-top: 90px; /* 조정하고자 하는 이미지의 상단 여백 */
+        }
     </style>
 </head>
 <body>
@@ -97,13 +100,13 @@
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-4">
-            <a class="btn btn-primary btn-block" th:href="@{/aboutUsPage}" style="font-family: 'Pretendard-Regular', sans-serif;">ABOUT US</a>
+            <a class="btn btn-primary btn-block" th:href="@{/aboutUs}" style="font-family: 'Pretendard-Regular', sans-serif;">ABOUT US</a>
         </div>
         <div class="col-md-4">
             <a class="btn btn-primary btn-block" th:href="@{/map}" style="font-family: 'Pretendard-Regular', sans-serif;">SEARCH DIRECTIONS</a>
         </div>
         <div class="col-md-4">
-            <a class="btn btn-primary btn-block" th:href="@{/breadPage}" style="font-family: 'Pretendard-Regular', sans-serif;">RECOMMEND BREADS</a>
+            <a class="btn btn-primary btn-block" th:href="@{/bread}" style="font-family: 'Pretendard-Regular', sans-serif;">RECOMMEND BREADS</a>
         </div>
     </div>
 </div>
@@ -122,7 +125,7 @@
                     <span>곳으로!</span>
                 </p>            </div>        </div>
         <div class="col-md-6">
-            <img src="/image/car.png" alt="Car Image" width="700" height="466">
+            <img src="/image/car.png" alt="Car Image" width="700" height="466" class="car-image">
         </div>
     </div>
 </div>
