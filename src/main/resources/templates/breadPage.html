@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bread Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            font-family: 'TTLaundryGothicB', sans-serif;
+        }
+        .header-text {
+            font-size: 64px;
+            margin-top: 100px;
+            text-align: center;
+            color: #000000;
+            position: relative;
+            margin-bottom: 50px;
+            font-family: 'Pretendard-Regular', sans-serif;
+        }
+        .header-text::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -6px;
+            width: 410px;
+            height: 16px;
+            background-color: #AACCC6;
+            z-index: -1;
+            mix-blend-mode: multiply;
+        }
+        .header-text::before {
+            content: 'Bread Review!';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 64px;
+            color: #000000;
+            font-family: 'HSSanTokki20-Regular', sans-serif;
+            z-index: 1;
+        }
+        .review-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 100px;
+        }
+
+        .review-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .review-item img {
+            width: 200px;
+            height: 200px;
+            margin-right: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .review-item {
+                flex-direction: column;
+                align-items: center;
+            }
+            .review-item img {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+        @font-face {
+            font-family: 'HSSanTokki20-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405@1.0/HSSanTokki20-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'HSSanTokki20-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405@1.0/HSSanTokki20-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 800;
+            font-style: normal;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#" th:href="@{/}" style="font-family: 'HSSanTokki20-Regular', sans-serif; font-size: 20px;">
+        <img src="/image/teamLogo.png" alt="Logo" height="30" class="d-inline-block align-top">
+        mol.bread.map
+    </a>
+</nav>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <p class="header-text">
+            </p>
+        </div>
+    </div>
+
+    <div class="row review-container">
+        <div class="col-md-6">
+            <div class="review-item">
+                <img src="/image/bread1.png" alt="Bread 1" width="200" height="200">
+                <p>맛있어요!</p>
+            </div>
+            <div class="review-item">
+                <img src="/image/bread1.png" alt="Bread 3" width="200" height="200">
+                <p>꿀맛입니다!</p>
+            </div>
+            <div class="review-item">
+                <img src="/image/bread1.png" alt="Bread 4" width="200" height="200">
+                <p>너무 맛있어요!</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-12 review-item">
+                    <img src="/image/bread1.png" alt="Bread 2" width="200" height="200">
+                    <p>최고에요!</p>
+                </div>
+                <div class="col-12 review-item">
+                    <img src="/image/bread1.png" alt="Bread 5" width="200" height="200">
+                    <p>완벽해요!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
