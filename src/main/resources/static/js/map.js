@@ -380,11 +380,83 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const destinationCoords = data.destinationCoords; // 도착지 좌표
         const distance = data.distance; // 거리
         selectedDepartureTime = getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
-        sendDepartureTimeToFastAPI(startCoords, destinationCoords, distance, selectedDepartureTime)
+       // sendDepartureTimeToFastAPI(startCoords, destinationCoords, distance, selectedDepartureTime)
 
-        const highwayNodes1 = [
-            [127.1008565722434, 37.396502014449894],
-            [127.10332041039379, 37.358794072637785],
+        const root1_highwayNodes = [
+            [127.22031199549663,37.52381114479651], //0300
+            [127.24098253938524,37.4842955984355],
+            [127.25374529878387,37.465931869766976],
+            [127.26317194991778,37.45201993175246],
+            [127.27938707326331,37.4451845824706],
+            [127.3037457517851,37.41304840725884],
+            [127.3153660401467,37.386699251295425],
+            [127.3235283049389,37.346852000680954],
+            [127.32537388142184,37.341697575159905],
+            [127.34740718560963,37.31515596805733],
+
+            [127.37471602201036,37.29412593065992],
+            [127.39848711354917,37.27111247899416],
+            [127.41987824596501,37.25030630765819],
+            [127.43228336236245,37.21979076768787],
+            [127.44276715850832,37.19452191600411],
+            [127.44528074122488,37.10951014878058],
+            [127.47493219534448,37.05570119062435],
+            [127.47843298234658,37.001719008085665],
+            [127.4669047573043,36.971587500531335],
+            [127.474900100258,36.93254850659951],
+
+           [127.47591573344967,36.89574803386027],
+            [127.47905463319294,36.86141333965102],
+            [127.49265031625535,36.828953862302306],
+            [127.50766968194922,36.78987979374164],
+            [127.44540352419638,36.718645828453454],
+
+            [127.42458377120629,36.67464859084522],
+            [127.4200886458462,36.60520675877221],//중부선 끝
+
+            // //경부
+            [127.43210220588804,36.55363043485985],
+            [127.42794983703914,36.471908653925546],
+            [127.41870756182243,36.39700720499854]
+        ];
+        // const root11_highwayNodes = [
+        //     [127.22031199549663,37.52381114479651], //0300
+        //     [127.23569165725593,37.49607245355468] ,//0500'
+        //     [127.25002254222645,37.465009142741415], //1000 안됨
+        //     [127.26235757809923,37.450260131402715],
+        //     [127.27900596922613,37.444669310216064],
+        //     [127.30325811910785,37.41280311221876],
+        //     [127.31507000744107,37.38661120162253],
+        //     [127.32308724204493,37.34672619748197],
+        //     [127.32506201080021,37.341554279946514],
+        //     [127.34720399377304,37.31495750615764],
+        //
+        //     [127.37444112701262,37.293741079450804],
+        //     [127.39818744378603,37.270921348742945],
+        //     [127.41987824596501,37.25030630765819],
+        //     [127.43228336236245,37.21979076768787],
+        //     [127.44130768275318,37.181975834905025],
+        //     [127.45228663326743,37.0893073747263],
+        //     [127.47493219534448,37.05570119062435],
+        //     [127.47843298234658,37.001719008085665],
+        //     [127.4669047573043,36.971587500531335],
+        //     [127.47679819013017,36.923669596758465],
+        //
+        //     [127.47591573344967,36.89574803386027],
+        //     [127.47905463319294,36.86141333965102],
+        //     [127.49429464892215,36.83688641558596],
+        //     [127.50725282575932, 36.79888577761128],
+        //     [127.45015936659819,36.72579625300241],
+        //     [127.42458377120629,36.67464859084522],
+        //     [127.4200886458462,36.60520675877221],//중부선 끝
+        //
+        //     //경부
+        //     [127.43210220588804,36.55363043485985],
+        //     [127.42794983703914,36.471908653925546],
+        //     [127.41870756182243,36.39700720499854]
+        // ];
+        const root2_highwayNodes = [
+            [127.10332041039379, 37.358794072637785], //2200
             [127.1034515341123,37.33356568720989],
             [127.10371825319847,37.282207568764164],
             [127.10378839595677, 37.268692199713435],
@@ -419,18 +491,10 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         ];
 
 
-        var startCoord = highwayNodes1[0];
-        var endCoord = highwayNodes1[highwayNodes1.length - 1];
+        var startCoord = root1_highwayNodes[0];
+        var endCoord = root1_highwayNodes[root1_highwayNodes.length - 1];
 
-        //  배열의 간격 계산
-        var interval = Math.floor((highwayNodes1.length - 2) / 28);
 
-        // 새로운 좌표 배열 생성
-        var newCoordinates = [startCoord];
-        for (var i = interval; i < highwayNodes1.length - 1; i += interval) {
-            newCoordinates.push(highwayNodes1[i]);
-        }
-        newCoordinates.push(endCoord);
 
 
         /**
@@ -443,30 +507,25 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         // }
         //
         // // 고속도로 노드들을 설정 (서버에서 받은 좌표 데이터 사용)
-        // const highwayNodes = coordinates;
+        // const k_highwayNodes = coordinates;
         //
         const origin = `${startCoords.x},${startCoords.y}`;
         const destination = `${destinationCoords.x},${destinationCoords.y}`;
 
-        //
+        var waypoints = [];
         // // 경유지 배열을 저장할 배열
-        const waypoints = [];
         waypoints.push([[startCoords.x ,startCoords.y]]);
 
-        waypoints.push(newCoordinates);
-        // // // 고속도로 노드를 30개씩 나누어 waypoints 배열에 추가
-        // for (let i = 0; i < highwayNodes1.length; i += 30) {
-        //     waypoints.push(highwayNodes1.slice(i, i + 30));
-        // }
+        waypoints.push(root1_highwayNodes);
 
         // 도착지를 waypoints 배열에 추가
        waypoints.push([[destinationCoords.x,destinationCoords.y]]);
 
         addMarkersAndSetCenter(startCoords, destinationCoords);
 
-        addMarkers(highwayNodes1);
+        addMarkers(root1_highwayNodes);
 
-        //drawRoutes(origin, destination, highwayNodes1, apiKey);
+        //drawRoutes(origin, destination, k_highwayNodes, apiKey);
         drawRoutesWayPoint(waypoints, apiKey);
         resetSearch(); // 검색 필드 초기화
 
@@ -476,7 +535,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         alert('경로 표시 중 오류가 발생했습니다.');
     }
 });
-// 서버로부터 좌표 데이터를 가져와서 highwayNodes에 할당
+// 서버로부터 좌표 데이터를 가져와서 g_highwayNodes에 할당
 async function fetchCoordinatesFromServer() {
     try {
         const response = await fetch('/path-prediction');
