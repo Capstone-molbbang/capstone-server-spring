@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            font-family: 'TTLaundryGothicB', sans-serif;
+        }
+        .custom-heading {
+            color: black;
+        }
+        .thin-line {
+            border-top: 1px solid #A4A4A4;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .vertical-text-container {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .vertical-text {
+            font-size: 64px;
+            writing-mode: vertical-lr;
+            text-orientation: upright;
+
+        }
+        .vertical-text span {
+            display: block;
+        }
+
+        .vertical-text span:nth-child(2) {
+            margin-top: 60px;
+        }
+        .vertical-text span:nth-child(3) {
+            margin-top: 200px;
+        }
+        @font-face {
+            font-family: 'Pretendard-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+            font-weight: 800;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'TTLaundryGothicB';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2403-2@1.0/TTLaundryGothicB.woff2') format('woff2');
+            font-weight: 400;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'HSSanTokki20-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405@1.0/HSSanTokki20-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'SUITE-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2304-2@1.0/SUITE-Regular.woff2') format('woff2');
+            font-weight: 700;
+            font-style: normal;
+        }
+        .btn-primary {
+            color: black;
+            background-color: white;
+            border: none;
+            border-radius: 20px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-primary:hover {
+            color: white;
+            background-color: #AACCC6;
+            border-color: transparent;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand" href="#" th:href="@{/}" style="font-family: 'HSSanTokki20-Regular', sans-serif; font-size: 20px;">
+        <img src="/image/teamLogo.png" alt="Logo" height="30" class="d-inline-block align-top">
+        mol.bread.map
+    </a>
+</nav>
+
+<!-- Button Links -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <a class="btn btn-primary btn-block" th:href="@{/aboutUsPage}" style="font-family: 'Pretendard-Regular', sans-serif;">ABOUT US</a>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-primary btn-block" th:href="@{/map}" style="font-family: 'Pretendard-Regular', sans-serif;">SEARCH DIRECTIONS</a>
+        </div>
+        <div class="col-md-4">
+            <a class="btn btn-primary btn-block" th:href="@{/breadPage}" style="font-family: 'Pretendard-Regular', sans-serif;">RECOMMEND BREADS</a>
+        </div>
+    </div>
+</div>
+
+<!-- Thin Gray Line -->
+<div class="thin-line"></div>
+
+<!-- Content with Image -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="vertical-text-container">
+                <p class="vertical-text">
+                    <span>언제어디든</span>
+                    <span>당신이원하는</span>
+                    <span>곳으로!</span>
+                </p>            </div>        </div>
+        <div class="col-md-6">
+            <img src="/image/car.png" alt="Car Image" width="700" height="466">
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

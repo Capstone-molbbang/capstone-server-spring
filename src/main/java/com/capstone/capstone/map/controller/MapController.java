@@ -13,7 +13,7 @@ public class MapController {
     @Value("${kakao.map.restapi-key}")
     private String kakaoMapApiKey;
 
-    @GetMapping("/")
+    @GetMapping("/map")
     public String map(Model model) {
         model.addAttribute("jsKey", jsKey);
         model.addAttribute("restapiKey", kakaoMapApiKey);
