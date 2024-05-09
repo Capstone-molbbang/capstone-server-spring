@@ -31,7 +31,7 @@
             height: 50px;
             /* 입력 칸 아래 여백 추가 */
             border-radius: 5px; /* 테두리 둥글게 처리 */
-            margin-top: 40px;
+            margin-top: 20px;
             margin-bottom: 10px;
             border: 1px solid #ccc; /* 테두리 설정 */
 
@@ -44,7 +44,7 @@
             border: 1px solid #ccc; /* 테두리 설정 */
 
         }
-        /* 검색 버튼 스타일 추가 */
+
         #search-form {
             width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
             height: 45px; /* 높이 설정 */
@@ -57,22 +57,21 @@
 
         #search-container {
             position: absolute; /* 절대 위치 설정 */
-            top: 43px; /* 상단 여백 설정 */
+            top: 13px; /* 상단 여백 설정 */
             left: 10px; /* 좌측 여백 설정 */
             z-index: 1000; /* 다른 요소 위에 표시하기 위한 z-index 설정 */
             padding: 20px; /* 내부 여백 설정 */
             border: 1px solid #ccc; /* 테두리 설정 */
             border-radius: 5px; /* 테두리 둥글게 처리 */
-            background-color: #6CCA7B;
+            background-color: #AACCC6;
             width : 450px;
-            height: 700px;
+            height: 770px;
             margin-left: auto;
             margin-right: auto;
 
 
         }
         #logo-image {
-
             position: absolute; /* 절대 위치 설정 */
             left: 10px; /* 로고의 왼쪽 여백 조정 */
             z-index: 1000; /* 다른 요소 위에 표시하기 위한 z-index 설정 */
@@ -87,15 +86,15 @@
 
         #close-button {
             position: absolute;
-            top: 540px; /* 아래 여백 조정 */
-            left: 30px; /* 우측 여백 조정 */
-            z-index: 1001;
-            cursor: pointer;
+            top: 10px;
+            right: 10px;
             display: none;
         }
-
+        #close-button img {
+            height: 15px;
+        }
         .toggle-open #toggle-button {
-            display: none; /* 토글된 상태에서 토글 버튼 숨김 */
+            display: none;
         }
 
         .toggle-open #close-button {
@@ -112,7 +111,7 @@
         }
         .place-list-container {
             top: 10px;
-            max-height: 400px; /* 최대 높이 지정 */
+            max-height: 465px; /* 최대 높이 지정 */
             overflow-y: auto; /* 세로 스크롤 표시 */
         }
 
@@ -137,14 +136,40 @@
             text-align: center; /* 가운데 정렬 */
             color: #555; /* 힌트 색상 설정 */
         }
+        @font-face {
+            font-family: 'HSSanTokki20-Regular';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405@1.0/HSSanTokki20-Regular.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+        }
+        #logo-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        #logo-image {
+            height: 30px;
+            margin-left: -20px;
+        }
+
+        #logo-text {
+            color: white;
+            font-family: 'HSSanTokki20-Regular', sans-serif;
+            font-size: 20px;
+            margin-left: 12px;
+        }
+
     </style>
 </head>
 <body th:attr = "data-api-key=${restapiKey}">
 <div id="map-container">
     <div id="map"></div>
     <div id="search-container">
-        <img src="/image/logo.png" alt="로고" id="logo-image">
-
+        <div id="logo-container">
+            <img src="/image/teamLogo.png" alt="Logo" height="30" class="d-inline-block align-top" id="logo-image" onclick="window.location.href='/'">
+            <span id="logo-text" onclick="window.location.href='/'">mol.bread.map</span>
+        </div>
         <form id="search-form-small">
             <input type="text" id="start-input-small" class="start-input" name="startAddress" placeholder="출발지를 입력하세요" autocomplete="off" required />
             <br>
@@ -162,10 +187,12 @@
         <div id="place-list" class="place-list-container">
 
         </div>
+        <div id="close-button"><img src="/image/닫기.png" alt="닫기" /></div> <!-- 닫기 버튼 -->
+
     </div>
 
-    <div id="toggle-button"><img src="/image/toggleOpenButton.png" alt="열기"/></div> <!-- 토글 버튼 -->
-    <div id="close-button"><img src="/image/toggleCloseButton.png" alt="닫기" /></div> <!-- 닫기 버튼 -->
+    <div id="toggle-button"><img src="/image/길찾기.png" alt="열기"/></div> <!-- 토글 버튼 -->
+
 </div>
 
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>

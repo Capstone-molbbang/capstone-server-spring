@@ -294,8 +294,6 @@ async function drawRoutesWayPoint(waypoints, apikey) {
     sendPredictedTimeToServer(predictedTime);
 }
 
-
-// 토글 버튼 클릭 시 작은 창을 열거나 닫습니다.
 document.getElementById("toggle-button").addEventListener("click", function () {
 
     document.getElementById('search-container').classList.toggle('toggle-open');
@@ -313,14 +311,15 @@ document.getElementById("toggle-button").addEventListener("click", function () {
         showSuggestions(destinationInput, destinationSuggestionsContainer);
     }
 });
-document.getElementById('close-button').addEventListener('click', function () {
-    document.getElementById('search-container').classList.toggle('toggle-open');
-    document.getElementById('search-container').classList.toggle('toggle-closed');
-});
+// document.getElementById('close-button').addEventListener('click', function () {
+//     document.getElementById('search-container').classList.toggle('toggle-open');
+//     document.getElementById('search-container').classList.toggle('toggle-closed');
+// });
 
 document.addEventListener("DOMContentLoaded", function() {
     var searchContainer = document.getElementById("search-container");
     var toggleButton = document.getElementById("toggle-button");
+    var closeButton = document.getElementById("close-button");
 
     // 검색창 표시 상태를 추적하는 변수
     var isSearchContainerVisible = false;
@@ -333,17 +332,24 @@ document.addEventListener("DOMContentLoaded", function() {
         if (isSearchContainerVisible) {
             // 검색창을 보이게 하고 버튼 텍스트를 변경
             searchContainer.style.display = "block";
-            toggleButton.innerHTML = '<img src="/image/toggleCloseButton.png" alt="닫기" />'; // 이미지로 변경
-        } else {
-            // 검색창을 숨기고 버튼 텍스트를 변경
-            searchContainer.style.display = "none";
-            toggleButton.innerHTML = '<img src="/image/toggleOpenButton.png" alt="열기" />'; // 이미지로 변경
+            toggleButton.style.display = "none";
+            closeButton.style.display = "block";
         }
     });
+    closeButton.addEventListener("click", function() {
+        // 검색 창을 숨기고 토글 버튼은 다시 보이게 하고 닫기 버튼은 숨김
+        searchContainer.style.display = "none";
+        toggleButton.style.display = "block";
+        closeButton.style.display = "none";
+        isSearchContainerVisible = false; // 상태 업데이트
+    });
 
-    // 초기에 검색창을 숨김
     searchContainer.style.display = "none";
+    toggleButton.style.display = "block"; // 초기에 토글 버튼만 표시
+    closeButton.style.display = "none"; // 초기에 닫기 버튼은 숨김
+
 });
+
 // 작은 창에서 출발지와 도착지 주소를 가져와 해당 위치에 마커를 추가합니다.
 document.getElementById("search-form-small").addEventListener("submit", async function (event) {
     event.preventDefault();
