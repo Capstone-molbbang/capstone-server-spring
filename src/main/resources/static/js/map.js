@@ -20,132 +20,87 @@ var distanceList = []; // 거리를 저장할 리스트
 var predictedTime = 0; // 전체 예측 시간을 저장할 변수
 var k = 0;
 
-async function drawRouteKakao(origin, destination, apiKey) {
+var totalDistanceRoot1 = 0;
+var totalTimeRoot1 = 0;
+var totalDistanceRoot2 = 0;
+var totalTimeRoot2 = 0;
+
+var root1_highwayNodes = [
+    [127.22031199549663,37.52381114479651], //0300
+    [127.24098253938524,37.4842955984355],
+    [127.25374529878387,37.465931869766976],
+    [127.26317194991778,37.45201993175246],
+    [127.27938707326331,37.4451845824706],
+    [127.3037457517851,37.41304840725884],
+    [127.3153660401467,37.386699251295425],
+    [127.3235283049389,37.346852000680954],
+    [127.32537388142184,37.341697575159905],
+    [127.34740718560963,37.31515596805733],
+
+    [127.37471602201036,37.29412593065992],
+    [127.39848711354917,37.27111247899416],
+    [127.41987824596501,37.25030630765819],
+    [127.43228336236245,37.21979076768787],
+    [127.44276715850832,37.19452191600411],
+    [127.44528074122488,37.10951014878058],
+    [127.47493219534448,37.05570119062435],
+    [127.47843298234658,37.001719008085665],
+    [127.4669047573043,36.971587500531335],
+    [127.474900100258,36.93254850659951],
+
+    [127.47591573344967,36.89574803386027],
+    [127.47905463319294,36.86141333965102],
+    [127.49265031625535,36.828953862302306],
+    [127.50766968194922,36.78987979374164],
+    [127.44540352419638,36.718645828453454],
+
+    [127.42458377120629,36.67464859084522],
+    [127.4200886458462,36.60520675877221],//중부선 끝
+
+    // //경부
+    [127.43210220588804,36.55363043485985],
+    [127.42794983703914,36.471908653925546],
+    [127.41870756182243,36.39700720499854]
+];
 
 
-    // const formattedDepartureTime = departureTime.toISOString(); // ISO 형식으로 출발 예정 시간 변환
+var root2_highwayNodes = [
+    [127.10332041039379, 37.358794072637785], //2200
+    [127.1034515341123,37.33356568720989],
+    [127.10371825319847,37.282207568764164],
+    [127.10378839595677, 37.268692199713435],
+    [127.10381177258138, 37.26418706952283],
+    [127.10000025955983, 37.220871613416406],
+    [127.09583359115491, 37.21257018267256],
+    [127.09606378065385, 37.18069128191127],
+    [127.09095628389771, 37.16515618993971],
 
+    [127.0849166721204, 37.141197247014425],
+    [127.1192174917301, 37.09957860692084],
+    [127.1303810262686 ,37.076033172993704],
+    [127.1453124272744, 37.01470955711591],
+    [127.15417441331587, 36.99434172233534],
+    [127.15925352834235, 36.98342187402131],
+    [127.18826863839793, 36.877147179016006],
+    [127.16620375354104, 36.8193716654845],
+    [127.1666213807959, 36.79974216728726],
+    [127.19023650476807, 36.76697529740176],
+
+    [127.2309875538001, 36.745043810570984],
+    [127.38303029780384, 36.627080729093386],
+    [127.4305295251844, 36.56516799699589],
+    [127.43210220588804, 36.55363043485985],
+
+    [127.43020967328724, 36.532986405455695],
+    [127.42923867327536, 36.51398873766687],
+    [127.42794983703914, 36.471908653925546],
+    [127.4197184682824, 36.43852029408191],
+    [127.41731976383807, 36.429692944186755],
+    [127.41870756182243, 36.39700720499854]
+];
+async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root) {
+    console.log("origin = " + origin)
     const REST_API_KEY = apiKey;
-    console.log(apiKey);
-    const url = 'https://apis-navi.kakaomobility.com/v1/directions';
-
-    const headers = {
-        Authorization: `KakaoAK ${REST_API_KEY}`,
-        'Content-Type': 'application/json'
-    };
-    console.log("selectedDepartureTime ;:" + selectedDepartureTime);
-
-    console.log("origin : "+ origin);
-    console.log("destination : "+ destination);
-
-    const queryParams = new URLSearchParams({
-
-        origin: origin,
-        destination: destination,
-        //output_coord: 'WGS84', // 반환되는 좌표계 설정 (예: WGS84)
-        // option: 'traoptimal', // 교통정보를 고려한 최적 경로 탐색
-        priority: "TIME",
-      // traffic: 'true', // 실시간 교통 정보 반영
-        avoid: "roadevent", // roadevent를 피하도록 설정
-        departure_time: selectedDepartureTime // 출발 예정 시간 추가
-    });
-    console.log(queryParams);
-
-    const requestUrl = `${url}?${queryParams}`;
-    console.log(requestUrl);
-
-    try{
-        const response = await fetch(requestUrl, {
-            method: 'GET',
-            headers: headers
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        // 경로 데이터가 제대로 반환되었는지 확인
-        if (!data || !data.routes || data.routes.length === 0 || !data.routes[0].sections || data.routes[0].sections.length === 0) {
-            throw new Error("No valid route found.");
-        }
-
-        // if(bool==true){
-        //     predictedTime += data.routes[0].summary.duration;
-        // }
-        // else{
-        //     distanceList[i] = data.routes[0].summary.distance;
-        //     i++
-        // }
-        //
-        // console.log("predictedTime : "+predictedTime);
-        // for(let j=0; j<i; j++){
-        //     console.log("distance [" + j + "]: " +distanceList[j]);
-        // }
-        const linePath = [];
-        data.routes[0].sections[0].roads.forEach(router => {
-            router.vertexes.forEach((vertex, index) => {
-                if (index % 2 === 0) {
-                    linePath.push(new kakao.maps.LatLng(router.vertexes[index + 1], router.vertexes[index]));
-                }
-            });
-        });
-        polyline = new kakao.maps.Polyline({
-            path: linePath,
-            strokeWeight: 5,
-            strokeColor: '#000000',
-            strokeOpacity: 0.7,
-            strokeStyle: 'solid'
-        });
-        polyline.setMap(map);
-
-        console.log("data=" + data)
-        // // 거리와 소요 시간 가져오기
-        // distance = data.routes[0].summary.distance;
-        // duration = data.routes[0].summary.duration;
-        //
-        // console.log("distance1 == " + distance);
-        // console.log("distance1 == " + duration);
-
-        displayRouteInfo(distance, duration);
-
-    }catch (error){
-        console.error("Error:", error);
-    }
-}
-
-// 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
-async function drawRoutes(origin, destination, highwayNodes, apikey) {
-    if (highwayNodes.length === 0) {
-        // 고속도로 노드가 없는 경우 출발지에서 도착지까지의 경로만 그림
-        await drawRouteKakao(origin, destination, apikey);
-    } else if (highwayNodes.length === 1) {
-        // 고속도로 노드가 1개인 경우 출발지에서 고속도로 노드까지의 경로와 고속도로 노드에서 도착지까지의 경로를 그림
-        await drawRouteKakao(origin, highwayNodes[0], apikey);
-        await drawRouteKakao(highwayNodes[0], destination, apikey);
-    } else {
-        // 고속도로 노드가 2개 이상인 경우
-        await drawRouteKakao(origin, highwayNodes[0], apikey); // 출발지에서 첫 번째 고속도로 노드까지의 경로 그림
-        for (let k = 0; k < highwayNodes.length - 1; k++) {
-            console.log("k === " + k);
-            await drawRouteKakao(highwayNodes[k], highwayNodes[k + 1], apikey); // 연속된 고속도로 노드들 간의 경로 그림
-        }
-        console.log("length-1 : " + highwayNodes.length - 1)
-       // sendDistanceToServer(distanceList);
-        //await drawRouteKakao(highwayNodes[highwayNodes.length - 1], destination, apikey, true); // 마지막 고속도로 노드부터 도착지까지의 경로 그림
-
-    }
-}
-
-
-async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool) {
-
-
-    console.log("origin : " + origin);
-    console.log("waypoints :" + waypoint);
-    console.log("des : " + destination);
-    const REST_API_KEY = apiKey;
-    console.log(apiKey);
 
     const headers = {
         Authorization: `KakaoAK ${REST_API_KEY}`,
@@ -228,17 +183,11 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 const numSections = sections.length;
 
                 for (let i = 0; i < numSections; i++) {
-                    if (i==0 || i==numSections-1){
-                        predictedTime += response.routes[0].sections[i].duration;
-                        console.log("duration["+i+"] : "+response.routes[0].sections[i].duration)
-                    }
-                    else{
-                        const tmp = response.routes[0].sections[i].distance;
-                        distanceList[k] = tmp;
-                        k++;
-                        console.log("k==" + k);
-                        console.log("tmp == " + tmp);
-                    }
+                    const tmp = response.routes[0].sections[i].distance;
+                    distanceList[k] = tmp;
+                    k++;
+                    console.log("k==" + k);
+                    console.log("tmp == " + tmp);
                 }
 
 
@@ -246,35 +195,23 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 for (let j = 0; j < k; j++) {
                     console.log("distance [" + j + "]: " + distanceList[j]);
                 }
+                if(bool){
+                    drawRoute(response);
+                }
+                else{
+                    let totalDistance = 0;
+                    for (let j = 0; j < k; j++) {
+                        totalDistance += distanceList[j];
+                        console.log("distance [" + j + "]: " + distanceList[j]);
+                    }
+                    if(root == 1){
+                        totalDistanceRoot1 = totalDistance;
 
-                // 경로 표시
-                const linePath = [];
-                response.routes[0].sections.forEach(section => {
-                    section.roads.forEach(router => {
-                        router.vertexes.forEach((vertex, index) => {
-                            if (index % 2 === 0) {
-                                linePath.push(new kakao.maps.LatLng(router.vertexes[index + 1], router.vertexes[index]));
-                            }
-                        });
-                    });
-                });
-
-                polyline = new kakao.maps.Polyline({
-                    path: linePath,
-                    strokeWeight: 5,
-                    strokeColor: '#000000',
-                    strokeOpacity: 0.7,
-                    strokeStyle: 'solid'
-                });
-                polyline.setMap(map);
-
-
-                // 거리와 소요 시간 가져오기
-                // const distance = response.routes[0].summary.distance;
-                // const duration = response.routes[0].summary.duration;
-                // console.log("distance == " + distance);
-                // console.log("duration == " + duration);
-                //displayRouteInfo(distance, duration);
+                    }
+                    else if(root == 2 ){
+                        totalDistanceRoot2 = totalDistance;
+                    }
+                }
             },
             error: function (xhr, status, error) {
                 console.log('통신 실패');
@@ -286,12 +223,32 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
     }
 }
 
-// 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
-async function drawRoutesWayPoint(waypoints, apikey) {
-    await drawRouteKakaoWayPoint(waypoints[0][0], waypoints[1], waypoints[2][0], apikey);
+async function drawRoute(response){
+    // 경로 표시
+    const linePath = [];
+    response.routes[0].sections.forEach(section => {
+        section.roads.forEach(router => {
+            router.vertexes.forEach((vertex, index) => {
+                if (index % 2 === 0) {
+                    linePath.push(new kakao.maps.LatLng(router.vertexes[index + 1], router.vertexes[index]));
+                }
+            });
+        });
+    });
 
-    sendDistanceToServer(distanceList);
-    sendPredictedTimeToServer(predictedTime);
+    polyline = new kakao.maps.Polyline({
+        path: linePath,
+        strokeWeight: 5,
+        strokeColor: '#000000',
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid'
+    });
+    polyline.setMap(map);
+}
+
+// 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
+async function drawRoutesWayPoint(waypoints, apikey, bool, root) {
+    await drawRouteKakaoWayPoint(waypoints[0], waypoints[1], waypoints[2], apikey, bool, root);
 }
 
 document.getElementById("toggle-button").addEventListener("click", function () {
@@ -299,6 +256,8 @@ document.getElementById("toggle-button").addEventListener("click", function () {
     document.getElementById('search-container').classList.toggle('toggle-open');
     document.getElementById('search-container').classList.toggle('toggle-closed');
 
+    document.getElementById('btn-shortest-distance').style.display = 'none';
+    document.getElementById('btn-shortest-time').style.display = 'none';
     // 토글 창이 열릴 때 출발지 및 도착지 입력란에 즉각적으로 자동 완성 기능 활성화
     if (document.getElementById('search-container').classList.contains('toggle-open')) {
         const startInput = document.getElementById('start-input-small');
@@ -307,20 +266,18 @@ document.getElementById("toggle-button").addEventListener("click", function () {
         const startSuggestionsContainer = document.getElementById('start-suggestions');
         const destinationSuggestionsContainer = document.getElementById('destination-suggestions');
 
+
         showSuggestions(startInput, startSuggestionsContainer);
         showSuggestions(destinationInput, destinationSuggestionsContainer);
+        startSuggestionsContainer.innerHTML = '';
+        destinationSuggestionsContainer.innerHTML = '';
     }
 });
-// document.getElementById('close-button').addEventListener('click', function () {
-//     document.getElementById('search-container').classList.toggle('toggle-open');
-//     document.getElementById('search-container').classList.toggle('toggle-closed');
-// });
 
 document.addEventListener("DOMContentLoaded", function() {
     var searchContainer = document.getElementById("search-container");
     var toggleButton = document.getElementById("toggle-button");
     var closeButton = document.getElementById("close-button");
-
     // 검색창 표시 상태를 추적하는 변수
     var isSearchContainerVisible = false;
 
@@ -354,12 +311,8 @@ document.addEventListener("DOMContentLoaded", function() {
 document.getElementById("search-form-small").addEventListener("submit", async function (event) {
     event.preventDefault();
     var apiKey = document.body.getAttribute('data-api-key');
-
-    // var startAddress = document.getElementById("start-input-small").value; // 출발지 주소 가져오기
-    // var destinationAddress = document.getElementById("destination-input-small").value; // 도착지 주소 가져오기
-
-    // 서버로 출발지와 도착지 주소를 전송하여 좌표를 얻어옵니다.
     try {
+
         const response = await fetch('/api/search', {
             method: 'POST',
             headers: {
@@ -378,156 +331,34 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const data = await response.json();
         const startCoords = data.startCoords; // 출발지 좌표
         const destinationCoords = data.destinationCoords; // 도착지 좌표
-        const distance = data.distance; // 거리
         selectedDepartureTime = getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
-       // sendDepartureTimeToFastAPI(startCoords, destinationCoords, distance, selectedDepartureTime)
 
-        const root1_highwayNodes = [
-            [127.22031199549663,37.52381114479651], //0300
-            [127.24098253938524,37.4842955984355],
-            [127.25374529878387,37.465931869766976],
-            [127.26317194991778,37.45201993175246],
-            [127.27938707326331,37.4451845824706],
-            [127.3037457517851,37.41304840725884],
-            [127.3153660401467,37.386699251295425],
-            [127.3235283049389,37.346852000680954],
-            [127.32537388142184,37.341697575159905],
-            [127.34740718560963,37.31515596805733],
+        await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1);
+        distanceList = [];
+        k=0;
 
-            [127.37471602201036,37.29412593065992],
-            [127.39848711354917,37.27111247899416],
-            [127.41987824596501,37.25030630765819],
-            [127.43228336236245,37.21979076768787],
-            [127.44276715850832,37.19452191600411],
-            [127.44528074122488,37.10951014878058],
-            [127.47493219534448,37.05570119062435],
-            [127.47843298234658,37.001719008085665],
-            [127.4669047573043,36.971587500531335],
-            [127.474900100258,36.93254850659951],
+        await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2);
 
-           [127.47591573344967,36.89574803386027],
-            [127.47905463319294,36.86141333965102],
-            [127.49265031625535,36.828953862302306],
-            [127.50766968194922,36.78987979374164],
-            [127.44540352419638,36.718645828453454],
+        const time = 130;
+        document.getElementById('root1-time-info').innerText = time + ' 분';
+        document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
+        document.getElementById('root2-time-info').innerText = 150 + ' 분';
+        document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
 
-            [127.42458377120629,36.67464859084522],
-            [127.4200886458462,36.60520675877221],//중부선 끝
+        document.getElementById('start-suggestions').style.display = 'none';
+        document.getElementById('destination-suggestions').style.display = 'none';
+        document.getElementById('btn-shortest-distance').style.display = 'block';
+        document.getElementById('btn-shortest-time').style.display = 'block';
+        // 최단 시간 버튼 클릭 시 이벤트 리스너
+        document.getElementById("btn-shortest-time").addEventListener("click", async function () {
+            drawRoutesByType('time', startCoords, destinationCoords, apiKey, root1_highwayNodes);
+        });
 
-            // //경부
-            [127.43210220588804,36.55363043485985],
-            [127.42794983703914,36.471908653925546],
-            [127.41870756182243,36.39700720499854]
-        ];
-        // const root11_highwayNodes = [
-        //     [127.22031199549663,37.52381114479651], //0300
-        //     [127.23569165725593,37.49607245355468] ,//0500'
-        //     [127.25002254222645,37.465009142741415], //1000 안됨
-        //     [127.26235757809923,37.450260131402715],
-        //     [127.27900596922613,37.444669310216064],
-        //     [127.30325811910785,37.41280311221876],
-        //     [127.31507000744107,37.38661120162253],
-        //     [127.32308724204493,37.34672619748197],
-        //     [127.32506201080021,37.341554279946514],
-        //     [127.34720399377304,37.31495750615764],
-        //
-        //     [127.37444112701262,37.293741079450804],
-        //     [127.39818744378603,37.270921348742945],
-        //     [127.41987824596501,37.25030630765819],
-        //     [127.43228336236245,37.21979076768787],
-        //     [127.44130768275318,37.181975834905025],
-        //     [127.45228663326743,37.0893073747263],
-        //     [127.47493219534448,37.05570119062435],
-        //     [127.47843298234658,37.001719008085665],
-        //     [127.4669047573043,36.971587500531335],
-        //     [127.47679819013017,36.923669596758465],
-        //
-        //     [127.47591573344967,36.89574803386027],
-        //     [127.47905463319294,36.86141333965102],
-        //     [127.49429464892215,36.83688641558596],
-        //     [127.50725282575932, 36.79888577761128],
-        //     [127.45015936659819,36.72579625300241],
-        //     [127.42458377120629,36.67464859084522],
-        //     [127.4200886458462,36.60520675877221],//중부선 끝
-        //
-        //     //경부
-        //     [127.43210220588804,36.55363043485985],
-        //     [127.42794983703914,36.471908653925546],
-        //     [127.41870756182243,36.39700720499854]
-        // ];
-        const root2_highwayNodes = [
-            [127.10332041039379, 37.358794072637785], //2200
-            [127.1034515341123,37.33356568720989],
-            [127.10371825319847,37.282207568764164],
-            [127.10378839595677, 37.268692199713435],
-            [127.10381177258138, 37.26418706952283],
-            [127.10000025955983, 37.220871613416406],
-            [127.09583359115491, 37.21257018267256],
-            [127.09606378065385, 37.18069128191127],
-            [127.09095628389771, 37.16515618993971],
+        // 최단 거리 버튼 클릭 시 이벤트 리스너
+        document.getElementById("btn-shortest-distance").addEventListener("click", async function () {
+            drawRoutesByType('distance', startCoords, destinationCoords, apiKey, root2_highwayNodes);
+        });
 
-            [127.0849166721204, 37.141197247014425],
-            [127.1192174917301, 37.09957860692084],
-            [127.1303810262686 ,37.076033172993704],
-            [127.1453124272744, 37.01470955711591],
-            [127.15417441331587, 36.99434172233534],
-            [127.15925352834235, 36.98342187402131],
-            [127.18826863839793, 36.877147179016006],
-            [127.16620375354104, 36.8193716654845],
-            [127.1666213807959, 36.79974216728726],
-            [127.19023650476807, 36.76697529740176],
-
-            [127.2309875538001, 36.745043810570984],
-            [127.38303029780384, 36.627080729093386],
-            [127.4305295251844, 36.56516799699589],
-            [127.43210220588804, 36.55363043485985],
-
-            [127.43020967328724, 36.532986405455695],
-            [127.42923867327536, 36.51398873766687],
-            [127.42794983703914, 36.471908653925546],
-            [127.4197184682824, 36.43852029408191],
-            [127.41731976383807, 36.429692944186755],
-            [127.41870756182243, 36.39700720499854]
-        ];
-
-
-        var startCoord = root1_highwayNodes[0];
-        var endCoord = root1_highwayNodes[root1_highwayNodes.length - 1];
-
-
-
-
-        /**
-         * 고속도로 노드 받아오는 코드
-         */
-        // const coordinates = await fetchCoordinatesFromServer(); // 서버로부터 좌표 데이터 가져오기
-        //
-        // if (!coordinates) {
-        //     throw new Error("Failed to fetch coordinates from server");
-        // }
-        //
-        // // 고속도로 노드들을 설정 (서버에서 받은 좌표 데이터 사용)
-        // const k_highwayNodes = coordinates;
-        //
-        const origin = `${startCoords.x},${startCoords.y}`;
-        const destination = `${destinationCoords.x},${destinationCoords.y}`;
-
-        var waypoints = [];
-        // // 경유지 배열을 저장할 배열
-        waypoints.push([[startCoords.x ,startCoords.y]]);
-
-        waypoints.push(root1_highwayNodes);
-
-        // 도착지를 waypoints 배열에 추가
-       waypoints.push([[destinationCoords.x,destinationCoords.y]]);
-
-        addMarkersAndSetCenter(startCoords, destinationCoords);
-
-        addMarkers(root1_highwayNodes);
-
-        //drawRoutes(origin, destination, k_highwayNodes, apiKey);
-        drawRoutesWayPoint(waypoints, apiKey);
-        resetSearch(); // 검색 필드 초기화
 
 
     } catch (error) {
@@ -553,9 +384,9 @@ async function fetchCoordinatesFromServer() {
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
+
     // 검색창의 값 가져오기
     const inputValue = input.value;
-    console.log("inputValue: " + inputValue);
 
     // 검색어가 없으면 자동 완성 목록을 숨김
     if (!inputValue) {
@@ -567,14 +398,14 @@ function showSuggestions(input, suggestionsContainer, isStart) {
     fetch(`/api/suggestions?query=${inputValue}`)
         .then(response => response.json())
         .then(data => {
-
             showPlaceList(data, isStart);
-
         })
         .catch(error => {
             console.error('Error fetching suggestions:', error);
             suggestionsContainer.innerHTML = '';
         });
+
+
 
 }
 // 출발지 검색창에 입력이 들어올 때마다 자동 완성 기능 활성화
@@ -616,32 +447,6 @@ function resetSearch() {
     predictedTime = 0;
 }
 
-// 경로 검색이 완료된 후에 실행되는 함수
-function displayRouteInfo(distance, duration) {
-    // 장소 리스트를 감싸고 있는 div 요소
-    const placeListContainer = document.getElementById('place-list');
-
-    // 장소 리스트를 삭제합니다.
-    placeListContainer.innerHTML = '';
-
-    // 거리와 시간을 표시할 새로운 요소를 생성합니다.
-    const routeInfoElement = document.createElement('div');
-    routeInfoElement.classList.add('place-info-box');
-
-    // 거리를 표시합니다.
-    const distanceInKm = (distance / 1000).toFixed(2); // 거리를 킬로미터 단위로 변환
-    routeInfoElement.innerHTML += '<p>거리: ' + distanceInKm + 'km</p>';
-
-    // 소요 시간을 시 분 단위로 변환하여 표시합니다.
-    const hours = Math.floor(duration / 3600); // 소요 시간에서 시간 부분 추출
-    const minutes = Math.floor((duration % 3600) / 60); // 소요 시간에서 분 부분 추출
-    routeInfoElement.innerHTML += '<p>소요 시간: ' + hours + '시간 ' + minutes + '분</p>';
-
-    // 새로운 요소를 장소 리스트를 감싸고 있는 div에 추가합니다.
-    placeListContainer.appendChild(routeInfoElement);
-
-
-}
 
 // 사용자가 선택한 출발 예정 시간을 다른 함수에서 사용할 수 있도록 반환하는 함수
 function getSelectedDepartureTime() {
@@ -732,7 +537,6 @@ document.addEventListener("DOMContentLoaded", function() {
 // 서버로부터 받은 장소 정보를 표시하는 함수
 function displayPlaceInfo(placeName, address, isStart) {
     const placeListContainer = document.getElementById('place-list');
-    console.log("placeListContainer : " + placeListContainer);
     // 장소 정보를 담을 박스 생성
     const placeInfoBox = document.createElement('div');
     placeInfoBox.classList.add('place-info-box');
@@ -743,11 +547,11 @@ function displayPlaceInfo(placeName, address, isStart) {
         ${address}
     `;
 
-    // 생성된 박스를 장소 목록 컨테이너에 추가
-    placeListContainer.appendChild(placeInfoBox);
-
-    // 장소 정보를 클릭했을 때 해당 위치를 출발점 또는 도착점으로 설정하는 이벤트 추가
+    // 클릭 이벤트 핸들러 함수
     placeInfoBox.addEventListener('click', function() {
+        // 클릭 이벤트가 발생하면 이전의 장소 정보를 삭제
+        placeListContainer.innerHTML = '';
+
         const placeName = this.querySelector('strong').textContent; // 해당 위치의 주소값을 가져옵니다.
         console.log("Clicked placeName: " + placeName);
         const addressElement = this.querySelector('br').nextSibling; // 주소를 포함하는 요소를 선택합니다.
@@ -763,6 +567,10 @@ function displayPlaceInfo(placeName, address, isStart) {
             destinationAddress = address;
         }
     });
+
+    // 생성된 박스를 장소 목록 컨테이너에 추가
+    placeListContainer.appendChild(placeInfoBox);
+
 }
 
 
@@ -770,13 +578,9 @@ function displayPlaceInfo(placeName, address, isStart) {
 function showPlaceList(data, isStart) {
     const placeListContainer = document.getElementById('place-list');
     placeListContainer.innerHTML = ''; // 기존 내용 비우기
-    console.log("===placeListContainer : "+placeListContainer);
-    // 받은 데이터를 기반으로 각 장소 정보를 표시
     for (const placeName in data) {
         if (data.hasOwnProperty(placeName)) {
             const address = data[placeName];
-            console.log("===" + address)
-
             displayPlaceInfo(placeName, address, isStart);
         }
     }
@@ -936,5 +740,52 @@ function addMarkers(highwayNodes) {
     const bounds = new kakao.maps.LatLngBounds();
     for (const marker of markers) {
         bounds.extend(marker.getPosition());
+    }
+}
+
+async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, highwayNodes, root){
+    const origin = `${startCoords.x},${startCoords.y}`;
+    const destination = `${destinationCoords.x},${destinationCoords.y}`;
+
+    const waypoints = [];
+    waypoints.push([startCoords.x, startCoords.y]);
+    waypoints.push(highwayNodes);
+    waypoints.push([destinationCoords.x, destinationCoords.y]);
+
+    await drawRoutesWayPoint(waypoints, apiKey, false, root);
+}
+async function drawRoutesByType(type, startCoords, destinationCoords, apiKey, highwayNodes) {
+    try {
+        const origin = `${startCoords.x},${startCoords.y}`;
+        const destination = `${destinationCoords.x},${destinationCoords.y}`;
+
+        const waypoints = [];
+        waypoints.push([startCoords.x, startCoords.y]);
+        waypoints.push(highwayNodes);
+        waypoints.push([destinationCoords.x, destinationCoords.y]);
+
+        addMarkersAndSetCenter(startCoords, destinationCoords);
+        //addMarkers(highwayNodes);
+
+        drawRoutesWayPoint(waypoints, apiKey, true);
+
+        //const time = calculateShortestTime(); // 최소 시간 계산 함수
+        // const time = 130;
+        // document.getElementById('time-info').innerText = time + ' 분';
+        // if(type == 'time'){
+        //     const distance = totalDistanceRoot1
+        //     document.getElementById('distance-info').innerText = distance + ' km'; // 거리 정보 업데이트
+        //
+        // }
+        // else if (type == 'distance'){
+        //     const distance = totalDistanceRoot2
+        //     document.getElementById('distance-info').innerText = distance + ' km'; // 거리 정보 업데이트
+        //
+        // }
+
+        resetSearch();
+    } catch (error) {
+        console.error("Error:", error);
+        alert('경로 표시 중 오류가 발생했습니다.');
     }
 }

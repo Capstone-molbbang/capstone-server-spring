@@ -163,7 +163,41 @@
         .navbar.navbar-light {
             background-color: #ffffff; /* 배경색을 하얀색(#ffffff)으로 설정 */
         }
+        .route-button {
+            width: 200px; /* 버튼의 너비 지정 */
+            height: 120px; /* 버튼의 높이 지정 */
+            border-radius: 10px; /* 테두리를 둥글게 처리 */
+            background-color: white; /* 배경색을 흰색으로 설정 */
+            margin: 10px; /* 버튼 간의 간격 조정 */
+            display: flex; /* 요소를 행 방향으로 배치 */
+            flex-direction: column; /* 컨테이너 내의 아이템을 열 방향으로 배치 */
+            justify-content: center; /* 주축을 따라 중앙 정렬 */
+            align-items: center; /* 교차축을 따라 중앙 정렬 */
+            transition: background-color 0.3s, color 0.3s; /* 호버 효과에 대한 전환 효과 추가 */
+            color: black;
+        }
 
+        .route-button span {
+            margin-top: 10px;
+            display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
+            text-align: center; /* 가운데 정렬 */
+            color: black; /* 글자색을 까만색으로 변경 */
+        }
+
+        #route-buttons {
+            display: flex; /* 요소를 행 방향으로 배치 */
+            justify-content: center; /* 주축을 따라 중앙 정렬 */
+        }
+
+        /* 호버 효과 */
+        .route-button:hover {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        .route-button:hover span {
+            color: white; /* 호버 시 글자색을 흰색으로 변경 */
+        }
 
     </style>
 </head>
@@ -195,23 +229,37 @@
 
             <button type="submit" class="btn btn-primary" id="search-form">자동차 경로 검색</button>
         </form>
+        <div id="route-buttons">
+<!--            <button id="btn-shortest-time" class="btn btn-primary route-button">최단 시간</button>-->
+<!--            <button id="btn-shortest-distance" class="btn btn-primary route-button">최단 거리</button>-->
+            <button id="btn-shortest-time" class="btn btn-primary route-button">
+                최소 시간
+                <br>
+                <span id="root1-time-info"></span>
+                <span id="root1-distance-info"></span>
+            </button>
+            <button id="btn-shortest-distance" class="btn btn-primary route-button">
+                최단 거리
+                <br>
+                <span id="root2-time-info"></span>
+                <span id="root2-distance-info"></span>
+            </button>
+        </div>
         <div id="place-list" class="place-list-container">
 
         </div>
         <div id="close-button"><img src="/image/닫기.png" alt="닫기" /></div> <!-- 닫기 버튼 -->
 
+
     </div>
 
     <div id="toggle-button"><img src="/image/길찾기.png" alt="열기"/></div> <!-- 토글 버튼 -->
-
 </div>
 
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/kakao-js-api/v2.0.3/kakao.js}"></script>
 <script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${jsKey} + '&libraries=services'}"></script>
 <script type="text/javascript" src="/js/map.js"></script>
-<script type="text/javascript" src="/js/toggle.js"></script>
-
 
 </body>
 </html>
