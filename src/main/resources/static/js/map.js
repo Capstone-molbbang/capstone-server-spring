@@ -331,8 +331,6 @@ document.addEventListener("DOMContentLoaded", function() {
 // 작은 창에서 출발지와 도착지 주소를 가져와 해당 위치에 마커를 추가합니다.
 document.getElementById("search-form-small").addEventListener("submit", async function (event) {
     await resetSearch();
-
-
     event.preventDefault();
     var apiKey = document.body.getAttribute('data-api-key');
     try {
@@ -353,10 +351,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
 
         const data = await response.json();
-        const startCoords = data.startCoords; // 출발지 좌표
-        const destinationCoords = data.destinationCoords; // 도착지 좌표
-        selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
+        startCoords = data.startCoords; // 출발지 좌표
+        destinationCoords = data.destinationCoords; // 도착지 좌표
+        selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
+        console.log("startCCC + " + startCoords.x + ", " + startCoords.y);
 
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
@@ -401,7 +400,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
-
+    document.getElementById('btn-shortest-distance').style.display = 'none';
+    document.getElementById('btn-shortest-time').style.display = 'none';
     // 검색창의 값 가져오기
     const inputValue = input.value;
 
@@ -411,6 +411,7 @@ function showSuggestions(input, suggestionsContainer, isStart) {
         return;
     }
 
+    console.log("input = " + inputValue);
     // 서버에 자동 완성에 필요한 데이터를 요청
     fetch(`/api/suggestions?query=${inputValue}`)
         .then(response => response.json())
@@ -441,26 +442,22 @@ document.getElementById('destination-input-small').addEventListener('input', fun
 
 });
 async function resetSearch() {
-    // 출발지 및 도착지 입력란 비우기
-    var startCoords = null;
-    var destinationCoords = null;
-    var startAddress = null;
-    var destinationAddress = null;
 
-    // 이전에 추가된 마커 및 경로 제거
+    totalDistanceRoot1 = 0;
+    totalDistanceRoot2 = 0;
+    totalTimeRoot1 = 0;
+    totalTimeRoot2 = 0;
+
     if (startMarker) {
-        startMarker.setMap(null); // 출발지 마커 제거
+        startMarker.setMap(null);
+        startMarker = null;
     }
     if (destinationMarker) {
-        destinationMarker.setMap(null); // 도착지 마커 제거
+        destinationMarker.setMap(null);
+        destinationMarker = null;
     }
     removePolyline(polyline1);
     removePolyline(polyline2);
-    distance = null;
-    duration = null;
-
-    distanceList = [];
-    predictedTime = 0;
 }
 
 
@@ -551,7 +548,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 // 서버로부터 받은 장소 정보를 표시하는 함수
-function displayPlaceInfo(placeName, address, isStart) {
+async function displayPlaceInfo(placeName, address, isStart) {
     const placeListContainer = document.getElementById('place-list');
     // 장소 정보를 담을 박스 생성
     const placeInfoBox = document.createElement('div');
@@ -564,9 +561,10 @@ function displayPlaceInfo(placeName, address, isStart) {
     `;
 
     // 클릭 이벤트 핸들러 함수
-    placeInfoBox.addEventListener('click', function() {
+    placeInfoBox.addEventListener('click', async function () {
         // 클릭 이벤트가 발생하면 이전의 장소 정보를 삭제
         placeListContainer.innerHTML = '';
+
 
         const placeName = this.querySelector('strong').textContent; // 해당 위치의 주소값을 가져옵니다.
         console.log("Clicked placeName: " + placeName);
@@ -576,10 +574,10 @@ function displayPlaceInfo(placeName, address, isStart) {
 
         // 클릭한 주소를 입력란에 넣기
         if (isStart) {
-            document.getElementById('start-input-small').value = placeName; // 출발지 입력란에 클릭한 주소 이름을 넣습니다.
+            document.getElementById('start-input-small').value = placeName;
             startAddress = address;
         } else {
-            document.getElementById('destination-input-small').value = placeName; // 도착지 입력란에 클릭한 주소 이름을 넣습니다.
+            document.getElementById('destination-input-small').value = placeName;
             destinationAddress = address;
         }
     });
@@ -591,32 +589,35 @@ function displayPlaceInfo(placeName, address, isStart) {
 
 
 // 서버로부터 받은 데이터를 가지고 장소 정보 표시
-function showPlaceList(data, isStart) {
+async function showPlaceList(data, isStart) {
     const placeListContainer = document.getElementById('place-list');
     placeListContainer.innerHTML = ''; // 기존 내용 비우기
     for (const placeName in data) {
         if (data.hasOwnProperty(placeName)) {
             const address = data[placeName];
-            displayPlaceInfo(placeName, address, isStart);
+            await displayPlaceInfo(placeName, address, isStart);
         }
     }
 }
 // 출발지와 도착지에 마커를 추가하고 해당 위치를 지도 중심으로 설정하는 함수
-function addMarkersAndSetCenter(startCoords, destinationCoords) {
+async function addMarkersAndSetCenter(startCoords, destinationCoords) {
     // 출발지와 도착지 좌표를 LatLng 객체로 변환
     const startLatLng = new kakao.maps.LatLng(startCoords.y, startCoords.x);
     const destinationLatLng = new kakao.maps.LatLng(destinationCoords.y, destinationCoords.x);
+
+    if (startMarker) startMarker.setMap(null);
+    if (destinationMarker) destinationMarker.setMap(null);
 
     console.log("startLatLng" + startLatLng);
     console.log("destinationLatLng" + destinationLatLng);
 
     // 출발지와 도착지 마커 생성
-    const startMarker = new kakao.maps.Marker({
+    startMarker = new kakao.maps.Marker({
         map: map,
         position: startLatLng,
         title: '출발지'
     });
-    const destinationMarker = new kakao.maps.Marker({
+    destinationMarker = new kakao.maps.Marker({
         map: map,
         position: destinationLatLng,
         title: '도착지'
@@ -733,32 +734,6 @@ function displayAddressFromCoords(mouseEvent) {
 // 지도 클릭 이벤트 핸들러 추가
 kakao.maps.event.addListener(map, 'click', displayAddressFromCoords);
 
-
-const markers = [];
-
-function addMarkers(highwayNodes) {
-    for (const coords of highwayNodes) {
-        // 좌표를 LatLng 객체로 변환
-        const LatLng = new kakao.maps.LatLng(coords[1], coords[0]);
-
-        // 마커 생성
-        const marker = new kakao.maps.Marker({
-            map: map,
-            position: LatLng,
-            title: '위치'
-        });
-
-        // 마커를 배열에 추가
-        markers.push(marker);
-    }
-
-    // 모든 마커를 포함하는 범위를 구합니다.
-    const bounds = new kakao.maps.LatLngBounds();
-    for (const marker of markers) {
-        bounds.extend(marker.getPosition());
-    }
-}
-
 async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, highwayNodes, root){
     const origin = `${startCoords.x},${startCoords.y}`;
     const destination = `${destinationCoords.x},${destinationCoords.y}`;
@@ -767,7 +742,7 @@ async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, 
     waypoints.push([startCoords.x, startCoords.y]);
     waypoints.push(highwayNodes);
     waypoints.push([destinationCoords.x, destinationCoords.y]);
-    addMarkersAndSetCenter(startCoords, destinationCoords);
+    await addMarkersAndSetCenter(startCoords, destinationCoords);
 
     await drawRoutesWayPoint(waypoints, apiKey, false, root);
     console.log("totalDistanceRoot2  + " + totalDistanceRoot2);
