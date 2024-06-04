@@ -17,7 +17,7 @@ import java.util.Map;
 public class ApiController {
     private final RestTemplate restTemplate;
     private static final String FASTAPI_URL = "http://3.34.126.202/test";
-    @PostMapping("/test")
+    @PostMapping("/from-spring")
     public ResponseEntity<String> test() {
 
         String dataToSend = "Hello from Spring Boot";
@@ -36,4 +36,10 @@ public class ApiController {
     }
 
 
+    @PostMapping("/from-fastapi")
+    public ResponseEntity<String> receiveData(@RequestBody Map<String, Object> data) {
+        System.out.println("Received data: " + data);
+
+        return new ResponseEntity<>("Data received successfully", HttpStatus.OK);
+    }
 }
