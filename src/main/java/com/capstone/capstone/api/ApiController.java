@@ -16,7 +16,7 @@ import java.util.Map;
 @Slf4j
 public class ApiController {
     private final RestTemplate restTemplate;
-    private static final String FASTAPI_URL = "http://3.34.126.202/test";
+    private static final String FASTAPI_URL = "http://3.34.126.202/from-spring";
     @PostMapping("/from-spring")
     public ResponseEntity<String> test() {
 
@@ -37,9 +37,9 @@ public class ApiController {
 
 
     @PostMapping("/from-fastapi")
-    public ResponseEntity<String> receiveData(@RequestBody Map<String, Object> data) {
+    public ResponseEntity<Map<String, Object>> receiveData(@RequestBody Map<String, Object> data) {
         System.out.println("Received data: " + data);
-
-        return new ResponseEntity<>("Data received successfully", HttpStatus.OK);
+        data.put("processed", true);
+        return ResponseEntity.ok(data);
     }
 }
