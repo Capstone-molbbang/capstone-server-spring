@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +26,9 @@ public class ApiController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        HttpEntity<String> entity = new HttpEntity<>(dataToSend, headers);
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("data", dataToSend);
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(FASTAPI_URL, entity, String.class);
 
