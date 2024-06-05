@@ -27,17 +27,19 @@ var totalTimeRoot1 = 0;
 var totalDistanceRoot2 = 0;
 var totalTimeRoot2 = 0;
 async function fetchHighwayNodes(root) {
-    fetch(`/api/nodes/${root}`)
-        .then(response => response.json())
-        .then(data => {
-            const nodeList = data.map(node => [node.longitude, node.latitude]);
-            return nodeList;
-        })
-        .catch(error => {
-            console.error('Error fetching highway nodes:', error);
-        });
+    try {
+        const response = await fetch(`/api/nodes/${root}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        const nodeList = data.map(node => [node.longitude, node.latitude]);
+        return nodeList;
+    } catch (error) {
+        console.error('Error fetching highway nodes:', error);
+        throw error; // 에러를 호출자에게 전파
+    }
 }
-
 async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root) {
     console.log("origin = " + origin)
     const REST_API_KEY = apiKey;
