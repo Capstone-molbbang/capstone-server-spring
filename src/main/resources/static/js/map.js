@@ -32,6 +32,7 @@ async function fetchHighwayNodes(root) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+        console.log(response);
         return await response.json();
     } catch (error) {
         console.error('Error fetching highway nodes:', error);
