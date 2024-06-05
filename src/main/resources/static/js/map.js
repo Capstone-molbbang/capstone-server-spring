@@ -32,8 +32,11 @@ async function fetchHighwayNodes(root) {
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        console.log(response);
-        return await response.json();
+        const data = await response.json(); // JSON으로 파싱
+        console.log(data); // 응답 데이터 확인
+
+        const nodeList = data.map(node => [node.longitude, node.latitude]);
+        return nodeList;
     } catch (error) {
         console.error('Error fetching highway nodes:', error);
     }
