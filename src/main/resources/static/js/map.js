@@ -83,10 +83,10 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "x": destinationX,
                 "y": destinationY
             },
-            "priority": "TIME",
+            "priority": "RECOMMEND",
             "traffic": true,
-            "roadevent": 2,
-            "optimizeWaypoints": true
+            "avoid" : ["motorway"],
+            "roadevent": 2
         };
     } else {
         let baseData = {
@@ -101,9 +101,9 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
             "waypoints": w,
             "priority": "TIME",
             "traffic": true,
-            "avoid": ["motorway"],
             "roadevent": 2,
             "road_details": true,
+            "optimizeWaypoints": true,
             "summary": true
         };
 
