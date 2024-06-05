@@ -48,7 +48,7 @@ async function fetchHighwayNodes(root) {
         throw error; // 에러를 호출자에게 전파
     }
 }
-async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root) {
+async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root, hiwayType) {
     console.log("origin = " + origin)
     const REST_API_KEY = apiKey;
 
@@ -93,7 +93,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
         };
     }
     else{
-        if(root == 1 || root == 3){
+        if(root == 1){
             data =  {
                 "origin": {
 
@@ -107,7 +107,9 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "priority" : "TIME",
                 "traffic" : true,
                 "avoid" : ["motorway"],
-                "roadevent": 2
+                "roadevent": 2,
+                "road_details": true,
+                "summary": true
             };
         }
         else if(root == 2){
@@ -124,8 +126,51 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "priority" : "DISTANCE",
                 "traffic" : true,
                 "avoid" : ["motorway"],
-                "roadevent": 2
+                "roadevent": 2,
+                "road_details": true,
+                "summary": true
             };
+        }
+        if(root == 3 ){
+            if(hiwayType){
+                data =  {
+                    "origin": {
+
+                        "x": originX,
+                        "y": originY
+                    },
+                    "destination": {
+                        "x": destinationX,
+                        "y": destinationY
+                    },
+                    "waypoints" : "127.038764,37.464552",
+                    "priority" : "TIME",
+                    "traffic" : true,
+                    "avoid" : ["motorway"],
+                    "roadevent": 2,
+                    "road_details": true,
+                    "summary": true
+                };
+            }
+            else {
+                data =  {
+                    "origin": {
+                        "x": originX,
+                        "y": originY
+                    },
+                    "destination": {
+                        "x": destinationX,
+                        "y": destinationY
+                    },
+                    "priority" : "TIME",
+                    "traffic" : true,
+                    "avoid" : ["motorway"],
+                    "roadevent": 2,
+                    "road_details": true,
+                    "summary": true
+                };
+            }
+
         }
     }
 
@@ -204,7 +249,7 @@ async function drawRoute(response, root){
             path: linePath,
             strokeWeight: 7,
             strokeColor: '#ff0000',
-            strokeOpacity: 1,
+            strokeOpacity: 0.8,
             strokeStyle: 'solid'
         });
         polyline1.setMap(map);
@@ -214,7 +259,7 @@ async function drawRoute(response, root){
             path: linePath,
             strokeWeight: 7,
             strokeColor: '#0067a3',
-            strokeOpacity: 1,
+            strokeOpacity: 0.8,
             strokeStyle: 'solid'
         });
         polyline2.setMap(map);
@@ -224,7 +269,7 @@ async function drawRoute(response, root){
             path: linePath,
             strokeWeight: 7,
             strokeColor: '#FFFF00',
-            strokeOpacity: 1,
+            strokeOpacity: 0.8,
             strokeStyle: 'solid'
         });
         polyline3.setMap(map);
