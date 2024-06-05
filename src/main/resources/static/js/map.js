@@ -374,6 +374,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         document.getElementById('btn-recommend').style.display = 'block';
         document.getElementById('btn-shortest-distance').style.display = 'block';
         document.getElementById('btn-shortest-time').style.display = 'block';
+
         document.getElementById("btn-recommend").addEventListener("click", async function () {
             await removePolyline(polyline1);
             await removePolyline(polyline2);
@@ -408,6 +409,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
+    document.getElementById('btn-recommend').style.display = 'none';
     document.getElementById('btn-shortest-distance').style.display = 'none';
     document.getElementById('btn-shortest-time').style.display = 'none';
     // 검색창의 값 가져오기
