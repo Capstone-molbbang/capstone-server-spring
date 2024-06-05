@@ -102,9 +102,9 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
             "priority": "TIME",
             "traffic": true,
             "roadevent": 2,
-            "road_details": true,
-            "optimizeWaypoints": true,
-            "summary": true
+       //     "road_details": true,
+            "optimizeWaypoints": true
+         //   "summary": true
         };
 
         if (root === 2) {
