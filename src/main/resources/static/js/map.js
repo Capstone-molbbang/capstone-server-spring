@@ -93,7 +93,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
         };
     }
     else{
-        if(root == 1){
+        if(root == 1 || root == 3){
             data =  {
                 "origin": {
 
@@ -127,26 +127,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "roadevent": 2
             };
         }
-        else if(root == 3){
-            data =  {
-                "origin": {
-
-                    "x": originX,
-                    "y": originY
-                },
-                "destination": {
-                    "x": destinationX,
-                    "y": destinationY
-                },
-                "priority" : "TIME",
-                "traffic" : true,
-                "avoid" : ["motorway"],
-                "roadevent": 2
-            };
-        }
-
     }
-
 
     try {
         const response = await $.ajax({
@@ -427,19 +408,25 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
             document.getElementById('btn-hanam').style.display = 'block';
-
         }
 
         document.getElementById("btn-recommend").addEventListener("click", async function () {
+            await removePolyline(polyline3);
+            await removePolyline(polyline2);
+            await viewPolyline(polyline1);
+        });
+        // 최단 시간 버튼 클릭 시 이벤트 리스너
+        document.getElementById("btn-pangyo").addEventListener("click", async function () {
             await removePolyline(polyline1);
             await removePolyline(polyline2);
             await viewPolyline(polyline3);
         });
+
         // 최단 시간 버튼 클릭 시 이벤트 리스너
-        document.getElementById("btn-shortest-time").addEventListener("click", async function () {
-            await removePolyline(polyline3);
+        document.getElementById("btn-hanam").addEventListener("click", async function () {
             await removePolyline(polyline2);
-            await viewPolyline(polyline1);
+            await removePolyline(polyline1);
+            await viewPolyline(polyline3);
         });
 
         // 최단 거리 버튼 클릭 시 이벤트 리스너
