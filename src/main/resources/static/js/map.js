@@ -78,6 +78,7 @@ var root2_highwayNodes = [
     [127.09095628389771, 37.16515618993971],
 
     [127.0849166721204, 37.141197247014425],
+
     [127.1192174917301, 37.09957860692084],
     [127.1303810262686 ,37.076033172993704],
     [127.1453124272744, 37.01470955711591],
@@ -89,6 +90,7 @@ var root2_highwayNodes = [
     [127.19023650476807, 36.76697529740176],
 
     [127.2309875538001, 36.745043810570984],
+
     [127.38303029780384, 36.627080729093386],
     [127.4305295251844, 36.56516799699589],
     [127.43210220588804, 36.55363043485985],
@@ -529,9 +531,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const selectedTime = instance.latestSelectedDateObj;
             const currentTime = new Date();
             console.log("selectedTime : " + selectedTime);
-            if (selectedTime < currentTime) {
+            if (selectedTime + 1 < currentTime) {
                 // 선택한 시간이 현재 시간보다 이전인 경우 경고 메시지 표시
-                alert("과거 시간은 선택할 수 없습니다.");
+                alert("과거 시간은 선거택할 수 없습니다.");
                 instance.setDate(currentTime); // 현재 시간으로 재설정
             }
             else
