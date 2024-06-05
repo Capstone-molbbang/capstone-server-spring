@@ -94,23 +94,44 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
     }
     else{
         if(root == 1 || root == 3){
-            data =  {
-                "origin": {
+            if(hiwayType){
+                data =  {
+                    "origin": {
 
-                    "x": originX,
-                    "y": originY
-                },
-                "destination": {
-                    "x": destinationX,
-                    "y": destinationY
-                },
-                "priority" : "TIME",
-                "traffic" : true,
-                "avoid" : ["motorway"],
-                "roadevent": 2,
-                "road_details": true,
-                "summary": true
-            };
+                        "x": originX,
+                        "y": originY
+                    },
+                    "destination": {
+                        "x": destinationX,
+                        "y": destinationY
+                    },
+                    "waypoints" : "127.038764,37.464552",
+                    "priority" : "TIME",
+                    "traffic" : true,
+                    "avoid" : ["motorway"],
+                    "roadevent": 2,
+                    "road_details": true,
+                    "summary": true
+                };
+            }
+            else {
+                data =  {
+                    "origin": {
+                        "x": originX,
+                        "y": originY
+                    },
+                    "destination": {
+                        "x": destinationX,
+                        "y": destinationY
+                    },
+                    "priority" : "TIME",
+                    "traffic" : true,
+                    "avoid" : ["motorway"],
+                    "roadevent": 2,
+                    "road_details": true,
+                    "summary": true
+                };
+            }
         }
         else if(root == 2){
             data =  {
@@ -351,6 +372,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         else if(root3TotalTime < root1TotalTime && root3TotalTime < root2TotalTime) {
             recommendRoot = "root3";
         }
+        console.log("recommendRoot + " + recommendRoot);
         if(recommendRoot = "root1"){
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
