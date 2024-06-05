@@ -812,7 +812,7 @@ async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, 
     waypoints.push([destinationCoords.x, destinationCoords.y]);
     await addMarkersAndSetCenter(startCoords, destinationCoords);
 
-    console("waypoints! == " + waypoints)
+    console.log("waypoints! == " + waypoints)
     await drawRoutesWayPoint(waypoints, apiKey, false, root, bool);
     console.log("totalDistanceRoot2  + " + totalDistanceRoot2);
 
