@@ -72,9 +72,9 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
 
     console.log("w! : ", JSON.stringify(w));
 
-    let  data ;
-    if(w == null){
-        data =  {
+    let data;
+    if (waypoints === null) {
+        data = {
             "origin": {
                 "x": originX,
                 "y": originY
@@ -83,77 +83,46 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "x": destinationX,
                 "y": destinationY
             },
-            "priority" : "TIME",
-            "traffic" : true,
+            "priority": "TIME",
+            "traffic": true,
             "roadevent": 2,
-            "optimizeWaypoints": true,
-        //    "travelMode": 'TRANSIT'
-
+            "optimizeWaypoints": true
         };
-    }
-    else{
-        if(root == 1 || root == 3){
-            if(hiwayType){
-                data =  {
-                    "origin": {
+    } else {
+        let baseData = {
+            "origin": {
+                "x": originX,
+                "y": originY
+            },
+            "destination": {
+                "x": destinationX,
+                "y": destinationY
+            },
+            "waypoints": waypoints,
+            "priority": "TIME",
+            "traffic": true,
+            "avoid": ["motorway"],
+            "roadevent": 2,
+            "road_details": true,
+            "summary": true
+        };
 
-                        "x": originX,
-                        "y": originY
-                    },
-                    "destination": {
-                        "x": destinationX,
-                        "y": destinationY
-                    },
-                    "waypoints" : "127.038764,37.464552" | w,
-                    "priority" : "TIME",
-                    "traffic" : true,
-                    "avoid" : ["motorway"],
-                    "roadevent": 2,
-                    "road_details": true,
-                    "summary": true
-                };
-            }
-            else {
-                data =  {
-                    "origin": {
-                        "x": originX,
-                        "y": originY
-                    },
-                    "destination": {
-                        "x": destinationX,
-                        "y": destinationY
-                    },
-                    "waypoints" : w,
-                    "priority" : "TIME",
-                    "traffic" : true,
-                    "avoid" : ["motorway"],
-                    "roadevent": 2,
-                    "road_details": true,
-                    "summary": true
-                };
+        if (root === 2) {
+            baseData.priority = "DISTANCE";
+        }
+
+        if (root === 1 || root === 3) {
+            if (hiwayType) {
+                baseData.waypoints.unshift({
+                    "x": "127.038764",
+                    "y": "37.464552"
+                });
             }
         }
-        else if(root == 2){
-            data =  {
-                "origin": {
 
-                    "x": originX,
-                    "y": originY
-                },
-                "destination": {
-                    "x": destinationX,
-                    "y": destinationY
-                },
-                "waypoints" : w,
-                "priority" : "DISTANCE",
-                "traffic" : true,
-                "avoid" : ["motorway"],
-                "roadevent": 2,
-                "road_details": true,
-                "summary": true
-            };
-        }
+        data = baseData;
     }
+
 
     try {
         const response = await $.ajax({
