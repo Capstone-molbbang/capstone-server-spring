@@ -73,7 +73,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
     console.log("w! : ", JSON.stringify(w));
 
     let data;
-    if (waypoints === null) {
+    if (w === null) {
         data = {
             "origin": {
                 "x": originX,
@@ -98,7 +98,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "x": destinationX,
                 "y": destinationY
             },
-            "waypoints": waypoints,
+            "waypoints": w,
             "priority": "TIME",
             "traffic": true,
             "avoid": ["motorway"],
