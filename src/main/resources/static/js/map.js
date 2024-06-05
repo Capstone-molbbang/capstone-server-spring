@@ -73,7 +73,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
     console.log("w! : ", JSON.stringify(w));
 
     let  data ;
-    if(w != null){
+    if(w == null){
         data =  {
             "origin": {
                 "x": originX,
@@ -83,7 +83,6 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "x": destinationX,
                 "y": destinationY
             },
-            "waypoints" : w,
             "priority" : "TIME",
             "traffic" : true,
             "roadevent": 2,
@@ -105,7 +104,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                         "x": destinationX,
                         "y": destinationY
                     },
-                    "waypoints" : "127.038764,37.464552",
+                    "waypoints" : "127.038764,37.464552" | w,
                     "priority" : "TIME",
                     "traffic" : true,
                     "avoid" : ["motorway"],
@@ -124,6 +123,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                         "x": destinationX,
                         "y": destinationY
                     },
+                    "waypoints" : w,
                     "priority" : "TIME",
                     "traffic" : true,
                     "avoid" : ["motorway"],
@@ -144,6 +144,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                     "x": destinationX,
                     "y": destinationY
                 },
+                "waypoints" : w,
                 "priority" : "DISTANCE",
                 "traffic" : true,
                 "avoid" : ["motorway"],
@@ -811,6 +812,7 @@ async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, 
     waypoints.push([destinationCoords.x, destinationCoords.y]);
     await addMarkersAndSetCenter(startCoords, destinationCoords);
 
+    console("waypoints! == " + waypoints)
     await drawRoutesWayPoint(waypoints, apiKey, false, root, bool);
     console.log("totalDistanceRoot2  + " + totalDistanceRoot2);
 
