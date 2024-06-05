@@ -358,11 +358,18 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const root1_highwayNodes = await fetchHighwayNodes('root1');
         const root2_highwayNodes = await fetchHighwayNodes('root2');
 
+        await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3);
+
+        distanceList = [];
+        k=0;
+
         await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1);
+
         distanceList = [];
         k=0;
 
         await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2);
+
 
         document.getElementById('root1-time-info').innerText = 178 + ' 분';
         document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
