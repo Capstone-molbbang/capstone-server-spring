@@ -93,7 +93,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
         };
     }
     else{
-        if(root == 1){
+        if(root == 1 || root == 3){
             data =  {
                 "origin": {
 
@@ -130,47 +130,6 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "road_details": true,
                 "summary": true
             };
-        }
-        if(root == 3 ){
-            if(hiwayType){
-                data =  {
-                    "origin": {
-
-                        "x": originX,
-                        "y": originY
-                    },
-                    "destination": {
-                        "x": destinationX,
-                        "y": destinationY
-                    },
-                    "waypoints" : "127.038764,37.464552",
-                    "priority" : "TIME",
-                    "traffic" : true,
-                    "avoid" : ["motorway"],
-                    "roadevent": 2,
-                    "road_details": true,
-                    "summary": true
-                };
-            }
-            else {
-                data =  {
-                    "origin": {
-                        "x": originX,
-                        "y": originY
-                    },
-                    "destination": {
-                        "x": destinationX,
-                        "y": destinationY
-                    },
-                    "priority" : "TIME",
-                    "traffic" : true,
-                    "avoid" : ["motorway"],
-                    "roadevent": 2,
-                    "road_details": true,
-                    "summary": true
-                };
-            }
-
         }
     }
 
@@ -278,8 +237,8 @@ async function drawRoute(response, root){
 }
 
 // 주어진 경로들을 순회하면서 각각의 경로를 지도에 그림
-async function drawRoutesWayPoint(waypoints, apikey, bool, root) {
-    await drawRouteKakaoWayPoint(waypoints[0], waypoints[1], waypoints[2], apikey, bool, root);
+async function drawRoutesWayPoint(waypoints, apikey, bool, root, bool1) {
+    await drawRouteKakaoWayPoint(waypoints[0], waypoints[1], waypoints[2], apikey, bool, root, bool1);
 
 }
 
@@ -393,31 +352,31 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             recommendRoot = "root3";
         }
         if(recommendRoot = "root1"){
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2, false);
 
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
         }
 
         else if(recommendRoot = "root3") {
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1, true);
 
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2, false);
 
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
         }
 
@@ -829,7 +788,7 @@ function displayAddressFromCoords(mouseEvent) {
 // 지도 클릭 이벤트 핸들러 추가
 kakao.maps.event.addListener(map, 'click', displayAddressFromCoords);
 
-async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, highwayNodes, root){
+async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, highwayNodes, root, bool){
     const origin = `${startCoords.x},${startCoords.y}`;
     const destination = `${destinationCoords.x},${destinationCoords.y}`;
 
@@ -839,7 +798,7 @@ async function calculateTimeAndDistance(startCoords, destinationCoords, apiKey, 
     waypoints.push([destinationCoords.x, destinationCoords.y]);
     await addMarkersAndSetCenter(startCoords, destinationCoords);
 
-    await drawRoutesWayPoint(waypoints, apiKey, false, root);
+    await drawRoutesWayPoint(waypoints, apiKey, false, root, bool);
     console.log("totalDistanceRoot2  + " + totalDistanceRoot2);
 
 }
