@@ -9,6 +9,8 @@ var geocoder = new kakao.maps.services.Geocoder();
 // 전역 변수 선언
 var polyline1= null;
 var polyline2= null;
+var polyline3= null;
+
 
 var distance = null;
 var duration = null;
@@ -26,6 +28,8 @@ var totalDistanceRoot1 = 0;
 var totalTimeRoot1 = 0;
 var totalDistanceRoot2 = 0;
 var totalTimeRoot2 = 0;
+var totalDistanceRoot3 = 0;
+var totalTimeRoot3 = 0;
 async function fetchHighwayNodes(root) {
     try {
         const response = await fetch(`/api/nodes/${root}`);
@@ -91,21 +95,58 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
         };
     }
     else{
-        data =  {
-            "origin": {
+        if(root == 1){
+            data =  {
+                "origin": {
 
-                "x": originX,
-                "y": originY
-            },
-            "destination": {
-                "x": destinationX,
-                "y": destinationY
-            },
-            "priority" : "RECOMMEND",
-            "traffic" : true,
-            "avoid" : ["motorway"],
-            "roadevent": 2
-        };
+                    "x": originX,
+                    "y": originY
+                },
+                "destination": {
+                    "x": destinationX,
+                    "y": destinationY
+                },
+                "priority" : "TIME",
+                "traffic" : true,
+                "avoid" : ["motorway"],
+                "roadevent": 2
+            };
+        }
+        else if(root == 2){
+            data =  {
+                "origin": {
+
+                    "x": originX,
+                    "y": originY
+                },
+                "destination": {
+                    "x": destinationX,
+                    "y": destinationY
+                },
+                "priority" : "DISTANCE",
+                "traffic" : true,
+                "avoid" : ["motorway"],
+                "roadevent": 2
+            };
+        }
+        else if(root == 3){
+            data =  {
+                "origin": {
+
+                    "x": originX,
+                    "y": originY
+                },
+                "destination": {
+                    "x": destinationX,
+                    "y": destinationY
+                },
+                "priority" : "RECOMMEND",
+                "traffic" : true,
+                "avoid" : ["motorway"],
+                "roadevent": 2
+            };
+        }
+
     }
 
 
@@ -150,6 +191,10 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                     drawRoute(response, 2);
                     totalDistanceRoot2 = totalDistance;
                 }
+                else if (root == 3) {
+                    drawRoute(response, 3);
+                    totalDistanceRoot3 = totalDistance;
+                }
                 k = 0;
               //  console.log("totalDistanceRoot2  = " + totalDistanceRoot2);
             },
@@ -180,7 +225,7 @@ async function drawRoute(response, root){
             path: linePath,
             strokeWeight: 7,
             strokeColor: '#ff0000',
-            strokeOpacity: 0.7,
+            strokeOpacity: 1,
             strokeStyle: 'solid'
         });
         polyline1.setMap(map);
@@ -190,10 +235,20 @@ async function drawRoute(response, root){
             path: linePath,
             strokeWeight: 7,
             strokeColor: '#0067a3',
-            strokeOpacity: 0.7,
+            strokeOpacity: 1,
             strokeStyle: 'solid'
         });
         polyline2.setMap(map);
+    }
+    else if(root === 3){
+        polyline3 = new kakao.maps.Polyline({
+            path: linePath,
+            strokeWeight: 7,
+            strokeColor: '#FFFF00',
+            strokeOpacity: 1,
+            strokeStyle: 'solid'
+        });
+        polyline1.setMap(map);
     }
 
 }
@@ -386,6 +441,8 @@ async function resetSearch() {
 
     totalDistanceRoot1 = 0;
     totalDistanceRoot2 = 0;
+    totalDistanceRoot3 = 0;
+
     totalTimeRoot1 = 0;
     totalTimeRoot2 = 0;
 
