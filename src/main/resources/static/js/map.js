@@ -248,7 +248,7 @@ async function drawRoute(response, root){
             strokeOpacity: 1,
             strokeStyle: 'solid'
         });
-        polyline1.setMap(map);
+        polyline3.setMap(map);
     }
 
 }
