@@ -342,6 +342,10 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         else if(root3TotalTime < root1TotalTime && root3TotalTime < root2TotalTime) {
             recommendRoot = "root3";
         }
+
+        console.log("root1 node = " + root1_highwayNodes);
+        console.log("root2 node = " + root2_highwayNodes);
+
         console.log("recommendRoot + " + recommendRoot);
         if(recommendRoot === "root1"){
             console.log("recommend root success!!")
