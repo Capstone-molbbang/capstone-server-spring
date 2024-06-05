@@ -374,6 +374,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
         console.log("recommendRoot + " + recommendRoot);
         if(recommendRoot === "root1"){
+            console.log("recommend root success!!")
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
             distanceList = [];
@@ -385,6 +386,18 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             k=0;
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
+
+            document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
+            document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
+            document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
+            document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
+            document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
+            document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
+
+            document.getElementById('btn-recommend').style.display = 'block';
+            document.getElementById('btn-shortest-distance').style.display = 'block';
+            document.getElementById('btn-pangyo').style.display = 'block';
+
         }
 
         else if(recommendRoot === "root3") {
@@ -400,41 +413,19 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
-        }
-
-        if(recommendRoot === "root1") {
-            document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
-            document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
-            document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
-            document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
-        }
-        else if(recommendRoot === "root3") {
             document.getElementById('root1-time-info').innerText = root3TotalTime + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root4-time-info').innerText = root1TotalTime + ' 분';
             document.getElementById('root4-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-        }
-        // document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
-        // document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-        // document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
-        // document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-        // document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
-        // document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
 
-        if(recommendRoot === "root1") {
-            document.getElementById('btn-recommend').style.display = 'block';
-            document.getElementById('btn-shortest-distance').style.display = 'block';
-            document.getElementById('btn-pangyo').style.display = 'block';
-        }
-        else if(recommendRoot === "root3"){
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
             document.getElementById('btn-hanam').style.display = 'block';
+
         }
+
 
         document.getElementById("btn-recommend").addEventListener("click", async function () {
             await removePolyline(polyline3);
