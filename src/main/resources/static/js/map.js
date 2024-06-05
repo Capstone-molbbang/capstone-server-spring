@@ -27,20 +27,15 @@ var totalTimeRoot1 = 0;
 var totalDistanceRoot2 = 0;
 var totalTimeRoot2 = 0;
 async function fetchHighwayNodes(root) {
-    try {
-        const response = await fetch(`/api/nodes/${root}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        console.log("response = " + response);
-        const data = await response.json(); // JSON으로 파싱
-        console.log(data); // 응답 데이터 확인
-
-        const nodeList = data.map(node => [node.longitude, node.latitude]);
-        return nodeList;
-    } catch (error) {
-        console.error('Error fetching highway nodes:', error);
-    }
+    fetch(`/api/nodes/${root}`)
+        .then(response => response.json())
+        .then(data => {
+            const nodeList = data.map(node => [node.longitude, node.latitude]);
+            return nodeList;
+        })
+        .catch(error => {
+            console.error('Error fetching highway nodes:', error);
+        });
 }
 
 async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root) {
@@ -356,7 +351,6 @@ function showSuggestions(input, suggestionsContainer, isStart) {
         return;
     }
 
-    console.log("input = " + inputValue);
     // 서버에 자동 완성에 필요한 데이터를 요청
     fetch(`/api/suggestions?query=${inputValue}`)
         .then(response => response.json())
