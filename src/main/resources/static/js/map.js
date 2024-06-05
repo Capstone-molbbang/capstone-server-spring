@@ -272,8 +272,10 @@ document.getElementById("toggle-button").addEventListener("click", function () {
     document.getElementById('search-container').classList.toggle('toggle-open');
     document.getElementById('search-container').classList.toggle('toggle-closed');
 
+    document.getElementById('btn-recommend').style.display = 'none';
     document.getElementById('btn-shortest-distance').style.display = 'none';
-    document.getElementById('btn-shortest-time').style.display = 'none';
+    document.getElementById('btn-pangyo').style.display = 'none';
+    document.getElementById('btn-hanam').style.display = 'none';
     // 토글 창이 열릴 때 출발지 및 도착지 입력란에 즉각적으로 자동 완성 기능 활성화
     if (document.getElementById('search-container').classList.contains('toggle-open')) {
         const startInput = document.getElementById('start-input-small');
