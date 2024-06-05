@@ -38,9 +38,6 @@ async function fetchHighwayNodes(root) {
     }
 }
 
-const root1_highwayNodes = await fetchHighwayNodes('root1');
-const root2_highwayNodes = await fetchHighwayNodes('root2');
-
 async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, bool, root) {
     console.log("origin = " + origin)
     const REST_API_KEY = apiKey;
@@ -301,6 +298,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
+        const root1_highwayNodes = await fetchHighwayNodes('root1');
+        const root2_highwayNodes = await fetchHighwayNodes('root2');
 
         await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1);
         distanceList = [];
