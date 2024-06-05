@@ -373,7 +373,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             recommendRoot = "root3";
         }
         console.log("recommendRoot + " + recommendRoot);
-        if(recommendRoot = "root1"){
+        if(recommendRoot === "root1"){
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
             distanceList = [];
@@ -387,7 +387,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
         }
 
-        else if(recommendRoot = "root3") {
+        else if(recommendRoot === "root3") {
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1, true);
 
             distanceList = [];
@@ -402,7 +402,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         }
 
-        if(recommendRoot = "root1") {
+        if(recommendRoot === "root1") {
             document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
@@ -410,7 +410,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
             document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
         }
-        else if(recommendRoot = "root3") {
+        else if(recommendRoot === "root3") {
             document.getElementById('root1-time-info').innerText = root3TotalTime + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
@@ -425,12 +425,12 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         // document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
         // document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
 
-        if(recommendRoot == "root1") {
+        if(recommendRoot === "root1") {
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
             document.getElementById('btn-pangyo').style.display = 'block';
         }
-        else if(recommendRoot == "root3"){
+        else if(recommendRoot === "root3"){
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
             document.getElementById('btn-hanam').style.display = 'block';
