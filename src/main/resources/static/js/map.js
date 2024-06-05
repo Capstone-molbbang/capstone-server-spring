@@ -364,17 +364,26 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2);
 
-        const time = 130;
-        document.getElementById('root1-time-info').innerText = time + ' 분';
+        document.getElementById('root1-time-info').innerText = 178 + ' 분';
         document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-        document.getElementById('root2-time-info').innerText = 150 + ' 분';
+        document.getElementById('root2-time-info').innerText = 190 + ' 분';
         document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
+        document.getElementById('root3-time-info').innerText = 178 + ' 분';
+        document.getElementById('root3-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
 
-
+        document.getElementById('btn-recommend').style.display = 'block';
         document.getElementById('btn-shortest-distance').style.display = 'block';
         document.getElementById('btn-shortest-time').style.display = 'block';
+        document.getElementById("btn-recommend").addEventListener("click", async function () {
+            await removePolyline(polyline1);
+            await removePolyline(polyline2);
+
+            await viewPolyline(polyline3);
+            //   await drawRoutesByType('time', startCoords, destinationCoords, apiKey, root1_highwayNodes);
+        });
         // 최단 시간 버튼 클릭 시 이벤트 리스너
         document.getElementById("btn-shortest-time").addEventListener("click", async function () {
+            await removePolyline(polyline3);
             await removePolyline(polyline2);
             await viewPolyline(polyline1);
          //   await drawRoutesByType('time', startCoords, destinationCoords, apiKey, root1_highwayNodes);
@@ -383,6 +392,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         // 최단 거리 버튼 클릭 시 이벤트 리스너
         document.getElementById("btn-shortest-distance").addEventListener("click", async function () {
             await removePolyline(polyline1);
+            await removePolyline(polyline3);
+
             await viewPolyline(polyline2);
             //  await drawRoutesByType('distance', startCoords, destinationCoords, apiKey, root2_highwayNodes);
         });
