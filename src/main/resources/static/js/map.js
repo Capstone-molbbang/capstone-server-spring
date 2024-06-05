@@ -248,6 +248,10 @@ document.getElementById("toggle-button").addEventListener("click", function () {
     document.getElementById('search-container').classList.toggle('toggle-open');
     document.getElementById('search-container').classList.toggle('toggle-closed');
 
+    polyline1 = null;
+    polyline2 = null;
+    polyline3 = null;
+
     document.getElementById('btn-recommend').style.display = 'none';
     document.getElementById('btn-shortest-distance').style.display = 'none';
     document.getElementById('btn-pangyo').style.display = 'none';
@@ -343,9 +347,6 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             recommendRoot = "root3";
         }
 
-        console.log("root1 node = " + root1_highwayNodes);
-        console.log("root2 node = " + root2_highwayNodes);
-
         console.log("recommendRoot + " + recommendRoot);
         if(recommendRoot === "root1"){
             console.log("recommend root success!!")
@@ -399,7 +400,6 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('btn-hanam').style.display = 'block';
 
         }
-
 
         document.getElementById("btn-recommend").addEventListener("click", async function () {
             await removePolyline(polyline3);
