@@ -7,5 +7,5 @@ import java.time.LocalDateTime;
 @Data
 public class RouteRequest {
 
-    private LocalDateTime departureTime;
+    private String departureTime;
 }
