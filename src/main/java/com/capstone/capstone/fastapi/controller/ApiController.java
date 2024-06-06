@@ -46,6 +46,7 @@ public class ApiController {
     @PostMapping("/api/departureTime")
     public ResponseEntity<Map<String, Object>> sendDepartureTime(@RequestBody RouteRequest routeRequest) {
 
+        log.info("time = " + routeRequest.getDepartureTime());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
