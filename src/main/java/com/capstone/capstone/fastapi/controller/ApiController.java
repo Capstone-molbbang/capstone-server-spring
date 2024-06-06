@@ -35,7 +35,6 @@ public class ApiController {
         return ResponseEntity.ok().body(response.getBody());
     }
 
-
     @PostMapping("/from-fastapi")
     public ResponseEntity<Map<String, Object>> receiveData(@RequestBody Map<String, Object> data) {
         System.out.println("Received data: " + data);
@@ -52,7 +51,7 @@ public class ApiController {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("departure_time", routeRequest.getDepartureTime());
+        requestBody.put("date", routeRequest.getDepartureTime());
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<Map> responseA = restTemplate.postForEntity(FASTAPI_URL + "/predict_router1", entity, Map.class);
