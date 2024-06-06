@@ -572,7 +572,8 @@ async function getSelectedDepartureTime() {
         //    document.getElementById("departure-time").value = currentDateTimeString;
 
         console.log("currentDateTimeString :" + currentDateTimeString);
-        selectedDepartureTime = `${year}${month}${day}${hours}${minutes}`;
+        selectedDepartureTime = currentDate.toISOString();
+
         return selectedDepartureTime;
     } else {
         return selectedDepartureTime;
@@ -592,7 +593,7 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("currentDate: " + currentDate);
     console.log("hours : " + hours)
 
-    var currentDateTimeString
+    var currentDateTimeString  = "";
     if (hours > 12) {
         currentDateTimeString = year + "년 " + month + "월 " + day + "일 오후 " + (hours - 12) + "시 " + minutes + "분 출발";
     } else if (hours === 12) {
@@ -625,7 +626,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const hours = selectedTime.getHours();
                 const ampm = hours >= 12 ? "오후" : "오전";
                 const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
-                selectedDepartureTime = `${selectedTime.getFullYear()}${month}${day}${formattedHours}${formattedMinutes}`;
+                selectedDepartureTime = currentTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
             }
         }
