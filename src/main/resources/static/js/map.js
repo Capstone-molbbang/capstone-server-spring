@@ -355,6 +355,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
 
         const timeData = await timeResponse.json();
+        console.log("timeData:" + timeData );
         tmpRootATime += timeData.routeBTime;
         tmpRootATime += 59;
 
@@ -376,6 +377,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const root1_highwayNodes = await fetchHighwayNodes('root1');
         const root2_highwayNodes = await fetchHighwayNodes('root2');
 
+        console.log("tmpRootATime =" + tmpRootATime);
+        console.log("tmpRootBTime =" + tmpRootBTime);
+        console.log("tmpRootCTime =" + tmpRootCTime);
 
         var recommendRoot;
 
