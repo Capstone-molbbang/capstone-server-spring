@@ -379,10 +379,10 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         var recommendRoot;
 
-        if(tmp < root3TotalTime && root1TotalTime < root2TotalTime) {
+        if(tmpRootCTime < tmpRootATime && tmpRootCTime < tmpRootBTime) {
             recommendRoot = "root1";
         }
-        else if(root3TotalTime < root1TotalTime && root3TotalTime < root2TotalTime) {
+        if(tmpRootATime < tmpRootCTime && tmpRootATime < tmpRootBTime) {
             recommendRoot = "root3";
         }
 
