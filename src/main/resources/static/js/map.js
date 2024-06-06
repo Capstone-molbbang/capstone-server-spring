@@ -357,13 +357,13 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const timeData = await timeResponse.json();
         console.log("timeData:" + timeData );
         tmpRootATime += timeData.routeBTime;
-        tmpRootATime += 59;
+        tmpRootATime += 43;
 
         tmpRootBTime += timeData.routeBTime;
-        tmpRootBTime += 48;
+        tmpRootBTime += 64;
 
         tmpRootCTime += timeData.routeATime;
-        tmpRootCTime += 41;
+        tmpRootCTime += 33;
 
 
         // totalTimeRoot1 = timeData.routeATime;
