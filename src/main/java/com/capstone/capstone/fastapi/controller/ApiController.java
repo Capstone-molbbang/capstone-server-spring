@@ -62,8 +62,9 @@ public class ApiController {
         Map<String, Object> responseBodyB = responseB.getBody();
 
         Map<String, Object> result = new HashMap<>();
-        result.put("result-router1", responseBodyA.get("routeATime"));
-        result.put("result-router2", responseBodyB.get("routeBTime"));
+        log.info(responseBodyA.toString());
+        result.put("routeATime", responseBodyA.get("routeATime"));
+        result.put("routeBTime", responseBodyB.get("routeBTime"));
 
         return ResponseEntity.ok(result);
     }
