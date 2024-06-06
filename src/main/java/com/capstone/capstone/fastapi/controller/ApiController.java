@@ -51,7 +51,7 @@ public class ApiController {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("data", routeRequest.getDepartureTime());
+        requestBody.put("data", routeRequest.getDepartureTime().toString());
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
