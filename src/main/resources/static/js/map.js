@@ -14,7 +14,9 @@ var polyline3= null;
 
 var distance = null;
 var duration = null;
+var selectedDepartureTimeMessage = null; // 사용자가 선택한 출발 예정 시간을 저장할 변수
 var selectedDepartureTime = null; // 사용자가 선택한 출발 예정 시간을 저장할 변수
+
 var startAddress = null;
 var destinationAddress = null;
 var startMarker= null;
@@ -350,6 +352,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         destinationCoords = data.destinationCoords; // 도착지 좌표
         selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
+        console.log("selectedDepartureTime == " + selectedDepartureTime);
         const timeResponse = await fetch('/api/departureTime', {
             method: 'POST',
             headers: {
@@ -569,7 +572,8 @@ async function getSelectedDepartureTime() {
         //    document.getElementById("departure-time").value = currentDateTimeString;
 
         console.log("currentDateTimeString :" + currentDateTimeString);
-        return `${year}${month}${day}${hours}${minutes}`;
+        selectedDepartureTime = `${year}${month}${day}${hours}${minutes}`;
+        return selectedDepartureTime;
     } else {
         return selectedDepartureTime;
     }
@@ -621,7 +625,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 const hours = selectedTime.getHours();
                 const ampm = hours >= 12 ? "오후" : "오전";
                 const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
-                selectedDepartureTime = `${selectedTime.getFullYear()}년 ${selectedTime.getMonth() + 1}월 ${selectedTime.getDate()}일 ${ampm} ${formattedHours}시 ${selectedTime.getMinutes()}분 출발`;
+                selectedDepartureTime = `${selectedTime.getFullYear()}${month}${day}${formattedHours}${formattedMinutes}`;
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
             }
         }
