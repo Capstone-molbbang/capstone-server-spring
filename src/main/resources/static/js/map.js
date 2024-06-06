@@ -359,7 +359,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                departure_time: selectedDepartureTime
+                departureTime: selectedDepartureTime
             })
         });
 
