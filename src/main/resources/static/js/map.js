@@ -36,10 +36,6 @@ var root1TotalTime = 178;
 var root2TotalTime = 210;
 var root3TotalTime = 150;
 
-var tmpRootATime = 0;
-var tmpRootBTime = 0;
-var tmpRootCTime = 0;
-
 
 async function fetchHighwayNodes(root) {
     try {
@@ -356,20 +352,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         const timeData = await timeResponse.json();
         console.log("timeData:" + timeData );
-        tmpRootATime += timeData.routeBTime;
-        tmpRootATime += 43;
+        totalTimeRoot1 += timeData.routeATime;
 
-        tmpRootBTime += timeData.routeBTime;
-        tmpRootBTime += 64;
+        totalTimeRoot2 += timeData.routeBTime;
 
-        tmpRootCTime += timeData.routeATime;
-        tmpRootCTime += 33;
-
-
-        // totalTimeRoot1 = timeData.routeATime;
-        // totalTimeRoot2 = timeData.routeBTime;
-        // totalTimeRoot3 = timeData.routeCTime;
-
+        totalTimeRoot3 += timeData.routeCTime;
 
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
@@ -377,16 +364,16 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const root1_highwayNodes = await fetchHighwayNodes('root1');
         const root2_highwayNodes = await fetchHighwayNodes('root2');
 
-        console.log("tmpRootATime =" + tmpRootATime);
-        console.log("tmpRootBTime =" + tmpRootBTime);
-        console.log("tmpRootCTime =" + tmpRootCTime);
+        console.log("totalTimeRoot1 =" + totalTimeRoot1);
+        console.log("totalTimeRoot2 =" + totalTimeRoot2);
+        console.log("totalTimeRoot3 =" + totalTimeRoot3);
 
         var recommendRoot;
 
-        if(tmpRootCTime < tmpRootATime && tmpRootCTime < tmpRootBTime) {
+        if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
             recommendRoot = "root1";
         }
-        if(tmpRootATime < tmpRootCTime && tmpRootATime < tmpRootBTime) {
+        if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
             recommendRoot = "root3";
         }
 
@@ -405,11 +392,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
 
-            document.getElementById('root1-time-info').innerText = tmpRootCTime + ' 분';
+            document.getElementById('root1-time-info').innerText = totalTimeRoot1 + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root2-time-info').innerText = tmpRootBTime + ' 분';
+            document.getElementById('root2-time-info').innerText = totalTimeRoot2 + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root3-time-info').innerText = tmpRootATime + ' 분';
+            document.getElementById('root3-time-info').innerText = totalTimeRoot3 + ' 분';
             document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
 
             document.getElementById('btn-recommend').style.display = 'block';
@@ -431,11 +418,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
-            document.getElementById('root1-time-info').innerText = tmpRootATime + ' 분';
+            document.getElementById('root1-time-info').innerText = totalTimeRoot3 + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root2-time-info').innerText = tmpRootBTime + ' 분';
+            document.getElementById('root2-time-info').innerText = totalTimeRoot2 + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root4-time-info').innerText = tmpRootCTime + ' 분';
+            document.getElementById('root4-time-info').innerText = totalTimeRoot1 + ' 분';
             document.getElementById('root4-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
 
             document.getElementById('btn-recommend').style.display = 'block';
@@ -542,6 +529,9 @@ async function resetSearch() {
     }
     removePolyline(polyline1);
     removePolyline(polyline2);
+    removePolyline(polyline3);
+
+
 }
 
 
