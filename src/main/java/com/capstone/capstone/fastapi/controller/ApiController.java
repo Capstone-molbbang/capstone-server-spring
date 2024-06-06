@@ -62,7 +62,7 @@ public class ApiController {
         Map<String, Object> responseBodyB = responseB.getBody();
 
         Map<String, Object> result = new HashMap<>();
-        log.info(responseBodyA.toString());
+        log.info(responseBodyB.toString());
         result.put("routeATime", responseBodyA.get("RouteA Time"));
         result.put("routeBTime", responseBodyB.get("RouteB Time"));
 
