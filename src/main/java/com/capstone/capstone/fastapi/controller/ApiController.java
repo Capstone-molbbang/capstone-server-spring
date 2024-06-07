@@ -67,7 +67,7 @@ public class ApiController {
         Map<String, Object> result = new HashMap<>();
         result.put("routeATime", responseBodyA.get("RouteA Time"));
         result.put("routeBTime", responseBodyB.get("RouteB Time"));
-        result.put("routeCTime", responseBodyB.get("RouteC Time"));
+        result.put("routeCTime", responseBodyC.get("RouteC Time"));
 
         return ResponseEntity.ok(result);
     }
