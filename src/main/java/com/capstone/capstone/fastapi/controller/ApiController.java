@@ -75,7 +75,7 @@ public class ApiController {
             ResponseEntity<Map> responseB = restTemplate.postForEntity(FASTAPI_URL + "/predict_router2", entity, Map.class);
             Map<String, Object> responseBodyB = responseB.getBody();
             log.info("responseBodyB = " + responseBodyB.toString());
-            result.put("routeCTime", responseBodyB.get("RouteB Time"));
+            result.put("routeCTime", responseBodyB.get("RouteB time"));
         } catch (HttpServerErrorException e) {
             log.error("Error in /predict_router2: " + e.getMessage());
             result.put("routeCTime", "Error");
