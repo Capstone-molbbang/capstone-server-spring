@@ -356,15 +356,15 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         //         departureTime: tmptime
         //     })
         // });
-
-        if (!timeResponse.ok) {
-            throw new Error(`HTTP error! Status: ${timeResponse.status}`);
-        }
-
-        const timeData = await timeResponse.json();
-     //  totalTimeRoot1 = timeData.routeATime;
-        //   totalTimeRoot2 += timeData.routeBTime;
-      //  totalTimeRoot3 = timeData.routeCTime;
+        //
+        // if (!timeResponse.ok) {
+        //     throw new Error(`HTTP error! Status: ${timeResponse.status}`);
+        // }
+     //
+     //    const timeData = await timeResponse.json();
+     // //  totalTimeRoot1 = timeData.routeATime;
+     //    //   totalTimeRoot2 += timeData.routeBTime;
+     //  //  totalTimeRoot3 = timeData.routeCTime;
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
