@@ -370,15 +370,24 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         const root2_highwayNodes = await fetchHighwayNodes('root2');
 
         console.log("totalTimeRoot1 =" + totalTimeRoot1);
-        console.log("totalTimeRoot2 =" + totalTimeRoot2);
+
+//        console.log("totalTimeRoot2 =" + totalTimeRoot2);
         console.log("totalTimeRoot3 =" + totalTimeRoot3);
 
         var recommendRoot;
+        //
+        // if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
+        //     recommendRoot = "root1";
+        // }
+        // if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
+        //     recommendRoot = "root3";
+        // }
 
-        if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
+
+        if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < root2TotalTime) {
             recommendRoot = "root1";
         }
-        if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
+        if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < root2TotalTime) {
             recommendRoot = "root3";
         }
 
