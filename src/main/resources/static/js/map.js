@@ -32,8 +32,10 @@ var totalDistanceRoot2 = 0;
 var totalTimeRoot2 = 0;
 var totalDistanceRoot3 = 0;
 var totalTimeRoot3 = 0;
+
 var root1TotalTime = 178;
-var root2TotalTime = 166;
+var root2TotalTime = 220;
+var root3TotalTime = 210;
 
 var direction;
 async function fetchHighwayNodes(root) {
