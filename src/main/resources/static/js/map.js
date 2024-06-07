@@ -362,7 +362,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
      //   totalTimeRoot2 += timeData.routeBTime;
 
         totalTimeRoot3 = timeData.routeCTime;
-
+ㅂ
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
@@ -435,7 +435,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('root1-time-info').innerText = totalTimeRoot3 + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
-            document.getElementById('root2-distance-info').innerText = totalTimeRoot2/1000 + ' km'; // 거리 정보 업데이트
+            document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root4-time-info').innerText = totalTimeRoot1 + ' 분';
             document.getElementById('root4-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
 
