@@ -306,6 +306,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
     polyline1 = null;
     polyline2 = null;
     polyline3 = null;
+    document.getElementById('btn-recommend').style.display = 'none';
+    document.getElementById('btn-shortest-distance').style.display = 'none';
+    document.getElementById('btn-pangyo').style.display = 'none';
+    document.getElementById('btn-hanam').style.display = 'none';
+
 
     event.preventDefault();
     var apiKey = document.body.getAttribute('data-api-key');
