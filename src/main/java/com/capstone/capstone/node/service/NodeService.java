@@ -20,4 +20,12 @@ public class NodeService {
     public List<Node> getCustomNodesForRoot2() {
         return nodeRepository.findByPathNumber(2);
     }
+
+    public List<Node> getCustomNodesForRoot3() {
+        return nodeRepository.findByPathNumber(3);
+    }
+
+    public List<Node> getCustomNodesForRoot4() {
+        return nodeRepository.findByPathNumber(4);
+    }
 }

@@ -41,4 +41,23 @@ public class NodeController {
 
     }
 
+    @GetMapping("/nodes/root3")
+    public ResponseEntity<?> getCustomNodesForRoot3() {
+        List<Node> root3 = nodeService.getCustomNodesForRoot3();
+        List<NodeResponse> root1DTO = root3.stream()
+                .map(node -> new NodeResponse(node.getLongitude(), node.getLatitude()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(root1DTO);
+    }
+
+    @GetMapping("/nodes/root4")
+    public ResponseEntity<?> getCustomNodesForRoot4() {
+        List<Node> root4 = nodeService.getCustomNodesForRoot4();
+        List<NodeResponse> root2DTO = root4.stream()
+                .map(node -> new NodeResponse(node.getLongitude(), node.getLatitude()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(root2DTO);
+
+    }
+
 }

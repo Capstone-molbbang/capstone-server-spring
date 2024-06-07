@@ -36,7 +36,7 @@ var root1TotalTime = 178;
 var root2TotalTime = 166;
 var root3TotalTime = 150;
 
-
+var direction;
 async function fetchHighwayNodes(root) {
     try {
         const response = await fetch(`/api/nodes/${root}`);
@@ -116,10 +116,18 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
 
         if (root === 1 || root === 3) {
             if (hiwayType) {
-                baseData.waypoints.unshift({
-                    "x": "127.038764",
-                    "y": "37.464552"
-                });
+                if(direction){
+                    baseData.waypoints.unshift({
+                        "x": "127.038764",
+                        "y": "37.464552"
+                    });
+                }
+                else{
+                    baseData.waypoints.push({
+                        "x": "127.038764",
+                        "y": "37.464552"
+                    });
+                }
             }
         }
 
@@ -152,15 +160,12 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 }
 
                 console.log("predictedTime : " + predictedTime);
-                for (let j = 0; j < k; j++) {
-                    console.log("duration [" + j + "]: " + distanceList[j]);
-                }
-
                 let totalDistance = 0;
                 for (let j = 0; j < k; j++) {
                     totalDistance += distanceList[j];
                     console.log("distance [" + j + "]: " + distanceList[j]);
                 }
+                console.log("")
                 if (root == 1) {
                     drawRoute(response, 1);
                     totalDistanceRoot1 = totalDistance;
@@ -339,14 +344,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         startCoords = data.startCoords; // 출발지 좌표
         destinationCoords = data.destinationCoords; // 도착지 좌표
-      //  selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
-
-        console.log("startCoords == " + startCoords.x);
-        console.log("destinationCoords == " + destinationCoords.x);
-
-        //selectedDepartureTime
-       // console.log("selectedDepartureTime == " + selectedDepartureTime);
-     //   if (startCoords)
+        //selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
         const timeResponse = await fetch('/api/departureTime', {
             method: 'POST',
@@ -363,31 +361,27 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
 
         const timeData = await timeResponse.json();
-        console.log("timeData:" + timeData );
         totalTimeRoot1 = timeData.routeATime;
-
-     //   totalTimeRoot2 += timeData.routeBTime;
-
+        //   totalTimeRoot2 += timeData.routeBTime;
         totalTimeRoot3 = timeData.routeCTime;
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
-        const root1_highwayNodes = await fetchHighwayNodes('root1');
-        const root2_highwayNodes = await fetchHighwayNodes('root2');
+        let root1_highwayNodes;
+        let root2_highwayNodes;
 
-        console.log("totalTimeRoot1 =" + totalTimeRoot1);
-
-//        console.log("totalTimeRoot2 =" + totalTimeRoot2);
-        console.log("totalTimeRoot3 =" + totalTimeRoot3);
+        if (startCoords.x == "127.0742595815513" && startCoords.y == "37.550638892935346" && destinationCoords.x == "127.42727719121109" && destinationCoords.y == "36.32765802936324") {
+            root1_highwayNodes = await fetchHighwayNodes('root1');
+            root2_highwayNodes = await fetchHighwayNodes('root2');
+            direction = true;
+        }
+        else if (destinationCoords.x == "127.0742595815513" && destinationCoords.y == "37.550638892935346" && startCoords.x == "127.42727719121109" && startCoords.y == "36.32765802936324") {
+            root1_highwayNodes = await fetchHighwayNodes('root3');
+            root2_highwayNodes = await fetchHighwayNodes('root4');
+            direction = false;
+        }
 
         var recommendRoot;
-        //
-        // if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
-        //     recommendRoot = "root1";
-        // }
-        // if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
-        //     recommendRoot = "root3";
-        // }
 
 
         if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < root2TotalTime) {
