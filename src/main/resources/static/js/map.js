@@ -252,14 +252,7 @@ document.getElementById("toggle-button").addEventListener("click", function () {
     document.getElementById('search-container').classList.toggle('toggle-open');
     document.getElementById('search-container').classList.toggle('toggle-closed');
 
-    polyline1 = null;
-    polyline2 = null;
-    polyline3 = null;
 
-    document.getElementById('btn-recommend').style.display = 'none';
-    document.getElementById('btn-shortest-distance').style.display = 'none';
-    document.getElementById('btn-pangyo').style.display = 'none';
-    document.getElementById('btn-hanam').style.display = 'none';
     // 토글 창이 열릴 때 출발지 및 도착지 입력란에 즉각적으로 자동 완성 기능 활성화
     if (document.getElementById('search-container').classList.contains('toggle-open')) {
         const startInput = document.getElementById('start-input-small');
@@ -310,6 +303,10 @@ document.addEventListener("DOMContentLoaded", function() {
 // 작은 창에서 출발지와 도착지 주소를 가져와 해당 위치에 마커를 추가합니다.
 document.getElementById("search-form-small").addEventListener("submit", async function (event) {
     await resetSearch();
+    polyline1 = null;
+    polyline2 = null;
+    polyline3 = null;
+
     event.preventDefault();
     var apiKey = document.body.getAttribute('data-api-key');
     try {
