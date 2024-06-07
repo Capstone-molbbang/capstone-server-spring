@@ -341,8 +341,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         destinationCoords = data.destinationCoords; // 도착지 좌표
       //  selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
-        console.log("startCoords == " + startCoords);
-        console.log("destinationCoords == " + destinationCoords);
+        console.log("startCoords == " + startCoords.x);
+        console.log("destinationCoords == " + destinationCoords.x);
 
         //selectedDepartureTime
        // console.log("selectedDepartureTime == " + selectedDepartureTime);
