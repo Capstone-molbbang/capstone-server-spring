@@ -59,15 +59,15 @@ public class ApiController {
         ResponseEntity<Map> responseB = restTemplate.postForEntity(FASTAPI_URL + "/predict_router2", entity, Map.class);
      //   ResponseEntity<Map> responseC = restTemplate.postForEntity(FASTAPI_URL + "/predict_router3", entity, Map.class);
 
-        log.info("responseA = " + responseA.toString());
-        log.info("responseB = " + responseB.toString());
+
     //    log.info("responseC = " + responseC.toString());
 
         Map<String, Object> responseBodyA = responseA.getBody();
         Map<String, Object> responseBodyB = responseB.getBody();
      //   Map<String, Object> responseBodyC = responseC.getBody();
 
-
+        log.info("responseBodyA = " + responseA.toString());
+        log.info("responseBodyB = " + responseB.toString());
         Map<String, Object> result = new HashMap<>();
         result.put("routeATime", responseBodyA.get("RouteA Time"));
         result.put("routeCTime", responseBodyB.get("RouteB Time"));
