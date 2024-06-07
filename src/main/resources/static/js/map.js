@@ -331,10 +331,15 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         const data = await response.json();
 
+        let dateString = "2024-06-07T15:00:00Z";
+        let date = new Date(dateString);
+        let tmptime = date.toISOString();
+
         startCoords = data.startCoords; // 출발지 좌표
         destinationCoords = data.destinationCoords; // 도착지 좌표
-        selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
+      //  selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
+        selectedDepartureTime
         console.log("selectedDepartureTime == " + selectedDepartureTime);
         const timeResponse = await fetch('/api/departureTime', {
             method: 'POST',
@@ -342,7 +347,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                departureTime: selectedDepartureTime
+                departureTime: tmptime
             })
         });
 
