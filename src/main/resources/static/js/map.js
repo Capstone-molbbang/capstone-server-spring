@@ -868,23 +868,3 @@ async function drawRoutesByType(type, startCoords, destinationCoords, apiKey, hi
         alert('경로 표시 중 오류가 발생했습니다.');
     }
 }
-const markers = [];
-function addMarkers(highwayNodes) {
-    for (const coords of highwayNodes) {
-        // 좌표를 LatLng 객체로 변환
-        const LatLng = new kakao.maps.LatLng(coords[1], coords[0]);
-        // 마커 생성
-        const marker = new kakao.maps.Marker({
-            map: map,
-            position: LatLng,
-            title: '위치'
-        });
-        // 마커를 배열에 추가
-        markers.push(marker);
-    }
-    // 모든 마커를 포함하는 범위를 구합니다.
-    const bounds = new kakao.maps.LatLngBounds();
-    for (const marker of markers) {
-        bounds.extend(marker.getPosition());
-    }
-}
