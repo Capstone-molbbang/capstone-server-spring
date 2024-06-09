@@ -38,6 +38,36 @@ var root2TotalTime = 220;
 var root3TotalTime = 210;
 
 var direction;
+
+
+const highwayNode = [
+    [127.41939905937681,36.611491010256834],
+    [127.42296515217477,36.65759927940105],
+    [127.4265060816794,36.695277468382095],
+
+    [127.45015936659819,36.72579625300241],
+    [127.48579568790136,36.76139270402846],
+    [127.50766968194922,36.78987979374164],
+    [127.49110937167697,36.8200839908485],
+    [127.48468541221457,36.855800217448085],
+    [127.47558342980356,36.88764133479958],
+    [127.474900100258,36.93254850659951],
+    [127.4669047573043,36.971587500531335],
+    [127.48064108656612,37.01147273904177],
+    [127.47493219534448,37.05570119062435],
+
+    [127.45228663326743,37.0893073747263],
+    [127.43886717586695,37.14600374989651], //06400
+    [127.44275941876379,37.19401990401747], //06700
+    [127.42497744893043,37.24242744998617],//07100
+    [127.39180268382265,37.277363194255045],//07500
+    [127.3256318705294,37.34133420219078],//08100
+    [127.29724348283062,37.42838444210035],//08900
+    [127.27934534097032,37.445358125858654],//09200
+    [127.2544963630788,37.46490986183679], //09500
+    [127.22031199549663,37.52381114479651] //10100
+];
+
 async function fetchHighwayNodes(root) {
     try {
         const response = await fetch(`/api/nodes/${root}`);
@@ -401,17 +431,17 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         console.log("recommendRoot = " + recommendRoot);
         if(recommendRoot === "root1"){
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, highwayNode, 1, false);
 
-            distanceList = [];
-            k=0;
-
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2, false);
-
-            distanceList = [];
-            k=0;
-
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
+            // distanceList = [];
+            // k=0;
+            //
+            // await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2, false);
+            //
+            // distanceList = [];
+            // k=0;
+            //
+            // await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
 
             document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
@@ -860,11 +890,32 @@ async function drawRoutesByType(type, startCoords, destinationCoords, apiKey, hi
         addMarkersAndSetCenter(startCoords, destinationCoords);
         //addMarkers(highwayNodes);
 
+        addMarkers(highwayNode);
         drawRoutesWayPoint(waypoints, apiKey, true);
 
         resetSearch();
     } catch (error) {
         console.error("Error:", error);
         alert('경로 표시 중 오류가 발생했습니다.');
+    }
+}
+const markers = [];
+function addMarkers(highwayNodes) {
+    for (const coords of highwayNodes) {
+        // 좌표를 LatLng 객체로 변환
+        const LatLng = new kakao.maps.LatLng(coords[1], coords[0]);
+        // 마커 생성
+        const marker = new kakao.maps.Marker({
+            map: map,
+            position: LatLng,
+            title: '위치'
+        });
+        // 마커를 배열에 추가
+        markers.push(marker);
+    }
+    // 모든 마커를 포함하는 범위를 구합니다.
+    const bounds = new kakao.maps.LatLngBounds();
+    for (const marker of markers) {
+        bounds.extend(marker.getPosition());
     }
 }
