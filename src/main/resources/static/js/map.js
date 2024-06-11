@@ -381,9 +381,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             root2_highwayNodes = await fetchHighwayNodes('root2');
             console.log("root1_highwayNodes == " + root1_highwayNodes);
             console.log("root2_highwayNodes == " + root2_highwayNodes);
-            root1TotalTime = 118;
+            root1TotalTime = 118; //하남
             root2TotalTime = 128;
-            root3TotalTime = 117;
+            root3TotalTime = 117; //경부
             direction = true;
         }
         else if (destinationCoords.x == "127.0742595815513" && destinationCoords.y == "37.550638892935346" && startCoords.x == "127.42727719121109" && startCoords.y == "36.32765802936324") {
@@ -398,14 +398,18 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             direction = false;
         }
 
+        console.log("root1TotalTime = " + root1TotalTime);
+        console.log("root2TotalTime = " + root2TotalTime);
+        console.log("root3TotalTime = " + root3TotalTime);
+
         var recommendRoot;
 
 
         if(root1TotalTime < root3TotalTime && root1TotalTime < root2TotalTime) {
-            recommendRoot = "root1";
+            recommendRoot = "root1"; //하남
         }
         if(root3TotalTime < root1TotalTime && root3TotalTime < root2TotalTime) {
-            recommendRoot = "root3";
+            recommendRoot = "root3"; //경부
         }
 
         console.log("recommendRoot = " + recommendRoot);
