@@ -382,7 +382,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             console.log("root1_highwayNodes == " + root1_highwayNodes);
             console.log("root2_highwayNodes == " + root2_highwayNodes);
             root1TotalTime = 117;
-            root2TotalTime = 130;
+            root2TotalTime = 128;
             root3TotalTime = 118;
             direction = true;
         }
@@ -393,7 +393,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             console.log("root3_highwayNodes == " + root1_highwayNodes);
             console.log("root4_highwayNodes == " + root2_highwayNodes);
             root1TotalTime = 163;
-            root2TotalTime = 180;
+            root2TotalTime = 165;
             root3TotalTime = 141;
             direction = false;
         }
