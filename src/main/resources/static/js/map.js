@@ -438,7 +438,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         else if(recommendRoot === "root3") {
             console.log("root4_highwayNodes == " + root2_highwayNodes);
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1, true);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, true);
 
             distanceList = [];
             k=0;
@@ -448,7 +448,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, false);
 
             document.getElementById('root1-time-info').innerText = Math.floor(root3TotalTime / 60) + ' 시간 ' + (root3TotalTime % 60) + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
