@@ -381,9 +381,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             root2_highwayNodes = await fetchHighwayNodes('root2');
             console.log("root1_highwayNodes == " + root1_highwayNodes);
             console.log("root2_highwayNodes == " + root2_highwayNodes);
-            root1TotalTime = 117;
+            root1TotalTime = 118;
             root2TotalTime = 128;
-            root3TotalTime = 118;
+            root3TotalTime = 117;
             direction = true;
         }
         else if (destinationCoords.x == "127.0742595815513" && destinationCoords.y == "37.550638892935346" && startCoords.x == "127.42727719121109" && startCoords.y == "36.32765802936324") {
@@ -392,9 +392,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             console.log("root3_highwayNodes == " + root1_highwayNodes);
             console.log("root4_highwayNodes == " + root2_highwayNodes);
-            root1TotalTime = 163;
+            root1TotalTime = 141; //root1이 하남
             root2TotalTime = 165;
-            root3TotalTime = 141;
+            root3TotalTime = 163;
             direction = false;
         }
 
@@ -438,7 +438,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         else if(recommendRoot === "root3") {
             console.log("root4_highwayNodes == " + root2_highwayNodes);
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, true);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1, true);
 
             distanceList = [];
             k=0;
@@ -448,7 +448,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             distanceList = [];
             k=0;
 
-            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, false);
+            await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
             document.getElementById('root1-time-info').innerText = Math.floor(root3TotalTime / 60) + ' 시간 ' + (root3TotalTime % 60) + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
