@@ -422,11 +422,12 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
 
-            document.getElementById('root1-time-info').innerText = root1TotalTime + ' 분';
+            console.log("root1Time = " + root1TotalTime);
+            document.getElementById('root1-time-info').innerText = Math.floor(root1TotalTime / 60) + ' 시간 ' + (root1TotalTime % 60) + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
+            document.getElementById('root2-time-info').innerText = Math.floor(root2TotalTime / 60) + ' 시간 ' + (root2TotalTime % 60) + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root3-time-info').innerText = root3TotalTime + ' 분';
+            document.getElementById('root3-time-info').innerText = Math.floor(root3TotalTime / 60) + ' 시간 ' + (root3TotalTime % 60) + ' 분';
             document.getElementById('root3-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
 
             document.getElementById('btn-recommend').style.display = 'block';
@@ -449,11 +450,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
-            document.getElementById('root1-time-info').innerText = root3TotalTime + ' 분';
+            document.getElementById('root1-time-info').innerText = Math.floor(root3TotalTime / 60) + ' 시간 ' + (root3TotalTime % 60) + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root2-time-info').innerText = root2TotalTime + ' 분';
+            document.getElementById('root2-time-info').innerText = Math.floor(root2TotalTime / 60) + ' 시간 ' + (root2TotalTime % 60) + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
-            document.getElementById('root4-time-info').innerText = root1TotalTime + ' 분';
+            document.getElementById('root4-time-info').innerText = Math.floor(root1TotalTime / 60) + ' 시간 ' + (root1TotalTime % 60) + ' 분';
             document.getElementById('root4-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
 
             document.getElementById('btn-recommend').style.display = 'block';
