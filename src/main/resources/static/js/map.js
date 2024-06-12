@@ -626,7 +626,8 @@ document.addEventListener("DOMContentLoaded", function() {
         enableTime: true,
         minDate: "today", // 현재 날짜 이전 선택 불가능
         minuteIncrement: 1,
-        dateFormat: "Y년 n월 j일 A h시 i분 ",        defaultDate: currentDate, // 현재 시간을 default 값으로 설정
+        dateFormat: "Y년 n월 j일 K h시 i분 출발",
+        defaultDate: currentDate, // 현재 시간을 default 값으로 설정
         time_24hr: false,
         ampm: true,
         onClose: function(selectedDates, dateStr, instance) {
