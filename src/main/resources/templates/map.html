@@ -30,19 +30,22 @@
             width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
             height: 50px;
             /* 입력 칸 아래 여백 추가 */
-            border-radius: 5px; /* 테두리 둥글게 처리 */
+            margin-left:  10px; /* 수평 가운데 정렬 */
+            margin-right:  auto; /* 수평 가운데 정렬 */
             margin-top: 20px;
             margin-bottom: 10px;
+            border-radius: 5px; /* 테두리 둥글게 처리 */
+
             border: 1px solid #ccc; /* 테두리 설정 */
 
         }
         .destination-input{
             width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
             height: 50px;
+            margin-left:  10px; /* 수평 가운데 정렬 */
             margin-bottom: 10px; /* 입력 칸 아래 여백 추가 */
             border-radius: 5px; /* 테두리 둥글게 처리 */
             border: 1px solid #ccc; /* 테두리 설정 */
-
         }
 
         #search-form {
@@ -52,6 +55,7 @@
             margin-right:  auto; /* 수평 가운데 정렬 */
             margin-top: 10px;
             bottom: 10px;
+            border-radius: 5px;
             margin-bottom: 10px;
             display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
         }
@@ -226,6 +230,7 @@
                 height: auto;
                 font-size: 16px;
                 text-align: center;
+
             }
             #search-form-small {
                 align-items: center;
@@ -237,7 +242,7 @@
             }
             .start-input, .destination-input, #departure-time, #search-form {
                 width: calc(100% - 20px);
-                margin: 10px 0;
+                margin: 10px;
             }
 
             #route-buttons {
@@ -318,7 +323,8 @@
 </div>
 
 <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/webjars/kakao-js-api/v2.0.3/kakao.js}"></script>
+<script type="te
+xt/javascript" th:src="@{/webjars/kakao-js-api/v2.0.3/kakao.js}"></script>
 <script type="text/javascript" th:src="@{'//dapi.kakao.com/v2/maps/sdk.js?appkey=' + ${jsKey} + '&libraries=services'}"></script>
 <script type="text/javascript" src="/js/map.js"></script>
 
