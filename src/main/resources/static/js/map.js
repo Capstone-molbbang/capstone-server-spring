@@ -652,9 +652,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 const formattedDateStr = selectedTime.getFullYear() + "년 " +
                     (selectedTime.getMonth() + 1) + "월 " +
                     selectedTime.getDate() + "일 " +
+                    ampm +
                     formattedHours + "시 " +
-                    formattedMinutes + "분 출발 " +
-                    ampm;
+                    formattedMinutes + "분 출발 ";
                 selectedDepartureTime = currentTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
                 document.getElementById('departure-time').value = formattedDateStr;
