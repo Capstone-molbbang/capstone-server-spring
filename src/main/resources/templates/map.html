@@ -126,15 +126,16 @@
 
         /* 시간 설정 입력란 가운데 정렬 */
         #departure-time {
-            width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
-            height: auto; /* 높이 자동 조정 */
-            display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
-            border: none; /* 테두리 제거 */
+            width: 80%;
+            height: auto;
+            display: block;
+            border: none;
             background: none; /* 배경 제거 */
             font-size: 1.2em; /* 글자 크기 설정 */
             font-weight: bold; /* 글자 두껍게 설정 */
             text-align: center; /* 가운데 정렬 */
             color: #555; /* 힌트 색상 설정 */
+            margin-bottom: 20px;
         }
         @font-face {
             font-family: 'HSSanTokki20-Regular';
@@ -168,26 +169,32 @@
             height: 120px; /* 버튼의 높이 지정 */
             border-radius: 10px; /* 테두리를 둥글게 처리 */
             background-color: white; /* 배경색을 흰색으로 설정 */
-            margin: 10px; /* 버튼 간의 간격 조정 */
+            margin: 10px 0;
             display: flex; /* 요소를 행 방향으로 배치 */
             flex-direction: column; /* 컨테이너 내의 아이템을 열 방향으로 배치 */
             justify-content: center; /* 주축을 따라 중앙 정렬 */
             align-items: center; /* 교차축을 따라 중앙 정렬 */
             transition: background-color 0.3s, color 0.3s; /* 호버 효과에 대한 전환 효과 추가 */
             color: black;
+
         }
+
 
         .route-button span {
             margin-top: 10px;
-            display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
-            text-align: center; /* 가운데 정렬 */
-            color: black; /* 글자색을 까만색으로 변경 */
+            display: block;
+            text-align: center;
+            color: black;
         }
 
         #route-buttons {
             display: flex; /* 요소를 행 방향으로 배치 */
-            justify-content: center; /* 주축을 따라 중앙 정렬 */
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
         }
+
+
 
         /* 호버 효과 */
         .route-button:hover {
@@ -200,24 +207,39 @@
         }
         @media (max-width: 768px) {
             #search-container {
-                width: calc(100% - 20px);
-                height: auto;
-                margin-top: 20px;
-                padding: 10px;
+                width: calc(100vw / 2);
+                height: calc(770px * (90vw / 450));
+                margin: 20px auto;
+                padding: 20px;
+                position: absolute;
+                z-index: 1000;
             }
-
+            #departure-time {
+                width: 90%;
+                height: auto;
+                font-size: 16px;
+            }
+            #search-form-small {
+                width: 100%;
+            }
+            #search-form {
+                width: 100%; /* 버튼을 꽉 채우도록 설정 */
+                margin: 10px auto;
+            }
             .start-input, .destination-input, #departure-time, #search-form {
                 width: calc(100% - 20px);
                 margin: 10px 0;
             }
 
             #route-buttons {
-                flex-direction: column;
+                display: flex;
+                justify-content: space-between;
                 align-items: center;
+                flex-wrap: wrap;
             }
 
             .route-button {
-                width: calc(100% - 20px);
+                width: calc(30% - 20px);
                 margin: 10px 0;
             }
         }
@@ -247,7 +269,6 @@
             <!-- 예상 출발 시간 입력란 -->
 
             <input type="datetime-local" id="departure-time" class="departure-time" name="departureTime" autocomplete="off" />
-            <br>
             <button type="submit" class="btn btn-primary" id="search-form">자동차 경로 검색</button>
         </form>
         <div id="route-buttons">
