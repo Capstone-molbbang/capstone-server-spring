@@ -75,7 +75,26 @@
             font-family: 'Pretendard-Regular', sans-serif;
             margin-top: 30px;
         }
-
+        @media (max-width: 768px) {
+            .header-text {
+                font-size: 32px;
+                margin-top: 50px;
+                margin-bottom: 25px;
+            }
+            .header-text::after {
+                width: 205px;
+                height: 8px;
+                bottom: -3px;
+            }
+            .header-text::before {
+                font-size: 32px;
+                bottom: -10px;
+            }
+            .content-text {
+                font-size: 14px;
+                margin-top: 20px;
+            }
+        }
     </style>
 </head>
 <body>
