@@ -625,6 +625,7 @@ document.addEventListener("DOMContentLoaded", function() {
     flatpickr("#departure-time", {
         enableTime: true,
         minDate: "today", // 현재 날짜 이전 선택 불가능
+        minuteIncrement: 1,
         dateFormat: "Y년 n월 j일 H시 i분 출발", // 날짜 및 시간 표시 형식 설정
         defaultDate: currentDate, // 현재 시간을 default 값으로 설정
         time_24hr: false,
@@ -647,10 +648,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 const hours = selectedTime.getHours();
                 const ampm = hours >= 12 ? "오후" : "오전";
                 const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
+                const formattedMinutes = ('0' + selectedTime.getMinutes()).slice(-2);
+                const formattedDateStr = selectedTime.getFullYear() + "년 " +
+                    (selectedTime.getMonth() + 1) + "월 " +
+                    selectedTime.getDate() + "일 " +
+                    formattedHours + "시 " +
+                    formattedMinutes + "분 출발 " +
+                    ampm;
                 selectedDepartureTime = currentTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
-                document.getElementById('departure-time').innerHTML = dateStr;
-
+                document.getElementById('departure-time').value = formattedDateStr;
             }
         }
 

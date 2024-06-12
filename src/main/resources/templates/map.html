@@ -204,7 +204,6 @@
             align-items: center;
             text-align: center;
             width: calc(100% - 20px);
-            margin-left: 10px;
         }
 
         .flatpickr-mobile {
@@ -288,7 +287,7 @@
             <div id="destination-suggestions" class="suggestions"></div> <!-- 도착지 자동완성을 표시할 영역 -->
             <!-- 예상 출발 시간 입력란 -->
 
-            <input id="departure-time" class="departure-time flatpickr-input" name="departureTime" type="datetime-local" readonly="readonly" placeholder="출발 시간을 선택하세요" />
+            <input id="departure-time" class="departure-time flatpickr-input" name="departureTime" type="text" readonly="readonly" placeholder="출발 시간을 선택하세요" />
             <button type="submit" class="btn btn-primary" id="search-form">자동차 경로 검색</button>
         </form>
         <div id="route-buttons">
