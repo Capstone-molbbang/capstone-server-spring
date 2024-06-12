@@ -641,9 +641,14 @@ document.addEventListener("DOMContentLoaded", function() {
             const selectedTime = instance.latestSelectedDateObj;
             const currentTime = new Date();
             console.log("selectedTime : " + selectedTime);
-            if (selectedTime + 1 < currentTime) {
-                // 선택한 시간이 현재 시간보다 이전인 경우 경고 메시지 표시
-                alert("과거 시간은 선거택할 수 없습니다.");
+            if (selectedTime.getFullYear() < currentTime.getFullYear() ||
+                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() < currentTime.getMonth()) ||
+                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() === currentTime.getMonth() && selectedTime.getDate() < currentTime.getDate()) ||
+                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() === currentTime.getMonth() && selectedTime.getDate() === currentTime.getDate() &&
+                    (selectedTime.getHours() < currentTime.getHours() ||
+                        (selectedTime.getHours() === currentTime.getHours() && selectedTime.getMinutes() < currentTime.getMinutes() - 1)))) {
+                // 선택한 시간이 현재 시간보다 1분 이전인 경우 경고 메시지 표시
+                alert("과거 시간은 선택할 수 없습니다.");
                 instance.setDate(currentTime); // 현재 시간으로 재설정
             }
             else
