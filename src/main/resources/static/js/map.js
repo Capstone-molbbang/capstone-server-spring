@@ -618,16 +618,8 @@ document.addEventListener("DOMContentLoaded", function() {
     console.log("currentDate: " + currentDate);
     console.log("hours : " + hours)
 
-    var currentDateTimeString  = "";
-    if (hours > 12) {
-        currentDateTimeString = year + "년 " + month + "월 " + day + "일 오후 " + (hours - 12) + "시 " + minutes + "분 출발";
-    } else if (hours === 12) {
-        currentDateTimeString = year + "년 " + month + "월 " + day + "일 오후 " + hours + "시 " + minutes + "분 출발";
-    } else if (hours === 0) {
-        currentDateTimeString = year + "년 " + month + "월 " + day + "일 오전 12시 " + minutes + "분 출발";
-    } else {
-        currentDateTimeString = year + "년 " + month + "월 " + day + "일 오전 " + hours + "시 " + minutes + "분 출발";
-    }
+    var currentDateTimeString = year + "년 " + month + "월 " + day + "일 " + hours + "시 " + minutes + "분 출발";
+
     console.log("currentDateTimeString :" + currentDateTimeString );
 
     flatpickr("#departure-time", {
@@ -636,12 +628,10 @@ document.addEventListener("DOMContentLoaded", function() {
         dateFormat: "Y년 n월 j일 H시 i분 출발", // 날짜 및 시간 표시 형식 설정
         defaultDate: currentDate, // 현재 시간을 default 값으로 설정
         time_24hr: false,
-        static: true,
         onClose: function(selectedDates, dateStr, instance) {
             // 사용자가 시간을 선택한 후 실행되는 콜백 함수
             const selectedTime = instance.latestSelectedDateObj;
             const currentTime = new Date();
-            console.log("selectedTime : " + selectedTime);
             if (selectedTime.getFullYear() < currentTime.getFullYear() ||
                 (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() < currentTime.getMonth()) ||
                 (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() === currentTime.getMonth() && selectedTime.getDate() < currentTime.getDate()) ||
@@ -659,6 +649,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
                 selectedDepartureTime = currentTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
+                document.getElementById('departure-time').innerHTML = dateStr;
+
             }
         }
 
