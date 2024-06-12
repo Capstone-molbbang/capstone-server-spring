@@ -45,6 +45,7 @@
             width: calc(100% - 20px); /* 버튼을 고려한 너비 조정 */
             height: 50px;
             margin-left:  10px; /* 수평 가운데 정렬 */
+            margin-bottom: 10px; /* 입력 칸 아래 여백 추가 */
             border-radius: 5px; /* 테두리 둥글게 처리 */
             border: 1px solid #ccc; /* 테두리 설정 */
         }
@@ -247,9 +248,12 @@
             #search-form {
                 width: 100%; /* 버튼을 꽉 채우도록 설정 */
             }
-            .start-input, .destination-input, #departure-time, #search-form {
+            .start-input, .destination-input,  #search-form {
                 width: calc(100% - 20px);
                 margin: 10px;
+            }
+            #departure-time{
+                width: calc(100% - 20px);
             }
 
             #route-buttons {
