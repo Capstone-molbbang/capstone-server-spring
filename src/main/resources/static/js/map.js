@@ -636,6 +636,7 @@ document.addEventListener("DOMContentLoaded", function() {
         dateFormat: "Y년 n월 j일 H시 i분 출발", // 날짜 및 시간 표시 형식 설정
         defaultDate: currentDate, // 현재 시간을 default 값으로 설정
         time_24hr: false,
+        static: true,
         onClose: function(selectedDates, dateStr, instance) {
             // 사용자가 시간을 선택한 후 실행되는 콜백 함수
             const selectedTime = instance.latestSelectedDateObj;
