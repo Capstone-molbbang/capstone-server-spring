@@ -51,7 +51,6 @@
             margin-left:  auto; /* 수평 가운데 정렬 */
             margin-right:  auto; /* 수평 가운데 정렬 */
             margin-top: 10px;
-            position: absolute;
             bottom: 10px;
             margin-bottom: 10px;
             display: block; /* 블록 요소로 설정하여 줄 바꿈 처리 */
@@ -198,7 +197,11 @@
             flex-wrap: wrap;
         }
 
-
+        .departure-time flatpickr-input flatpickr-mobile{
+            align-items: center;
+            text-align: center;
+            width: calc(100% - 20px);
+        }
 
         /* 호버 효과 */
         .route-button:hover {
@@ -225,11 +228,12 @@
                 text-align: center;
             }
             #search-form-small {
-                width: 100%;
+                align-items: center;
+                text-align: center;
+                width: calc(100% - 20px);
             }
             #search-form {
                 width: 100%; /* 버튼을 꽉 채우도록 설정 */
-
             }
             .start-input, .destination-input, #departure-time, #search-form {
                 width: calc(100% - 20px);
