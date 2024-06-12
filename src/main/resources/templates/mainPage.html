@@ -84,11 +84,43 @@
         }
         .car-image {
             margin-top: 90px; /* 조정하고자 하는 이미지의 상단 여백 */
+            width: 100%; /* 이미지 크기를 반응형으로 설정 */
+            height: auto;
         }
         .navbar.navbar-light {
             background-color: #ffffff; /* 배경색을 하얀색(#ffffff)으로 설정 */
         }
-
+        @media (max-width: 768px) {
+            .vertical-text-container {
+                margin-top: 30px;
+            }
+            .vertical-text {
+                font-size: 32px;
+            }
+            .vertical-text span:nth-child(2) {
+                margin-top: 30px;
+            }
+            .vertical-text span:nth-child(3) {
+                margin-top: 100px;
+            }
+            .car-image {
+                margin-top: 30px;
+                width: 100%;
+                height: auto;
+            }
+            .btn-primary {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            .container {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -121,14 +153,16 @@
 <!-- Content with Image -->
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-6">
             <div class="vertical-text-container">
                 <p class="vertical-text">
                     <span>언제어디든</span>
                     <span>당신이원하는</span>
                     <span>곳으로!</span>
-                </p>            </div>        </div>
-        <div class="col-md-6">
+                </p>
+            </div>
+        </div>
+        <div class="col-6">
             <img src="/image/car.png" alt="Car Image" width="700" height="466" class="car-image">
         </div>
     </div>
