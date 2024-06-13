@@ -63,7 +63,6 @@ public class ApiController {
         Map<String, Object> result = new HashMap<>();
 
         try {
-
             ResponseEntity<Map> response = restTemplate.postForEntity(FASTAPI_URL + "/predict", entity, Map.class);
             Map<String, Integer> responseBody = response.getBody();
             log.info("responseBody = " + responseBody.toString());
@@ -78,7 +77,6 @@ public class ApiController {
                 result.put("routeBTime", "Error");
                 result.put("routeCTime", "Error");
             }
-
         } catch (HttpServerErrorException e) {
             log.error("Server error in /predict: " + e.getMessage());
             result.put("routeATime", "Error");
