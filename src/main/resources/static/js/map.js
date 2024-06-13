@@ -657,7 +657,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
                 Array.prototype.forEach.call(elements, function(elem) {
-                    elem.value = formattedDateStr;
+                    if (elem.type === "text") {
+                        elem.value = formattedDateStr; // 텍스트 입력 필드에 값 설정
+                    } else {
+                        elem.value = selectedTime.toISOString().slice(0, 16); // datetime-local 입력 필드에 값 설정
+                    }
                 });
             }
         }
