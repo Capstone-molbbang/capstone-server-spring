@@ -658,8 +658,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 selectedTime.setSeconds(0); // 초를 0으로 설정
                 console.log("selected time = " + selectedTime);
-                selectedDepartureTime = `${selectedTime.getFullYear}-${selectedTime.getMonth}-${selectedTime.getDate}T${hours}:${selectedTime.getMinutes}`;
+                const year = selectedTime.getFullYear();
+                const month = ('0' + (selectedTime.getMonth() + 1)).slice(-2);
+                const day = ('0' + selectedTime.getDate()).slice(-2);
+                const hour_s = ('0' + selectedTime.getHours()).slice(-2);
+                const minutes = ('0' + selectedTime.getMinutes()).slice(-2);
 
+                selectedDepartureTime = `${year}-${month}-${day}T${hour_s}:${minutes}:00`;
                 console.log("selectedDepartureTime >>> " + selectedDepartureTime);
 
                 //document.getElementById('departure-time').value = formattedDateStr;
