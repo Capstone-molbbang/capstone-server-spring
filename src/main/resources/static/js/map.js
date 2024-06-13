@@ -105,7 +105,7 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 "y": destinationY
             },
             "waypoints": w,
-            "priority": "TIME",
+            "priority": "RECOMMEND",
             "traffic": true,
             "roadevent": 2,
        //     "road_details": true,
@@ -122,15 +122,15 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 if(direction){
                     console.log("direction");
                     baseData.waypoints.unshift({
-                        "x": "127.038764",
-                        "y": "37.464552"
+                        "x": "127.04192342710209",
+                        "y": "37.4615048487278"
                     });
                 }
                 else{
                     console.log("No direction");
                     baseData.waypoints.push({
-                        "x": "127.038764",
-                        "y": "37.464552"
+                        "x": "127.04192342710209",
+                        "y": "37.4615048487278"
                     });
                 }
             }
