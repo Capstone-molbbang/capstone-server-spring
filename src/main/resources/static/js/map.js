@@ -33,6 +33,7 @@ var totalTimeRoot2 = 0;
 var totalDistanceRoot3 = 0;
 var totalTimeRoot3 = 0;
 
+
 var root1TotalTime = 0;
 var root2TotalTime = 0;
 var root3TotalTime = 0;
@@ -309,7 +310,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 });
 
-// 작은 창에서 출발지와 도착지 주소를 가져와 해당 위치에 마커를 추가합니다.
 document.getElementById("search-form-small").addEventListener("submit", async function (event) {
     await resetSearch();
     polyline1 = null;
@@ -320,11 +320,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
     document.getElementById('btn-pangyo').style.display = 'none';
     document.getElementById('btn-hanam').style.display = 'none';
 
-
     event.preventDefault();
     var apiKey = document.body.getAttribute('data-api-key');
     try {
-
         const response = await fetch('/api/search', {
             method: 'POST',
             headers: {
@@ -341,78 +339,30 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
 
         const data = await response.json();
-
-        let dateString = "2024-06-07T15:00:00Z";
-        let date = new Date(dateString);
-        let tmptime = date.toISOString();
-
         startCoords = data.startCoords; // 출발지 좌표
         destinationCoords = data.destinationCoords; // 도착지 좌표
-        //selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
-
-        // const timeResponse = await fetch('/api/departureTime', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         departureTime: tmptime
-        //     })
-        // });
-        //
-        // if (!timeResponse.ok) {
-        //     throw new Error(`HTTP error! Status: ${timeResponse.status}`);
-        // }
-     //
-     //    const timeData = await timeResponse.json();
-     // //  totalTimeRoot1 = timeData.routeATime;
-     //    //   totalTimeRoot2 += timeData.routeBTime;
-     //  //  totalTimeRoot3 = timeData.routeCTime;
-
+        selectedDepartureTime = await getSelectedDepartureTime(); // 사용자가 선택한 출발 예정 시간 가져오기
 
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
-        let root1_highwayNodes;
-        let root2_highwayNodes;
+        const isRouteA = startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324";
+        const isRouteB = destinationCoords.x === "127.0742595815513" && destinationCoords.y === "37.550638892935346" && startCoords.x === "127.42727719121109" && startCoords.y === "36.32765802936324";
 
-        if (startCoords.x == "127.0742595815513" && startCoords.y == "37.550638892935346" && destinationCoords.x == "127.42727719121109" && destinationCoords.y == "36.32765802936324") {
-            root1_highwayNodes = await fetchHighwayNodes('root1');
-            root2_highwayNodes = await fetchHighwayNodes('root2');
-            console.log("root1_highwayNodes == " + root1_highwayNodes);
-            console.log("root2_highwayNodes == " + root2_highwayNodes);
-            root1TotalTime = 118; //하남
-            root2TotalTime = 128;
-            root3TotalTime = 117; //경부
-            direction = true;
+        if (isRouteA || isRouteB) {
+            await handleRoute(isRouteA ? "A" : "B", isRouteA);
         }
-        else if (destinationCoords.x == "127.0742595815513" && destinationCoords.y == "37.550638892935346" && startCoords.x == "127.42727719121109" && startCoords.y == "36.32765802936324") {
-            root1_highwayNodes = await fetchHighwayNodes('root3');
-            root2_highwayNodes = await fetchHighwayNodes('root4');
-
-            console.log("root3_highwayNodes == " + root1_highwayNodes);
-            console.log("root4_highwayNodes == " + root2_highwayNodes);
-            root1TotalTime = 141; //root1이 하남
-            root2TotalTime = 165;
-            root3TotalTime = 163;
-            direction = false;
-        }
-
-        console.log("root1TotalTime = " + root1TotalTime);
-        console.log("root2TotalTime = " + root2TotalTime);
-        console.log("root3TotalTime = " + root3TotalTime);
 
         var recommendRoot;
 
-
-        if(root1TotalTime < root3TotalTime && root1TotalTime < root2TotalTime) {
+        if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
             recommendRoot = "root1"; //하남
-        }
-        if(root3TotalTime < root1TotalTime && root3TotalTime < root2TotalTime) {
+        } else if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
             recommendRoot = "root3"; //경부
         }
 
         console.log("recommendRoot = " + recommendRoot);
+
         if(recommendRoot === "root1"){
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
@@ -439,7 +389,6 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('btn-pangyo').style.display = 'block';
 
         }
-
         else if(recommendRoot === "root3") {
             console.log("root4_highwayNodes == " + root2_highwayNodes);
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 1, true);
@@ -464,7 +413,6 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
             document.getElementById('btn-hanam').style.display = 'block';
-
         }
 
         document.getElementById("btn-recommend").addEventListener("click", async function () {
@@ -472,27 +420,24 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             await removePolyline(polyline2);
             await viewPolyline(polyline1);
         });
-        // 최단 시간 버튼 클릭 시 이벤트 리스너
+
         document.getElementById("btn-pangyo").addEventListener("click", async function () {
             await removePolyline(polyline1);
             await removePolyline(polyline2);
             await viewPolyline(polyline3);
         });
 
-        // 최단 시간 버튼 클릭 시 이벤트 리스너
         document.getElementById("btn-hanam").addEventListener("click", async function () {
             await removePolyline(polyline2);
             await removePolyline(polyline1);
             await viewPolyline(polyline3);
         });
 
-        // 최단 거리 버튼 클릭 시 이벤트 리스너
         document.getElementById("btn-shortest-distance").addEventListener("click", async function () {
             await removePolyline(polyline1);
             await removePolyline(polyline3);
             await viewPolyline(polyline2);
         });
-
 
     } catch (error) {
         console.error("Error:", error);
@@ -500,6 +445,42 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
     }
 });
 
+async function fetchDepartureTimes(startType) {
+    const timeResponse = await fetch('/api/departureTime', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            departureTime: selectedDepartureTime,
+            start: startType
+        })
+    });
+
+    if (!timeResponse.ok) {
+        throw new Error(`HTTP error! Status: ${timeResponse.status}`);
+    }
+
+    return await timeResponse.json();
+}
+
+async function handleRoute(startType, isRouteA) {
+    const timeData = await fetchDepartureTimes(startType);
+
+    if (isRouteA) {
+        root1_highwayNodes = await fetchHighwayNodes('root1');
+        root2_highwayNodes = await fetchHighwayNodes('root2');
+        direction = true;
+    } else {
+        root1_highwayNodes = await fetchHighwayNodes('root3');
+        root2_highwayNodes = await fetchHighwayNodes('root4');
+        direction = false;
+    }
+
+    totalTimeRoot1 = timeData.routeATime;
+    totalTimeRoot2 += timeData.routeBTime;
+    totalTimeRoot3 = timeData.routeCTime;
+}
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
