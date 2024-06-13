@@ -454,7 +454,7 @@ async function fetchDepartureTimes(startType) {
         },
         body: JSON.stringify({
             data: selectedDepartureTime,
-            start: startType.toString()
+            start: startType
         })
     });
 
@@ -479,8 +479,12 @@ async function handleRoute(startType, isRouteA) {
     }
 
     totalTimeRoot1 = timeData.routeATime;
-    totalTimeRoot2 += timeData.routeBTime;
+    totalTimeRoot2 = timeData.routeBTime;
     totalTimeRoot3 = timeData.routeCTime;
+    console.log("totalTimeRoot1 = " + totalTimeRoot1);
+    console.log("totalTimeRoot2 = " + totalTimeRoot2);
+    console.log("totalTimeRoot3 = " + totalTimeRoot3);
+
 }
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
