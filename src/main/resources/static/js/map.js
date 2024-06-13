@@ -346,13 +346,6 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
-        const isRouteB = destinationCoords.x === "127.0742595815513" && destinationCoords.y === "37.550638892935346" && startCoords.x === "127.42727719121109" && startCoords.y === "36.32765802936324";
-
-        if (isRouteA || isRouteB) {
-            await handleRoute(isRouteA ? "A" : "B", isRouteA);
-
-
-        }
 
         if(startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324") {
 
