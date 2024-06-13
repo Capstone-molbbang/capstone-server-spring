@@ -446,14 +446,15 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 });
 
 async function fetchDepartureTimes(startType) {
+    console.log(startType);
     const timeResponse = await fetch('/api/departureTime', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            departureTime: selectedDepartureTime,
-            start: startType
+            data: selectedDepartureTime,
+            start: startType.toString()
         })
     });
 
