@@ -364,7 +364,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
                 throw new Error(`HTTP error! Status: ${timeResponse.status}`);
             }
 
-            const timeData = timeResponse.json();
+            const timeData = await timeResponse.json();
 
             root1_highwayNodes = await fetchHighwayNodes('root1');
             root2_highwayNodes = await fetchHighwayNodes('root2');
