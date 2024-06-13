@@ -634,7 +634,7 @@ document.addEventListener("DOMContentLoaded", function() {
         time_24hr: false,
         disableMobile: true,
         ampm: true,
-        local: "ko",
+        locale: "ko",
         onClose: function(selectedDates, dateStr, instance) {
             // 사용자가 시간을 선택한 후 실행되는 콜백 함수
             const selectedTime = instance.latestSelectedDateObj;
