@@ -656,9 +656,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     formattedHours + "시 " +
                     formattedMinutes + "분 출발 ";
 
-                const koreaTime = new Date(selectedTime.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }));
-                koreaTime.setSeconds(0); // 초를 0으로 설정
-                selectedDepartureTime = koreaTime.toISOString();
+                selectedTime.setSeconds(0); // 초를 0으로 설정
+                selectedDepartureTime = selectedTime.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }).replace(/,/g, '');
+
                 console.log("selectedDepartureTime >>> " + selectedDepartureTime);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
