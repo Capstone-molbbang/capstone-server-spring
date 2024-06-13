@@ -53,12 +53,10 @@ public class ApiController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("data", routeRequest.getData().toString());
-        dataMap.put("start", routeRequest.getStart());
-
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("data", dataMap);
+        requestBody.put("data", routeRequest.getData().toString());
+        requestBody.put("start", routeRequest.getStart());
+
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
