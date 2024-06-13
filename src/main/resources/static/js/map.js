@@ -473,11 +473,11 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 3, false);
 
             document.getElementById('root1-time-info').innerText = Math.floor(totalTimeRoot3 / 60) + ' 시간 ' + (totalTimeRoot3 % 60) + ' 분';
-            document.getElementById('root1-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
+            document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = Math.floor(totalTimeRoot2 / 60) + ' 시간 ' + (totalTimeRoot2 % 60) + ' 분';
             document.getElementById('root2-distance-info').innerText = totalDistanceRoot2/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root4-time-info').innerText = Math.floor(totalTimeRoot1 / 60) + ' 시간 ' + (totalTimeRoot1 % 60) + ' 분';
-            document.getElementById('root4-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
+            document.getElementById('root4-distance-info').innerText = totalDistanceRoot3/1000 + ' km'; // 거리 정보 업데이트
 
             document.getElementById('btn-recommend').style.display = 'block';
             document.getElementById('btn-shortest-distance').style.display = 'block';
