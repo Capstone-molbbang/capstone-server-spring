@@ -182,6 +182,8 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                     drawRoute(response, 3);
                     totalDistanceRoot3 = totalDistance;
                 }
+
+
                 k = 0;
               //  console.log("totalDistanceRoot2  = " + totalDistanceRoot2);
             },
@@ -435,17 +437,25 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         if(recommendRoot === "root1"){
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root1_highwayNodes, 1, false);
 
+            console("totalDistanceRoot1 == "+ totalDistanceRoot1);
+            console("totalDistanceRoot2 == "+ totalDistanceRoot2);
+            console("totalDistanceRoot3 == "+ totalDistanceRoot3);
+
             distanceList = [];
             k=0;
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 2, false);
-
+            console("totalDistanceRoot1 == "+ totalDistanceRoot1);
+            console("totalDistanceRoot2 == "+ totalDistanceRoot2);
+            console("totalDistanceRoot3 == "+ totalDistanceRoot3);
             distanceList = [];
             k=0;
 
             await calculateTimeAndDistance(startCoords, destinationCoords, apiKey, root2_highwayNodes, 3, true);
+            console("totalDistanceRoot1 == "+ totalDistanceRoot1);
+            console("totalDistanceRoot2 == "+ totalDistanceRoot2);
+            console("totalDistanceRoot3 == "+ totalDistanceRoot3);
 
-            console.log("root1Time = " + root1TotalTime);
             document.getElementById('root1-time-info').innerText = Math.floor(totalTimeRoot1 / 60) + ' 시간 ' + (totalTimeRoot1 % 60) + ' 분';
             document.getElementById('root1-distance-info').innerText = totalDistanceRoot1/1000 + ' km'; // 거리 정보 업데이트
             document.getElementById('root2-time-info').innerText = Math.floor(totalTimeRoot2 / 60) + ' 시간 ' + (totalTimeRoot2 % 60) + ' 분';
