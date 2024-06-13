@@ -658,17 +658,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 selectedTime.setSeconds(0); // 초를 0으로 설정
                 const koreaTime = selectedTime.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }).replace(/,/g, '');
-                const koreaTimeyear = koreaTime.getFullYear();
-                const koreaTimemonth = ('0' + (koreaTime.getMonth() + 1)).slice(-2);
-                const koreaTimeday = ('0' + koreaTime.getDate()).slice(-2);
-                const koreaTimehours = ('0' + koreaTime.getHours()).slice(-2);
-                const koreaTimeminutes = ('0' + koreaTime.getMinutes()).slice(-2);
-                const koreaTimeseconds = ('0' + koreaTime.getSeconds()).slice(-2);
-
-                selectedDepartureTime = `${koreaTimeyear}-${koreaTimemonth}-${koreaTimeday}T${koreaTimehours}:${koreaTimeminutes}:${koreaTimeseconds}`;
-
-
-                console.log("selectedDepartureTime >>> " + selectedDepartureTime);
+                console.log("selected time = " + selectedTime);
+                console.log("selectedDepartureTime >>> " + koreaTime);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
                 Array.prototype.forEach.call(elements, function(elem) {
