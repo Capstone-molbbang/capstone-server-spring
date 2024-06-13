@@ -643,7 +643,7 @@ document.addEventListener("DOMContentLoaded", function() {
             else
             {
                 const hours = selectedTime.getHours();
-                const ampm = hours >= 12 ? "PM " : "AM ";
+                const ampm = hours >= 12 ? "오후 " : "오전 ";
                 const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
                 const formattedMinutes = ('0' + selectedTime.getMinutes()).slice(-2);
                 const formattedDateStr = selectedTime.getFullYear() + "년 " +
