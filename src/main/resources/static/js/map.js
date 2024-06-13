@@ -14,7 +14,6 @@ var polyline3= null;
 
 var distance = null;
 var duration = null;
-var selectedDepartureTimeMessage = null; // 사용자가 선택한 출발 예정 시간을 저장할 변수
 var selectedDepartureTime = null; // 사용자가 선택한 출발 예정 시간을 저장할 변수
 
 var startAddress = null;
@@ -349,7 +348,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         if(startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324") {
 
-            console.log("selectedDepartureTime===" + selectedDepartureTime);
+            console.log("selectedDepartureTime ===" + selectedDepartureTime);
             const timeResponse = await fetch('/api/departureTime', {
                 method: 'POST',
                 headers: {
@@ -656,8 +655,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     ampm +
                     formattedHours + "시 " +
                     formattedMinutes + "분 출발 ";
+
                 selectedTime.setSeconds(0);
                 selectedDepartureTime = selectedTime.toISOString().slice(0, -5);
+
+                console.log("selectedDepartureTime >>> " + selectedDepartureTime);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
                 Array.prototype.forEach.call(elements, function(elem) {
