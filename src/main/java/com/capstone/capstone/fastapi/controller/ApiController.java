@@ -64,6 +64,7 @@ public class ApiController {
 
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(FASTAPI_URL + "/predict", entity, Map.class);
+            log.info(FASTAPI_URL+"/predict");
             Map<String, Integer> responseBody = response.getBody();
             log.info("responseBody = " + responseBody.toString());
 
