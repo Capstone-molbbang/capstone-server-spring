@@ -656,8 +656,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     ampm +
                     formattedHours + "시 " +
                     formattedMinutes + "분 출발 ";
-                selectedTime.setMilliseconds(0);
-                const selectedDepartureTime = selectedTime.toISOString().slice(0, 19);                console.log("selectedDepartureTime2: " + selectedDepartureTime);
+                selectedTime.setSeconds(0);
+                const selectedDepartureTime = selectedTime.toISOString().slice(0, -5);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
                 Array.prototype.forEach.call(elements, function(elem) {
