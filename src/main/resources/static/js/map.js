@@ -346,13 +346,82 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         document.getElementById('start-suggestions').style.display = 'none';
         document.getElementById('destination-suggestions').style.display = 'none';
 
-        const isRouteA = startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324";
         const isRouteB = destinationCoords.x === "127.0742595815513" && destinationCoords.y === "37.550638892935346" && startCoords.x === "127.42727719121109" && startCoords.y === "36.32765802936324";
 
         if (isRouteA || isRouteB) {
             await handleRoute(isRouteA ? "A" : "B", isRouteA);
+
+
         }
 
+        if(startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324") {
+
+            const timeResponse = await fetch('/api/departureTime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: selectedDepartureTime,
+                    start: "A"
+                })
+            });
+
+            if (!timeResponse.ok) {
+                throw new Error(`HTTP error! Status: ${timeResponse.status}`);
+            }
+
+            const timeData = timeResponse.json();
+
+            root1_highwayNodes = await fetchHighwayNodes('root1');
+            root2_highwayNodes = await fetchHighwayNodes('root2');
+            direction = true;
+
+            console.log("root1_highwayNodes = " + root1_highwayNodes);
+            console.log("root2_highwayNodes = " + root2_highwayNodes);
+
+            totalTimeRoot1 = timeData.routeATime;
+            totalTimeRoot2 = timeData.routeBTime;
+            totalTimeRoot3 = timeData.routeCTime;
+
+            console.log("totalTimeRoot1 = " + totalTimeRoot1);
+            console.log("totalTimeRoot2 = " + totalTimeRoot2);
+            console.log("totalTimeRoot3 = " + totalTimeRoot3);
+        }
+
+        else if(destinationCoords.x === "127.0742595815513" && destinationCoords.y === "37.550638892935346" && startCoords.x === "127.42727719121109" && startCoords.y === "36.32765802936324"){
+            const timeResponse = await fetch('/api/departureTime', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    data: selectedDepartureTime,
+                    start: "B"
+                })
+            });
+
+            if (!timeResponse.ok) {
+                throw new Error(`HTTP error! Status: ${timeResponse.status}`);
+            }
+
+            const timeData = timeResponse.json();
+
+            root1_highwayNodes = await fetchHighwayNodes('root3');
+            root2_highwayNodes = await fetchHighwayNodes('root4');
+            direction = false;
+
+            console.log("root1_highwayNodes = " + root1_highwayNodes);
+            console.log("root2_highwayNodes = " + root2_highwayNodes);
+
+            totalTimeRoot1 = timeData.routeATime;
+            totalTimeRoot2 = timeData.routeBTime;
+            totalTimeRoot3 = timeData.routeCTime;
+
+            console.log("totalTimeRoot1 = " + totalTimeRoot1);
+            console.log("totalTimeRoot2 = " + totalTimeRoot2);
+            console.log("totalTimeRoot3 = " + totalTimeRoot3);
+        }
         var recommendRoot;
 
         if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
@@ -445,47 +514,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
     }
 });
 
-async function fetchDepartureTimes(startType) {
-    console.log(startType);
-    const timeResponse = await fetch('/api/departureTime', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            data: selectedDepartureTime,
-            start: startType
-        })
-    });
 
-    if (!timeResponse.ok) {
-        throw new Error(`HTTP error! Status: ${timeResponse.status}`);
-    }
 
-    return await timeResponse.json();
-}
-
-async function handleRoute(startType, isRouteA) {
-    const timeData = await fetchDepartureTimes(startType);
-
-    if (isRouteA) {
-        root1_highwayNodes = await fetchHighwayNodes('root1');
-        root2_highwayNodes = await fetchHighwayNodes('root2');
-        direction = true;
-    } else {
-        root1_highwayNodes = await fetchHighwayNodes('root3');
-        root2_highwayNodes = await fetchHighwayNodes('root4');
-        direction = false;
-    }
-
-    totalTimeRoot1 = timeData.routeATime;
-    totalTimeRoot2 = timeData.routeBTime;
-    totalTimeRoot3 = timeData.routeCTime;
-    console.log("totalTimeRoot1 = " + totalTimeRoot1);
-    console.log("totalTimeRoot2 = " + totalTimeRoot2);
-    console.log("totalTimeRoot3 = " + totalTimeRoot3);
-
-}
 
 // 검색창에 입력이 들어올 때마다 자동 완성을 표시하는 함수
 function showSuggestions(input, suggestionsContainer, isStart) {
