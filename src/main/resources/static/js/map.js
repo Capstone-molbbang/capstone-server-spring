@@ -614,7 +614,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var day = ('0' + currentDate.getDate()).slice(-2);
     var hours = ('0' + currentDate.getHours()).slice(-2);
     var minutes = ('0' + currentDate.getMinutes()).slice(-2);
-    var ampm = currentDate.getHours() < 12 ? "오전" : "오후";
+    var ampm = currentDate.getHours() < 12 ? "AM" : "PM";
     console.log("currentDate: " + currentDate);
     console.log("hours : " + hours)
 
