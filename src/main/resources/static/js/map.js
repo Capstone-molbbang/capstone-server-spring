@@ -657,8 +657,8 @@ document.addEventListener("DOMContentLoaded", function() {
                     formattedMinutes + "분 출발 ";
 
                 selectedTime.setSeconds(0); // 초를 0으로 설정
-                const koreaTime = selectedTime.toLocaleString('en-US', { timeZone: 'Asia/Seoul' }).replace(/,/g, '');
                 console.log("selected time = " + selectedTime);
+                selectedDepartureTime = selectedTime.toISOString();
                 console.log("selectedDepartureTime >>> " + koreaTime);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
