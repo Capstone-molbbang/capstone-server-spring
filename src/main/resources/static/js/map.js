@@ -627,23 +627,18 @@ document.addEventListener("DOMContentLoaded", function() {
         minDate: "today", // 현재 날짜 이전 선택 불가능
         minuteIncrement: 1,
         dateFormat: "Y년 n월 j일 K h시 i분 출발",
-        defaultDate: currentDate, // 현재 시간을 default 값으로 설정
+        defaultDate: new Date(), // 현재 시간을 default 값으로 설정
         time_24hr: false,
         disableMobile: true,
         ampm: true,
+        locale: "ko",
         onClose: function(selectedDates, dateStr, instance) {
             // 사용자가 시간을 선택한 후 실행되는 콜백 함수
             const selectedTime = instance.latestSelectedDateObj;
             const currentTime = new Date();
-            if (selectedTime.getFullYear() < currentTime.getFullYear() ||
-                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() < currentTime.getMonth()) ||
-                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() === currentTime.getMonth() && selectedTime.getDate() < currentTime.getDate()) ||
-                (selectedTime.getFullYear() === currentTime.getFullYear() && selectedTime.getMonth() === currentTime.getMonth() && selectedTime.getDate() === currentTime.getDate() &&
-                    (selectedTime.getHours() < currentTime.getHours() ||
-                        (selectedTime.getHours() === currentTime.getHours() && selectedTime.getMinutes() < currentTime.getMinutes() - 1)))) {
-                // 선택한 시간이 현재 시간보다 1분 이전인 경우 경고 메시지 표시
+            if (selectedTime.getTime() < new Date().getTime() - 60000) {
                 alert("과거 시간은 선택할 수 없습니다.");
-                instance.setDate(currentTime); // 현재 시간으로 재설정
+                instance.setDate(new Date()); // 현재 시간으로 재설정
             }
             else
             {
@@ -659,7 +654,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     formattedMinutes + "분 출발 ";
                 selectedDepartureTime = currentTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
-                document.getElementById('departure-time').value = formattedDateStr;
+                //document.getElementById('departure-time').value = formattedDateStr;
+                var elements = document.getElementsByClassName('departure-time');
+                Array.prototype.forEach.call(elements, function(elem) {
+                    elem.value = formattedDateStr;
+                });
             }
         }
 
