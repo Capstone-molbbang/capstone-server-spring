@@ -53,14 +53,16 @@ public class ApiController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("departureTime", routeRequest.getDepartureTime().toString());
+        dataMap.put("start", routeRequest.getStart());
+
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("departureTime", routeRequest.getDepartureTime().toString());
-        requestBody.put("start", routeRequest.getStart());
+        requestBody.put("data", dataMap);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
 
         Map<String, Object> result = new HashMap<>();
-
 
         try {
             ResponseEntity<Map> response = restTemplate.postForEntity(FASTAPI_URL + "/predict", entity, Map.class);
