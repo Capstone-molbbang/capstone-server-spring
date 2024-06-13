@@ -652,7 +652,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     ampm +
                     formattedHours + "시 " +
                     formattedMinutes + "분 출발 ";
-                selectedDepartureTime = currentTime.toISOString();
+                selectedDepartureTime = selectedTime.toISOString();
                 console.log("selectedDepartureTime2: " + selectedDepartureTime);
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
