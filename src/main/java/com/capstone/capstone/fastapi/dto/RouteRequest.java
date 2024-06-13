@@ -8,4 +8,5 @@ import java.time.LocalDateTime;
 public class RouteRequest {
 
     private LocalDateTime departureTime;
+    private String start;
 }
