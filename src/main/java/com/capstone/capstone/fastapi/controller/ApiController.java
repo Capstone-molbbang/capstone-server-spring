@@ -48,13 +48,13 @@ public class ApiController {
     @PostMapping("/api/departureTime")
     public ResponseEntity<Map<String, Object>> sendDepartureTime(@RequestBody RouteRequest routeRequest) {
 
-        log.info("time = " + routeRequest.getDepartureTime());
+        log.info("time = " + routeRequest.getData());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
         Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("data", routeRequest.getDepartureTime().toString());
+        dataMap.put("data", routeRequest.getData().toString());
         dataMap.put("start", routeRequest.getStart());
 
         Map<String, Object> requestBody = new HashMap<>();
