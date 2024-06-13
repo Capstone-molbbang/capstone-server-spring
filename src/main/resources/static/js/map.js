@@ -658,11 +658,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 selectedTime.setSeconds(0); // 초를 0으로 설정
                 console.log("selected time = " + selectedTime);
-                selectedDepartureTime = selectedTime.toISOString().slice(0, -2);
-                const selectedDepartureTime2 = selectedTime.toISOString();
+                selectedDepartureTime = `${selectedTime.getFullYear}-${selectedTime.getMonth}-${selectedTime.getDate}T${hours}:${selectedTime.getMinutes}`;
 
                 console.log("selectedDepartureTime >>> " + selectedDepartureTime);
-                console.log("selectedDepartureTime2 >>> " + selectedDepartureTime2);
 
                 //document.getElementById('departure-time').value = formattedDateStr;
                 var elements = document.getElementsByClassName('departure-time');
