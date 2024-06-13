@@ -225,9 +225,9 @@
         .route-button:hover span {
             color: white; /* 호버 시 글자색을 흰색으로 변경 */
         }
-        @media (max-width: 450px) {
+        @media (max-width: 758px) {
             #search-container {
-                width: calc(100vw);
+                width: 40%;
                 height: calc(770px * (90vw / 450));
                 margin: 20px auto;
                 padding: 20px;
@@ -264,10 +264,11 @@
                 align-items: center;
                 flex-wrap: wrap;
             }
-
             .route-button {
-                width: calc(30% - 20px);
-                margin: 10px 0;
+                width: calc(45% - 20px); /* 버튼 너비 조정 */
+                height: 100px; /* 버튼 높이 조정 */
+                margin: 5px 0; /* 버튼 간격 설정 */
+                font-size: 12px; /* 버튼 텍스트 크기 조정 */
             }
         }
     </style>
