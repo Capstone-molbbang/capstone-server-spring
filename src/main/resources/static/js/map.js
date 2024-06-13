@@ -349,6 +349,7 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
 
         if(startCoords.x === "127.0742595815513" && startCoords.y === "37.550638892935346" && destinationCoords.x === "127.42727719121109" && destinationCoords.y === "36.32765802936324") {
 
+            console.log("selectedDepartureTime===" + selectedDepartureTime);
             const timeResponse = await fetch('/api/departureTime', {
                 method: 'POST',
                 headers: {
@@ -383,6 +384,8 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
 
         else if(destinationCoords.x === "127.0742595815513" && destinationCoords.y === "37.550638892935346" && startCoords.x === "127.42727719121109" && startCoords.y === "36.32765802936324"){
+            console.log("selectedDepartureTime===" + selectedDepartureTime);
+
             const timeResponse = await fetch('/api/departureTime', {
                 method: 'POST',
                 headers: {
@@ -417,9 +420,9 @@ document.getElementById("search-form-small").addEventListener("submit", async fu
         }
         var recommendRoot;
 
-        if(totalTimeRoot1 < totalTimeRoot3 && totalTimeRoot1 < totalTimeRoot2) {
+        if(totalTimeRoot1 <= totalTimeRoot3 && totalTimeRoot1 <= totalTimeRoot2) {
             recommendRoot = "root1"; //하남
-        } else if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 < totalTimeRoot2) {
+        } else if(totalTimeRoot3 < totalTimeRoot1 && totalTimeRoot3 <= totalTimeRoot2) {
             recommendRoot = "root3"; //경부
         }
 
@@ -594,15 +597,7 @@ async function getSelectedDepartureTime() {
 
         console.log("hours : " + hours)
         console.log("currentDate: " + currentDate);
-        if (hours > 12) {
-            currentDateTimeString = year + "년 " + month + "월 " + day + "일 오후 " + (hours - 12) + "시 " + minutes + "분 출발";
-        } else if (hours === 12) {
-            currentDateTimeString = year + "년 " + month + "월 " + day + "일 오후 " + hours + "시 " + minutes + "분 출발";
-        } else if (hours === 0) {
-            currentDateTimeString = year + "년 " + month + "월 " + day + "일 오전 12시 " + minutes + "분 출발";
-        } else {
-            currentDateTimeString = year + "년 " + month + "월 " + day + "일 오전 " + hours + "시 " + minutes + "분 출발";
-        }
+
         //    document.getElementById("departure-time").value = currentDateTimeString;
 
         console.log("currentDateTimeString :" + currentDateTimeString);
