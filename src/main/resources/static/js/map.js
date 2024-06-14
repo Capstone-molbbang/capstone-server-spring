@@ -122,10 +122,9 @@ async function drawRouteKakaoWayPoint(origin, waypoint, destination, apiKey, boo
                 if(direction){
                     console.log("direction");
                     baseData.waypoints.unshift({
-                        "x": "127.04192342710209",
-                        "y": "37.4615048487278"
+                        "x": "127.0380653257135",
+                        "y": "37.465308423678096"
                     });
-                    baseData.priority = "DISTANCE";
                 }
                 else{
                     console.log("No direction");
