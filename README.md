@@ -5,4 +5,4 @@
 - - - 
 
 ## 📌 실행 화면
-![GIFMaker_me (4)](https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/6b4dc070-e36d-4069-ab0c-77f68454c915)
+![GIFMaker_me (8)](https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/ea67c912-6aa7-47c3-a73b-fed060f4f547)
