@@ -644,7 +644,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     flatpickr("#departure-time", {
         enableTime: true,
-        minDate: "today", // 현재 날짜 이전 선택 불가능
         minuteIncrement: 1,
         dateFormat: "Y년 n월 j일 K h시 i분 출발",
         defaultDate: new Date(), // 현재 시간을 default 값으로 설정
@@ -656,44 +655,38 @@ document.addEventListener("DOMContentLoaded", function() {
             // 사용자가 시간을 선택한 후 실행되는 콜백 함수
             const selectedTime = instance.latestSelectedDateObj;
             const currentTime = new Date();
-            if (selectedTime.getTime() < new Date().getTime() - 60000) {
-                alert("과거 시간은 선택할 수 없습니다.");
-                instance.setDate(new Date()); // 현재 시간으로 재설정
-            }
-            else
-            {
-                const hours = selectedTime.getHours();
-                const ampm = hours >= 12 ? "오후 " : "오전 ";
-                const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
-                const formattedMinutes = ('0' + selectedTime.getMinutes()).slice(-2);
-                const formattedDateStr = selectedTime.getFullYear() + "년 " +
-                    (selectedTime.getMonth() + 1) + "월 " +
-                    selectedTime.getDate() + "일 " +
-                    ampm +
-                    formattedHours + "시 " +
-                    formattedMinutes + "분 출발 ";
+            const hours = selectedTime.getHours();
+            const ampm = hours >= 12 ? "오후 " : "오전 ";
+            const formattedHours = hours % 12 || 12; // 12시간 형식으로 변환
+            const formattedMinutes = ('0' + selectedTime.getMinutes()).slice(-2);
+            const formattedDateStr = selectedTime.getFullYear() + "년 " +
+                (selectedTime.getMonth() + 1) + "월 " +
+                selectedTime.getDate() + "일 " +
+                ampm +
+                formattedHours + "시 " +
+                formattedMinutes + "분 출발 ";
 
-                selectedTime.setSeconds(0); // 초를 0으로 설정
-                console.log("selected time = " + selectedTime);
-                const year = selectedTime.getFullYear();
-                const month = ('0' + (selectedTime.getMonth() + 1)).slice(-2);
-                const day = ('0' + selectedTime.getDate()).slice(-2);
-                const hour_s = ('0' + selectedTime.getHours()).slice(-2);
-                const minutes = ('0' + selectedTime.getMinutes()).slice(-2);
+            selectedTime.setSeconds(0); // 초를 0으로 설정
+            console.log("selected time = " + selectedTime);
+            const year = selectedTime.getFullYear();
+            const month = ('0' + (selectedTime.getMonth() + 1)).slice(-2);
+            const day = ('0' + selectedTime.getDate()).slice(-2);
+            const hour_s = ('0' + selectedTime.getHours()).slice(-2);
+            const minutes = ('0' + selectedTime.getMinutes()).slice(-2);
 
-                selectedDepartureTime = `${year}-${month}-${day}T${hour_s}:${minutes}:00`;
-                console.log("selectedDepartureTime >>> " + selectedDepartureTime);
+            selectedDepartureTime = `${year}-${month}-${day}T${hour_s}:${minutes}:00`;
+            console.log("selectedDepartureTime >>> " + selectedDepartureTime);
 
-                //document.getElementById('departure-time').value = formattedDateStr;
-                var elements = document.getElementsByClassName('departure-time');
-                Array.prototype.forEach.call(elements, function(elem) {
-                    if (elem.type === "text") {
-                        elem.value = formattedDateStr; // 텍스트 입력 필드에 값 설정
-                    } else {
-                        elem.value = selectedTime.toISOString().slice(0, 16); // datetime-local 입력 필드에 값 설정
-                    }
-                });
-            }
+            //document.getElementById('departure-time').value = formattedDateStr;
+            var elements = document.getElementsByClassName('departure-time');
+            Array.prototype.forEach.call(elements, function(elem) {
+                if (elem.type === "text") {
+                    elem.value = formattedDateStr; // 텍스트 입력 필드에 값 설정
+                } else {
+                    elem.value = selectedTime.toISOString().slice(0, 16); // datetime-local 입력 필드에 값 설정
+                }
+            });
+
         }
     })
 });
