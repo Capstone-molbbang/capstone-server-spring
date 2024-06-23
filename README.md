@@ -6,4 +6,5 @@
 
 ## 📌 실행 화면
 <img width="1440" alt="main" src="https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/fd128cf1-727f-4173-a48c-db2f6eee4173">
+
 ![GIFMaker_me (8)](https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/ea67c912-6aa7-47c3-a73b-fed060f4f547)
