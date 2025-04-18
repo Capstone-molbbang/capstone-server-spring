@@ -4,7 +4,6 @@
 
 - - - 
 
-## 📌 실행 화면
-<img width="1440" alt="main" src="https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/897f7df7-aec5-4da1-9b60-4e8322af4ed8">
-
-![GIFMaker_me (10)](https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/d602789f-1375-4f18-80fc-d149e59d8933)
+<!--## 📌 실행 화면-->
+<!--<img width="1440" alt="main" src="https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/897f7df7-aec5-4da1-9b60-4e8322af4ed8">-->
+<!--![GIFMaker_me (10)](https://github.com/Capstone-molbbang/capstone-server-spring/assets/91180366/d602789f-1375-4f18-80fc-d149e59d8933)-->
